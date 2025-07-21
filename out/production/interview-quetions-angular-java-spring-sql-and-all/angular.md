@@ -19118,20 +19118,1272 @@ export class AppComponent implements OnInit {
 ### Basic Questions
 
 1. What are some common causes of performance issues in Angular apps? _(Asked in Infosys)_
+
+**🧩 Foundation:** Angular performance issues typically stem from inefficient change detection, large bundle sizes, memory leaks, and poor optimization strategies.
+
+**⚙️ Function:** Understanding performance bottlenecks helps developers create faster, more responsive applications that provide better user experience.
+
+**🚀 Features:**
+- Change detection cycles
+- Memory leaks from unsubscribed observables
+- Large bundle sizes
+- Inefficient template expressions
+- Heavy computations in templates
+- Unnecessary component re-renders
+
+**🔁 Flow:**
+```typescript
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
+import { Subject, takeUntil } from 'rxjs';
+
+@Component({
+  selector: 'app-performance-example',
+  template: `
+    <div class="performance-demo">
+      <h2>Performance Monitoring</h2>
+      
+      <!-- Avoid heavy computations in template -->
+      <div class="data-display">
+        <p>Items: {{ getItemCount() }}</p> <!-- ❌ Bad: Called on every change detection -->
+        <p>Items: {{ itemCount }}</p> <!-- ✅ Good: Pre-computed value -->
+      </div>
+      
+      <!-- Use OnPush strategy for better performance -->
+      <div class="user-list">
+        <div *ngFor="let user of users; trackBy: trackByUserId" class="user-item">
+          {{ user.name }} - {{ user.email }}
+        </div>
+      </div>
+      
+      <!-- Avoid complex expressions in template -->
+      <div class="stats">
+        <p>Active Users: {{ activeUsersCount }}</p>
+        <p>Total Users: {{ totalUsersCount }}</p>
+      </div>
+    </div>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush, // ✅ Performance optimization
+  styles: [`
+    .performance-demo {
+      padding: 20px;
+    }
+    .user-item {
+      padding: 8px;
+      border-bottom: 1px solid #eee;
+    }
+  `]
+})
+export class PerformanceExampleComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<void>(); // ✅ Memory leak prevention
+  users: User[] = [];
+  itemCount = 0;
+  activeUsersCount = 0;
+  totalUsersCount = 0;
+  
+  constructor(private userService: UserService) {}
+  
+  ngOnInit(): void {
+    // ✅ Proper subscription management
+    this.userService.getUsers()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(users => {
+        this.users = users;
+        this.itemCount = users.length;
+        this.activeUsersCount = users.filter(u => u.active).length;
+        this.totalUsersCount = users.length;
+      });
+  }
+  
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+  
+  // ❌ Bad: Heavy computation in template
+  getItemCount(): number {
+    console.log('Computing item count...'); // This runs on every change detection
+    return this.users.length;
+  }
+  
+  // ✅ Good: TrackBy function for *ngFor performance
+  trackByUserId(index: number, user: User): number {
+    return user.id;
+  }
+}
+
+interface User {
+  id: number;
+  name: string;
+  email: string;
+  active: boolean;
+}
+```
+
+**🐞 Fixes:** Use OnPush change detection strategy, implement proper subscription cleanup, avoid heavy computations in templates, and use trackBy functions for *ngFor.
+
+---
+
 2. How do you reduce the bundle size of an Angular app? _(Asked in Capgemini)_
+
+**🧩 Foundation:** Bundle size reduction involves optimizing imports, using tree-shaking, implementing code splitting, and removing unused dependencies.
+
+**⚙️ Function:** Smaller bundles improve application load times, reduce bandwidth usage, and provide better user experience, especially on slower connections.
+
+**🚀 Features:**
+- Tree-shaking for unused code removal
+- Lazy loading of modules
+- Code splitting strategies
+- Bundle analysis tools
+- Optimized imports
+- Compression and minification
+
+**🔁 Flow:**
+```typescript
+// ✅ Good: Specific imports (tree-shakable)
+import { Component } from '@angular/core';
+import { map, filter } from 'rxjs/operators';
+
+// ❌ Bad: Import entire library
+import * as _ from 'lodash';
+
+// ✅ Good: Import only needed functions
+import { debounce } from 'lodash-es';
+
+@Component({
+  selector: 'app-bundle-optimization',
+  template: `
+    <div class="optimized-app">
+      <h2>Bundle Optimized Application</h2>
+      
+      <!-- Lazy loaded components -->
+      <button (click)="loadHeavyComponent()">Load Heavy Component</button>
+      <ng-container *ngComponentOutlet="heavyComponent"></ng-container>
+      
+      <!-- Conditional loading -->
+      <div *ngIf="showAdvancedFeatures">
+        <app-advanced-features></app-advanced-features>
+      </div>
+    </div>
+  `
+})
+export class BundleOptimizationComponent {
+  heavyComponent: any = null;
+  showAdvancedFeatures = false;
+  
+  async loadHeavyComponent(): Promise<void> {
+    // ✅ Dynamic import for code splitting
+    const module = await import('./heavy-component/heavy.component');
+    this.heavyComponent = module.HeavyComponent;
+  }
+  
+  toggleAdvancedFeatures(): void {
+    this.showAdvancedFeatures = !this.showAdvancedFeatures;
+  }
+}
+
+// ✅ Lazy loaded module
+const routes: Routes = [
+  {
+    path: 'dashboard',
+    loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule)
+  },
+  {
+    path: 'reports',
+    loadChildren: () => import('./reports/reports.module').then(m => m.ReportsModule)
+  }
+];
+
+// ✅ Optimized service with specific imports
+@Injectable({
+  providedIn: 'root'
+})
+export class OptimizedDataService {
+  constructor(private http: HttpClient) {}
+  
+  // ✅ Use specific RxJS operators
+  getData(): Observable<any[]> {
+    return this.http.get<any[]>('/api/data').pipe(
+      map(response => response.filter(item => item.active)),
+      debounceTime(300) // ✅ Specific import instead of full lodash
+    );
+  }
+}
+
+// ✅ Bundle analysis script
+// package.json
+{
+  "scripts": {
+    "analyze": "ng build --stats-json && webpack-bundle-analyzer dist/stats.json",
+    "build:prod": "ng build --configuration production --aot --build-optimizer"
+  }
+}
+```
+
+**🐞 Fixes:** Use bundle analyzers to identify large dependencies, implement proper code splitting, and regularly audit dependencies for unused packages.
 
 ### Intermediate Questions
 
 1. How does the OnPush change detection strategy work and when should you use it? _(Asked in Deloitte)_
+
+**🧩 Foundation:** OnPush change detection strategy only runs change detection when inputs change, events are triggered, or observables emit, significantly reducing unnecessary change detection cycles.
+
+**⚙️ Function:** OnPush strategy improves performance by limiting when Angular checks for changes, reducing CPU usage and improving application responsiveness.
+
+**🚀 Features:**
+- Only triggers on @Input changes
+- Responds to component events
+- Works with async pipes
+- Requires immutable data patterns
+- Reduces change detection cycles
+- Improves performance for large component trees
+
+**🔁 Flow:**
+```typescript
+import { Component, Input, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Observable } from 'rxjs';
+
+@Component({
+  selector: 'app-onpush-example',
+  template: `
+    <div class="onpush-demo">
+      <h3>{{ title }}</h3>
+      
+      <!-- Input-based change detection -->
+      <div class="user-info">
+        <p>Name: {{ user.name }}</p>
+        <p>Email: {{ user.email }}</p>
+        <p>Status: {{ user.status }}</p>
+      </div>
+      
+      <!-- Event-based change detection -->
+      <button (click)="updateStatus()">Update Status</button>
+      <p>Last Updated: {{ lastUpdated }}</p>
+      
+      <!-- Observable-based change detection -->
+      <div class="real-time-data">
+        <p>Current Time: {{ currentTime$ | async }}</p>
+        <p>Data Count: {{ dataCount$ | async }}</p>
+      </div>
+      
+      <!-- Manual change detection -->
+      <button (click)="manualUpdate()">Manual Update</button>
+      <p>Manual Counter: {{ manualCounter }}</p>
+    </div>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush // ✅ Performance optimization
+})
+export class OnPushExampleComponent {
+  @Input() title = 'OnPush Demo';
+  @Input() user: User = { name: '', email: '', status: '' };
+  
+  lastUpdated = new Date().toLocaleTimeString();
+  manualCounter = 0;
+  
+  // ✅ Observable for async pipe (triggers change detection)
+  currentTime$ = new Observable<string>(observer => {
+    setInterval(() => {
+      observer.next(new Date().toLocaleTimeString());
+    }, 1000);
+  });
+  
+  dataCount$ = new Observable<number>(observer => {
+    let count = 0;
+    setInterval(() => {
+      observer.next(++count);
+    }, 2000);
+  });
+  
+  constructor(private cdr: ChangeDetectorRef) {}
+  
+  // ✅ Event-based change detection
+  updateStatus(): void {
+    this.lastUpdated = new Date().toLocaleTimeString();
+    // No need to call detectChanges() - event triggers change detection
+  }
+  
+  // ✅ Manual change detection
+  manualUpdate(): void {
+    this.manualCounter++;
+    this.cdr.detectChanges(); // Manually trigger change detection
+  }
+  
+  // ✅ Method to update user (for parent component)
+  updateUser(newUser: User): void {
+    // ❌ Bad: Mutating input
+    // this.user.name = newUser.name;
+    
+    // ✅ Good: Creating new object (triggers OnPush change detection)
+    this.user = { ...newUser };
+  }
+}
+
+// Parent component demonstrating OnPush usage
+@Component({
+  selector: 'app-parent',
+  template: `
+    <div class="parent-container">
+      <h2>Parent Component</h2>
+      
+      <!-- ✅ Immutable data updates trigger OnPush change detection -->
+      <app-onpush-example 
+        [title]="componentTitle"
+        [user]="currentUser">
+      </app-onpush-example>
+      
+      <button (click)="updateUser()">Update User</button>
+      <button (click)="updateTitle()">Update Title</button>
+    </div>
+  `
+})
+export class ParentComponent {
+  componentTitle = 'Initial Title';
+  currentUser: User = {
+    name: 'John Doe',
+    email: 'john@example.com',
+    status: 'Active'
+  };
+  
+  updateUser(): void {
+    // ✅ Creating new object triggers OnPush change detection
+    this.currentUser = {
+      ...this.currentUser,
+      status: this.currentUser.status === 'Active' ? 'Inactive' : 'Active'
+    };
+  }
+  
+  updateTitle(): void {
+    this.componentTitle = `Updated Title - ${new Date().toLocaleTimeString()}`;
+  }
+}
+
+interface User {
+  name: string;
+  email: string;
+  status: string;
+}
+```
+
+**🐞 Fixes:** Always use immutable data patterns, avoid mutating @Input properties, and use async pipes or manual change detection when needed.
+
+---
+
 2. How do trackBy functions improve the performance of `*ngFor`? _(Asked in TCS)_
+
+**🧩 Foundation:** TrackBy functions help Angular identify which items have changed in a list, preventing unnecessary DOM manipulation and improving rendering performance.
+
+**⚙️ Function:** TrackBy functions provide stable identity for list items, allowing Angular to efficiently update only changed elements instead of re-rendering the entire list.
+
+**🚀 Features:**
+- Stable item identification
+- Reduced DOM manipulation
+- Improved rendering performance
+- Better memory usage
+- Optimized change detection
+- Prevents unnecessary re-renders
+
+**🔁 Flow:**
+```typescript
+import { Component, OnInit } from '@angular/core';
+
+@Component({
+  selector: 'app-trackby-example',
+  template: `
+    <div class="trackby-demo">
+      <h3>TrackBy Performance Demo</h3>
+      
+      <!-- ❌ Bad: No trackBy function -->
+      <div class="user-list-bad">
+        <h4>Without TrackBy (Poor Performance)</h4>
+        <div *ngFor="let user of usersWithoutTrackBy" class="user-item">
+          <span>{{ user.name }}</span>
+          <span>{{ user.email }}</span>
+          <button (click)="updateUserBad(user)">Update</button>
+        </div>
+      </div>
+      
+      <!-- ✅ Good: With trackBy function -->
+      <div class="user-list-good">
+        <h4>With TrackBy (Better Performance)</h4>
+        <div *ngFor="let user of usersWithTrackBy; trackBy: trackByUserId" class="user-item">
+          <span>{{ user.name }}</span>
+          <span>{{ user.email }}</span>
+          <button (click)="updateUserGood(user)">Update</button>
+        </div>
+      </div>
+      
+      <!-- ✅ Advanced: TrackBy with multiple properties -->
+      <div class="user-list-advanced">
+        <h4>Advanced TrackBy</h4>
+        <div *ngFor="let user of usersAdvanced; trackBy: trackByUserProperties" class="user-item">
+          <span>{{ user.name }}</span>
+          <span>{{ user.email }}</span>
+          <span>{{ user.department }}</span>
+          <button (click)="updateUserAdvanced(user)">Update</button>
+        </div>
+      </div>
+      
+      <div class="controls">
+        <button (click)="addUser()">Add User</button>
+        <button (click)="removeUser()">Remove User</button>
+        <button (click)="shuffleUsers()">Shuffle Users</button>
+        <button (click)="updateRandomUser()">Update Random User</button>
+      </div>
+      
+      <div class="performance-info">
+        <p>Total Users: {{ usersWithTrackBy.length }}</p>
+        <p>Updates: {{ updateCount }}</p>
+        <p>Last Update: {{ lastUpdateTime }}</p>
+      </div>
+    </div>
+  `,
+  styles: [`
+    .trackby-demo {
+      padding: 20px;
+    }
+    .user-item {
+      display: flex;
+      gap: 10px;
+      padding: 8px;
+      border: 1px solid #ddd;
+      margin: 4px 0;
+      border-radius: 4px;
+    }
+    .controls {
+      margin: 20px 0;
+      display: flex;
+      gap: 10px;
+    }
+    .performance-info {
+      background: #f8f9fa;
+      padding: 10px;
+      border-radius: 4px;
+    }
+  `]
+})
+export class TrackByExampleComponent implements OnInit {
+  usersWithoutTrackBy: User[] = [];
+  usersWithTrackBy: User[] = [];
+  usersAdvanced: User[] = [];
+  
+  updateCount = 0;
+  lastUpdateTime = '';
+  
+  ngOnInit(): void {
+    this.initializeUsers();
+  }
+  
+  private initializeUsers(): void {
+    const initialUsers: User[] = [
+      { id: 1, name: 'John Doe', email: 'john@example.com', department: 'Engineering' },
+      { id: 2, name: 'Jane Smith', email: 'jane@example.com', department: 'Marketing' },
+      { id: 3, name: 'Bob Johnson', email: 'bob@example.com', department: 'Sales' },
+      { id: 4, name: 'Alice Brown', email: 'alice@example.com', department: 'HR' }
+    ];
+    
+    this.usersWithoutTrackBy = [...initialUsers];
+    this.usersWithTrackBy = [...initialUsers];
+    this.usersAdvanced = [...initialUsers];
+  }
+  
+  // ✅ Basic trackBy function using ID
+  trackByUserId(index: number, user: User): number {
+    return user.id;
+  }
+  
+  // ✅ Advanced trackBy function using multiple properties
+  trackByUserProperties(index: number, user: User): string {
+    return `${user.id}-${user.name}-${user.department}`;
+  }
+  
+  // ❌ Bad: Updates without trackBy (causes full re-render)
+  updateUserBad(user: User): void {
+    const index = this.usersWithoutTrackBy.findIndex(u => u.id === user.id);
+    if (index !== -1) {
+      this.usersWithoutTrackBy[index] = {
+        ...user,
+        name: `${user.name} (Updated)`
+      };
+      this.updateCount++;
+      this.lastUpdateTime = new Date().toLocaleTimeString();
+    }
+  }
+  
+  // ✅ Good: Updates with trackBy (efficient DOM updates)
+  updateUserGood(user: User): void {
+    const index = this.usersWithTrackBy.findIndex(u => u.id === user.id);
+    if (index !== -1) {
+      this.usersWithTrackBy[index] = {
+        ...user,
+        name: `${user.name} (Updated)`
+      };
+      this.updateCount++;
+      this.lastUpdateTime = new Date().toLocaleTimeString();
+    }
+  }
+  
+  // ✅ Advanced: Updates with complex trackBy
+  updateUserAdvanced(user: User): void {
+    const index = this.usersAdvanced.findIndex(u => u.id === user.id);
+    if (index !== -1) {
+      this.usersAdvanced[index] = {
+        ...user,
+        department: user.department === 'Engineering' ? 'Development' : 'Engineering'
+      };
+      this.updateCount++;
+      this.lastUpdateTime = new Date().toLocaleTimeString();
+    }
+  }
+  
+  addUser(): void {
+    const newId = Math.max(...this.usersWithTrackBy.map(u => u.id)) + 1;
+    const newUser: User = {
+      id: newId,
+      name: `User ${newId}`,
+      email: `user${newId}@example.com`,
+      department: 'New Department'
+    };
+    
+    this.usersWithoutTrackBy.push(newUser);
+    this.usersWithTrackBy.push(newUser);
+    this.usersAdvanced.push(newUser);
+  }
+  
+  removeUser(): void {
+    if (this.usersWithTrackBy.length > 0) {
+      this.usersWithoutTrackBy.pop();
+      this.usersWithTrackBy.pop();
+      this.usersAdvanced.pop();
+    }
+  }
+  
+  shuffleUsers(): void {
+    this.usersWithoutTrackBy = this.shuffleArray([...this.usersWithoutTrackBy]);
+    this.usersWithTrackBy = this.shuffleArray([...this.usersWithTrackBy]);
+    this.usersAdvanced = this.shuffleArray([...this.usersAdvanced]);
+  }
+  
+  updateRandomUser(): void {
+    if (this.usersWithTrackBy.length > 0) {
+      const randomIndex = Math.floor(Math.random() * this.usersWithTrackBy.length);
+      const user = this.usersWithTrackBy[randomIndex];
+      this.updateUserGood(user);
+    }
+  }
+  
+  private shuffleArray<T>(array: T[]): T[] {
+    const shuffled = [...array];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+  }
+}
+
+interface User {
+  id: number;
+  name: string;
+  email: string;
+  department: string;
+}
+
+// Performance monitoring service
+@Injectable({
+  providedIn: 'root'
+})
+export class PerformanceMonitorService {
+  private renderTimes: number[] = [];
+  
+  startRenderTimer(): void {
+    performance.mark('render-start');
+  }
+  
+  endRenderTimer(): number {
+    performance.mark('render-end');
+    performance.measure('render-time', 'render-start', 'render-end');
+    
+    const measure = performance.getEntriesByName('render-time')[0];
+    const renderTime = measure.duration;
+    
+    this.renderTimes.push(renderTime);
+    
+    // Keep only last 100 measurements
+    if (this.renderTimes.length > 100) {
+      this.renderTimes.shift();
+    }
+    
+    return renderTime;
+  }
+  
+  getAverageRenderTime(): number {
+    if (this.renderTimes.length === 0) return 0;
+    return this.renderTimes.reduce((sum, time) => sum + time, 0) / this.renderTimes.length;
+  }
+  
+  getPerformanceReport(): any {
+    return {
+      averageRenderTime: this.getAverageRenderTime(),
+      totalMeasurements: this.renderTimes.length,
+      minRenderTime: Math.min(...this.renderTimes),
+      maxRenderTime: Math.max(...this.renderTimes)
+    };
+  }
+}
+```
+
+**🐞 Fixes:** Always use trackBy functions for lists with more than 10 items, ensure trackBy functions return stable values, and avoid complex calculations in trackBy functions.
 
 ### Advanced Questions
 
 1. How do you use service workers to improve performance in Angular PWAs? _(Asked in Tech Mahindra)_
 
+**🧩 Foundation:** Service workers in Angular PWAs provide offline functionality, caching strategies, and background sync capabilities to improve performance and user experience.
+
+**⚙️ Function:** Service workers act as a proxy between the application and network, enabling caching, offline access, and performance optimizations.
+
+**🚀 Features:**
+- Offline functionality
+- Intelligent caching strategies
+- Background sync
+- Push notifications
+- Network request interception
+- Performance optimization
+
+**🔁 Flow:**
+```typescript
+// ngsw-config.json
+{
+  "$schema": "./node_modules/@angular/service-worker/config/schema.json",
+  "index": "/index.html",
+  "assetGroups": [
+    {
+      "name": "app",
+      "installMode": "prefetch",
+      "resources": {
+        "files": [
+          "/favicon.ico",
+          "/index.html",
+          "/manifest.webmanifest",
+          "/*.css",
+          "/*.js"
+        ]
+      }
+    },
+    {
+      "name": "assets",
+      "installMode": "lazy",
+      "updateMode": "prefetch",
+      "resources": {
+        "files": [
+          "/assets/**",
+          "/*.(svg|cur|jpg|jpeg|png|apng|webp|avif|gif|otf|ttf|woff|woff2)"
+        ]
+      }
+    }
+  ],
+  "dataGroups": [
+    {
+      "name": "api-freshness",
+      "urls": [
+        "/api/users",
+        "/api/products"
+      ],
+      "cacheConfig": {
+        "strategy": "freshness",
+        "maxSize": 100,
+        "maxAge": "3d",
+        "timeout": "10s"
+      }
+    },
+    {
+      "name": "api-performance",
+      "urls": [
+        "/api/static-data",
+        "/api/reference-data"
+      ],
+      "cacheConfig": {
+        "strategy": "performance",
+        "maxSize": 100,
+        "maxAge": "7d"
+      }
+    }
+  ]
+}
+
+// app.module.ts
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
+
+@NgModule({
+  imports: [
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: environment.production,
+      registrationStrategy: 'registerWhenStable:30000'
+    })
+  ]
+})
+export class AppModule {}
+
+// Service worker service
+@Injectable({
+  providedIn: 'root'
+})
+export class SwUpdateService {
+  constructor(private swUpdate: SwUpdate) {
+    this.initializeServiceWorker();
+  }
+  
+  private initializeServiceWorker(): void {
+    if (this.swUpdate.isEnabled) {
+      // Check for updates
+      this.swUpdate.checkForUpdate();
+      
+      // Listen for available updates
+      this.swUpdate.available.subscribe(event => {
+        console.log('New version available:', event.current, event.available);
+        this.promptUserForUpdate();
+      });
+      
+      // Listen for activated updates
+      this.swUpdate.activated.subscribe(event => {
+        console.log('New version activated:', event.previous, event.current);
+      });
+    }
+  }
+  
+  private promptUserForUpdate(): void {
+    if (confirm('New version available. Load new version?')) {
+      window.location.reload();
+    }
+  }
+  
+  checkForUpdate(): Promise<void> {
+    return this.swUpdate.checkForUpdate();
+  }
+}
+
+// PWA service for offline functionality
+@Injectable({
+  providedIn: 'root'
+})
+export class PwaService {
+  private isOnline = navigator.onLine;
+  
+  constructor() {
+    this.setupOnlineOfflineHandlers();
+  }
+  
+  private setupOnlineOfflineHandlers(): void {
+    window.addEventListener('online', () => {
+      this.isOnline = true;
+      this.handleOnline();
+    });
+    
+    window.addEventListener('offline', () => {
+      this.isOnline = false;
+      this.handleOffline();
+    });
+  }
+  
+  private handleOnline(): void {
+    console.log('Application is online');
+    // Sync any pending offline data
+    this.syncOfflineData();
+  }
+  
+  private handleOffline(): void {
+    console.log('Application is offline');
+    // Show offline indicator
+    this.showOfflineIndicator();
+  }
+  
+  private async syncOfflineData(): Promise<void> {
+    // Implement offline data synchronization
+    const offlineData = this.getOfflineData();
+    if (offlineData.length > 0) {
+      try {
+        await this.syncDataToServer(offlineData);
+        this.clearOfflineData();
+      } catch (error) {
+        console.error('Failed to sync offline data:', error);
+      }
+    }
+  }
+  
+  private getOfflineData(): any[] {
+    return JSON.parse(localStorage.getItem('offlineData') || '[]');
+  }
+  
+  private clearOfflineData(): void {
+    localStorage.removeItem('offlineData');
+  }
+  
+  private async syncDataToServer(data: any[]): Promise<void> {
+    // Implement server synchronization logic
+  }
+  
+  private showOfflineIndicator(): void {
+    // Show offline indicator to user
+  }
+  
+  isOnline(): boolean {
+    return this.isOnline;
+  }
+}
+
+// Enhanced HTTP interceptor for offline support
+@Injectable()
+export class OfflineInterceptor implements HttpInterceptor {
+  constructor(private pwaService: PwaService) {}
+  
+  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    if (!this.pwaService.isOnline() && this.shouldCacheRequest(req)) {
+      return this.handleOfflineRequest(req);
+    }
+    
+    return next.handle(req).pipe(
+      catchError(error => {
+        if (error.status === 0 && this.shouldCacheRequest(req)) {
+          return this.handleOfflineRequest(req);
+        }
+        return throwError(error);
+      })
+    );
+  }
+  
+  private shouldCacheRequest(req: HttpRequest<any>): boolean {
+    return req.method === 'GET' || req.method === 'POST';
+  }
+  
+  private handleOfflineRequest(req: HttpRequest<any>): Observable<HttpEvent<any>> {
+    // Return cached data or offline response
+    const cachedData = this.getCachedData(req.url);
+    if (cachedData) {
+      return of(new HttpResponse({ body: cachedData }));
+    }
+    
+    // Store request for later sync
+    this.storeOfflineRequest(req);
+    
+    return of(new HttpResponse({ 
+      body: { message: 'Offline mode - data will sync when online' }
+    }));
+  }
+  
+  private getCachedData(url: string): any {
+    return JSON.parse(localStorage.getItem(`cache_${url}`) || 'null');
+  }
+  
+  private storeOfflineRequest(req: HttpRequest<any>): void {
+    const offlineData = JSON.parse(localStorage.getItem('offlineData') || '[]');
+    offlineData.push({
+      url: req.url,
+      method: req.method,
+      body: req.body,
+      timestamp: new Date().toISOString()
+    });
+    localStorage.setItem('offlineData', JSON.stringify(offlineData));
+  }
+}
+```
+
+**🐞 Fixes:** Test offline functionality thoroughly, implement proper error handling for failed requests, and ensure cached data is properly invalidated.
+
+---
+
 ### Tough Questions
 
 1. You have a dashboard with many real-time charts and metrics. How do you ensure it performs smoothly on low-end devices? _(Asked in Cognizant)_
+
+**🧩 Foundation:** Dashboard performance optimization requires efficient data handling, smart rendering strategies, and device-specific optimizations to maintain smooth performance across all devices.
+
+**⚙️ Function:** Performance optimization ensures the dashboard remains responsive and provides good user experience regardless of device capabilities.
+
+**🚀 Features:**
+- Virtual scrolling for large datasets
+- Lazy loading of chart components
+- Data throttling and debouncing
+- Progressive enhancement
+- Memory management
+- Device capability detection
+
+**🔁 Flow:**
+```typescript
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
+import { BehaviorSubject, Subject, interval, combineLatest } from 'rxjs';
+import { takeUntil, debounceTime, throttleTime, map, filter } from 'rxjs/operators';
+
+@Component({
+  selector: 'app-performance-dashboard',
+  template: `
+    <div class="dashboard-container" [class.low-end]="isLowEndDevice">
+      <div class="dashboard-header">
+        <h1>Performance Dashboard</h1>
+        <div class="device-info">
+          <span>Device: {{ deviceType }}</span>
+          <span>Performance Mode: {{ performanceMode }}</span>
+        </div>
+      </div>
+      
+      <!-- Virtual scrolling for large datasets -->
+      <div class="metrics-grid">
+        <div class="metric-card" *ngFor="let metric of visibleMetrics; trackBy: trackByMetricId">
+          <h3>{{ metric.name }}</h3>
+          <div class="metric-value">{{ metric.value }}</div>
+          <div class="metric-chart" *ngIf="shouldShowChart(metric)">
+            <app-chart 
+              [data]="metric.chartData"
+              [config]="getChartConfig(metric)">
+            </app-chart>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Lazy loaded advanced features -->
+      <div class="advanced-features" *ngIf="showAdvancedFeatures">
+        <ng-container *ngComponentOutlet="advancedComponent"></ng-container>
+      </div>
+      
+      <!-- Performance controls -->
+      <div class="performance-controls">
+        <button (click)="togglePerformanceMode()">
+          {{ performanceMode === 'high' ? 'Low Performance' : 'High Performance' }}
+        </button>
+        <button (click)="toggleRealTimeUpdates()">
+          {{ realTimeEnabled ? 'Disable Real-time' : 'Enable Real-time' }}
+        </button>
+      </div>
+      
+      <!-- Performance monitoring -->
+      <div class="performance-monitor">
+        <p>FPS: {{ currentFPS }}</p>
+        <p>Memory Usage: {{ memoryUsage }}MB</p>
+        <p>Update Rate: {{ updateRate }}ms</p>
+      </div>
+    </div>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  styles: [`
+    .dashboard-container {
+      padding: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .dashboard-container.low-end {
+      /* Reduce animations and effects for low-end devices */
+      animation: none;
+      transition: none;
+    }
+    
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin: 20px 0;
+    }
+    
+    .metric-card {
+      background: white;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .performance-controls {
+      display: flex;
+      gap: 10px;
+      margin: 20px 0;
+    }
+    
+    .performance-monitor {
+      background: #f8f9fa;
+      padding: 10px;
+      border-radius: 4px;
+      font-family: monospace;
+    }
+  `]
+})
+export class PerformanceDashboardComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<void>();
+  private dataStream$ = new BehaviorSubject<Metric[]>([]);
+  private performanceMonitor$ = new BehaviorSubject<PerformanceMetrics>({
+    fps: 60,
+    memoryUsage: 0,
+    updateRate: 1000
+  });
+  
+  visibleMetrics: Metric[] = [];
+  advancedComponent: any = null;
+  showAdvancedFeatures = false;
+  
+  deviceType = 'unknown';
+  performanceMode = 'high';
+  realTimeEnabled = true;
+  currentFPS = 60;
+  memoryUsage = 0;
+  updateRate = 1000;
+  
+  private isLowEndDevice = false;
+  private updateInterval = 1000;
+  private maxVisibleMetrics = 10;
+  
+  constructor(
+    private deviceService: DeviceCapabilityService,
+    private performanceService: PerformanceMonitorService
+  ) {}
+  
+  ngOnInit(): void {
+    this.initializeDeviceDetection();
+    this.setupPerformanceMonitoring();
+    this.initializeDataStream();
+    this.loadAdvancedFeatures();
+  }
+  
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+  
+  private initializeDeviceDetection(): void {
+    this.deviceType = this.deviceService.getDeviceType();
+    this.isLowEndDevice = this.deviceService.isLowEndDevice();
+    
+    if (this.isLowEndDevice) {
+      this.performanceMode = 'low';
+      this.updateInterval = 2000;
+      this.maxVisibleMetrics = 5;
+      this.showAdvancedFeatures = false;
+    }
+  }
+  
+  private setupPerformanceMonitoring(): void {
+    // Monitor FPS
+    interval(1000).pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(() => {
+      this.currentFPS = this.performanceService.getCurrentFPS();
+      this.memoryUsage = this.performanceService.getMemoryUsage();
+    });
+    
+    // Adjust performance based on metrics
+    this.performanceMonitor$.pipe(
+      takeUntil(this.destroy$),
+      debounceTime(2000)
+    ).subscribe(metrics => {
+      this.adjustPerformance(metrics);
+    });
+  }
+  
+  private initializeDataStream(): void {
+    // Throttle data updates based on device capability
+    this.dataStream$.pipe(
+      takeUntil(this.destroy$),
+      throttleTime(this.updateInterval),
+      map(metrics => this.filterMetricsForDevice(metrics))
+    ).subscribe(metrics => {
+      this.visibleMetrics = metrics;
+    });
+    
+    // Start real-time data updates
+    this.startRealTimeUpdates();
+  }
+  
+  private startRealTimeUpdates(): void {
+    if (!this.realTimeEnabled) return;
+    
+    interval(this.updateInterval).pipe(
+      takeUntil(this.destroy$),
+      filter(() => this.realTimeEnabled)
+    ).subscribe(() => {
+      this.updateMetrics();
+    });
+  }
+  
+  private updateMetrics(): void {
+    const newMetrics = this.generateMetrics();
+    this.dataStream$.next(newMetrics);
+  }
+  
+  private filterMetricsForDevice(metrics: Metric[]): Metric[] {
+    if (this.isLowEndDevice) {
+      return metrics.slice(0, this.maxVisibleMetrics);
+    }
+    return metrics;
+  }
+  
+  private shouldShowChart(metric: Metric): boolean {
+    if (this.isLowEndDevice) {
+      return metric.priority === 'high';
+    }
+    return true;
+  }
+  
+  private getChartConfig(metric: Metric): ChartConfig {
+    if (this.isLowEndDevice) {
+      return {
+        ...metric.chartConfig,
+        animation: false,
+        responsive: true,
+        maintainAspectRatio: false
+      };
+    }
+    return metric.chartConfig;
+  }
+  
+  private adjustPerformance(metrics: PerformanceMetrics): void {
+    if (metrics.fps < 30) {
+      this.performanceMode = 'low';
+      this.updateInterval = 2000;
+      this.maxVisibleMetrics = 5;
+    } else if (metrics.fps < 45) {
+      this.performanceMode = 'medium';
+      this.updateInterval = 1500;
+      this.maxVisibleMetrics = 8;
+    }
+  }
+  
+  private async loadAdvancedFeatures(): Promise<void> {
+    if (!this.isLowEndDevice) {
+      try {
+        const module = await import('./advanced-features/advanced.component');
+        this.advancedComponent = module.AdvancedFeaturesComponent;
+        this.showAdvancedFeatures = true;
+      } catch (error) {
+        console.warn('Failed to load advanced features:', error);
+      }
+    }
+  }
+  
+  togglePerformanceMode(): void {
+    this.performanceMode = this.performanceMode === 'high' ? 'low' : 'high';
+    this.updateInterval = this.performanceMode === 'high' ? 1000 : 2000;
+  }
+  
+  toggleRealTimeUpdates(): void {
+    this.realTimeEnabled = !this.realTimeEnabled;
+    if (this.realTimeEnabled) {
+      this.startRealTimeUpdates();
+    }
+  }
+  
+  trackByMetricId(index: number, metric: Metric): string {
+    return metric.id;
+  }
+  
+  private generateMetrics(): Metric[] {
+    // Generate sample metrics
+    return Array.from({ length: 20 }, (_, i) => ({
+      id: `metric-${i}`,
+      name: `Metric ${i + 1}`,
+      value: Math.random() * 100,
+      priority: i < 5 ? 'high' : 'medium',
+      chartData: this.generateChartData(),
+      chartConfig: this.getDefaultChartConfig()
+    }));
+  }
+  
+  private generateChartData(): any[] {
+    return Array.from({ length: 10 }, () => ({
+      x: new Date(),
+      y: Math.random() * 100
+    }));
+  }
+  
+  private getDefaultChartConfig(): ChartConfig {
+    return {
+      type: 'line',
+      animation: !this.isLowEndDevice,
+      responsive: true,
+      maintainAspectRatio: false
+    };
+  }
+}
+
+interface Metric {
+  id: string;
+  name: string;
+  value: number;
+  priority: 'high' | 'medium' | 'low';
+  chartData: any[];
+  chartConfig: ChartConfig;
+}
+
+interface ChartConfig {
+  type: string;
+  animation: boolean;
+  responsive: boolean;
+  maintainAspectRatio: boolean;
+}
+
+interface PerformanceMetrics {
+  fps: number;
+  memoryUsage: number;
+  updateRate: number;
+}
+
+// Device capability service
+@Injectable({
+  providedIn: 'root'
+})
+export class DeviceCapabilityService {
+  private deviceInfo: DeviceInfo;
+  
+  constructor() {
+    this.deviceInfo = this.detectDeviceCapabilities();
+  }
+  
+  private detectDeviceCapabilities(): DeviceInfo {
+    const userAgent = navigator.userAgent;
+    const hardwareConcurrency = navigator.hardwareConcurrency || 1;
+    const memory = (performance as any).memory?.usedJSHeapSize || 0;
+    
+    return {
+      type: this.getDeviceType(userAgent),
+      isLowEnd: this.isLowEndDevice(hardwareConcurrency, memory),
+      cores: hardwareConcurrency,
+      memory: memory,
+      userAgent: userAgent
+    };
+  }
+  
+  private getDeviceType(userAgent: string): string {
+    if (/Mobile|Android|iPhone|iPad/.test(userAgent)) {
+      return 'mobile';
+    }
+    if (/Tablet|iPad/.test(userAgent)) {
+      return 'tablet';
+    }
+    return 'desktop';
+  }
+  
+  private isLowEndDevice(cores: number, memory: number): boolean {
+    return cores <= 2 || memory < 50 * 1024 * 1024; // Less than 50MB
+  }
+  
+  getDeviceType(): string {
+    return this.deviceInfo.type;
+  }
+  
+  isLowEndDevice(): boolean {
+    return this.deviceInfo.isLowEnd;
+  }
+  
+  getDeviceInfo(): DeviceInfo {
+    return this.deviceInfo;
+  }
+}
+
+interface DeviceInfo {
+  type: string;
+  isLowEnd: boolean;
+  cores: number;
+  memory: number;
+  userAgent: string;
+}
+```
+
+**🐞 Fixes:** Implement progressive enhancement, use device capability detection, and provide fallbacks for unsupported features on low-end devices.
 
 ---
 

@@ -330,60 +330,6 @@ LegacyOrderServiceAdapter translates legacy SOAP to REST internally.
 ```java
 NGINX or Spring Cloud LoadBalancer routes to healthy instances.
 ```
-# 🧠 Microservices Design Patterns – Mind Map
-
-## 📦 Microservices Patterns
-
-- 🔹 **1. Decomposition Patterns**
-    - 🧩 Decompose by Business Capability
-    - 🧠 Decompose by Subdomain (DDD)
-    - 🌿 Strangler Fig
-
-- 🔹 **2. Integration Patterns (Communication)**
-    - 🛡️ API Gateway
-    - 🧱 Aggregator
-    - 🧭 Proxy
-    - 🔍 Client-side Service Discovery
-    - 🌐 Server-side Service Discovery
-    - 📬 Message Broker / Event-Driven
-
-- 🔹 **3. Database Patterns**
-    - 🗄️ Database per Service
-    - 🧍 Shared Database (anti-pattern)
-    - 🔁 Saga Pattern
-    - 📑 CQRS
-    - 📜 Event Sourcing
-
-- 🔹 **4. Observability Patterns**
-    - 📊 Log Aggregation
-    - 🧵 Distributed Tracing
-    - 📈 Metrics Collection
-    - ❤️ Health Check API
-
-- 🔹 **5. Deployment Patterns**
-    - 🧳 Service Instance per Host
-    - 🧳 Multiple Services per Host
-    - ⚡ Serverless Deployment
-    - 💚💙 Blue-Green Deployment
-    - 🐤 Canary Deployment
-
-- 🔹 **6. Cross-Cutting Concern Patterns**
-    - ⚙️ Externalized Configuration
-    - 🔌 Centralized Logging
-    - 🔐 Access Token / JWT
-    - 🚦 Rate Limiting
-    - 🚫 Circuit Breaker
-    - 🚧 Bulkhead
-    - 🔁 Retry Pattern
-    - ⏱️ Timeout
-
-- 🔹 **7. Infrastructure/Operational Patterns**
-    - 🗃️ Service Registry and Discovery
-    - 🧳 Sidecar Pattern
-    - 🤝 Ambassador Pattern
-    - 🔄 Adapter Pattern
-    - ⚖️ Load Balancer
-----------------------------
 
 # 🧠 Senior Developer Microservices Interview Questions (MNC-Level with Company Tags)
 

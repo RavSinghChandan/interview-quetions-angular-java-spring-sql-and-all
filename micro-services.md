@@ -435,3 +435,227 @@ NGINX or Spring Cloud LoadBalancer routes to healthy instances.
 - ❓ Can you explain the Sidecar and Ambassador patterns in service mesh? *(Asked in Infosys)*
 - ❓ How does load balancing work in your architecture? *(Asked in Tech Mahindra)*
 - ❓ How do you scale services dynamically? *(Asked in Cognizant, HCL)*
+---------
+# 🧠 Senior Developer Microservices Interview Questions (MNC-Level with Company Tags)
+
+## 📂 Decomposition Patterns
+
+### ❓ How would you break a monolithic application into microservices? *(Asked in Infosys, TCS)*
+
+* **Facts**: Monoliths are broken down by business capabilities, team boundaries, scalability needs.
+* **Flow**: Identify domain boundaries → Refactor into bounded contexts → Define service APIs → Extract services iteratively.
+* **Failures**: Tight coupling, no domain-driven boundaries, or database sharing across services.
+* **Fixes**: Apply Domain-Driven Design (DDD), enforce API contracts, use Strangler Fig Pattern.
+
+### ❓ Difference: Decomposition by business capability vs. by subdomain? *(Wipro)*
+
+* **Facts**: Business capability = "What" (e.g., Billing); Subdomain = "How" (e.g., Invoicing, Payment)
+* **Flow**: Business capability → aligns to organization; Subdomain → aligns to code modules.
+* **Failures**: Overlapping boundaries, team misalignment.
+* **Fixes**: Use Event Storming to discover correct bounded contexts.
+
+### ❓ Strangler Fig pattern usage? *(Tech Mahindra)*
+
+* **Facts**: Gradual replacement of legacy code.
+* **Flow**: Route traffic → Replace module → Repeat until full migration.
+* **Failures**: Overlapping routes, parallel data writes.
+* **Fixes**: Use API gateway for routing and feature toggles.
+
+---
+
+## 📂 Integration Patterns
+
+### ❓ API Gateway importance? *(Accenture, Cognizant)*
+
+* **Facts**: Central entry point; handles routing, auth, throttling.
+* **Flow**: Client → Gateway → Internal services.
+* **Failures**: Latency, single point of failure.
+* **Fixes**: Use scalable gateways (e.g., Kong, Zuul) + fallback strategies.
+
+### ❓ Sync vs Async communication? *(Capgemini)*
+
+* **Facts**: Sync = HTTP/gRPC; Async = Kafka, RabbitMQ.
+* **Flow**: Event-driven async for decoupling, resiliency.
+* **Failures**: Over-reliance on sync = bottlenecks.
+* **Fixes**: Use CQRS + event sourcing for async operations.
+
+### ❓ What is service discovery? *(IBM)*
+
+* **Facts**: Auto-discover running services (Eureka, Consul).
+* **Flow**: Register on start → Discover via registry.
+* **Failures**: Manual endpoint config → tight coupling.
+* **Fixes**: Use client-side discovery in Spring Cloud or server-side with Istio.
+
+### ❓ Kafka/RabbitMQ usage? *(HCL Technologies)*
+
+* **Facts**: Kafka = distributed log, Rabbit = queue-based broker.
+* **Flow**: Producer → Broker → Consumer.
+* **Failures**: Message loss, no retries, dead-letter queue misuse.
+* **Fixes**: Use idempotent consumers + back-off policies.
+
+---
+
+## 📂 Database Patterns
+
+### ❓ Data consistency across microservices? *(Infosys, Capgemini)*
+
+* **Facts**: Use eventual consistency.
+* **Flow**: Local DBs → Event publishing → Sync.
+* **Failures**: Cross-service DB calls, strong consistency.
+* **Fixes**: Use Saga/Event Sourcing patterns.
+
+### ❓ Explain Saga Pattern with example? *(TCS)*
+
+* **Facts**: Sequence of local transactions.
+* **Flow**: Service A does work → triggers B → failure triggers compensating txn.
+* **Failures**: Incomplete rollback, orchestration mix-up.
+* **Fixes**: Use choreography (event-based) or orchestration (central saga manager).
+
+### ❓ What is CQRS? *(L\&T Infotech)*
+
+* **Facts**: Command Query Responsibility Segregation.
+* **Flow**: Write = Command model → DB; Read = Query model → denormalized DB.
+* **Failures**: Complexity, sync lag.
+* **Fixes**: Use when read/write load is high or projections needed.
+
+### ❓ Event Sourcing? *(Cognizant)*
+
+* **Facts**: Persist changes as a sequence of events.
+* **Flow**: Store events → Replay to rebuild state.
+* **Failures**: Complex rehydration, large event log.
+* **Fixes**: Use snapshots + event versioning.
+
+---
+
+## 📂 Observability Patterns
+
+### ❓ Centralized logging? *(Wipro)*
+
+* **Facts**: Logs from all services into one place (ELK, EFK).
+* **Flow**: App logs → Fluentd/Logstash → Elasticsearch → Kibana.
+* **Failures**: Missing correlation IDs.
+* **Fixes**: Add trace/request IDs in logs.
+
+### ❓ Distributed tracing? *(Infosys, Zensar)*
+
+* **Facts**: Trace a request across services (Zipkin, Jaeger).
+* **Flow**: Inject trace IDs → Propagate → Visualize.
+* **Failures**: Missing instrumentation.
+* **Fixes**: Use OpenTelemetry/Brave libraries.
+
+### ❓ Monitoring production? *(IBM)*
+
+* **Facts**: Prometheus + Grafana, CloudWatch, Datadog.
+* **Flow**: Metrics → Exporter → Dashboard/Alert.
+* **Failures**: Metric overload or under-monitoring.
+* **Fixes**: Use RED (Rate, Error, Duration) or USE method.
+
+### ❓ Health checks? *(TCS)*
+
+* **Facts**: Liveness vs Readiness probes.
+* **Flow**: /actuator/health or custom.
+* **Failures**: One check = multiple responsibilities.
+* **Fixes**: Separate checks for DB, cache, dependencies.
+
+---
+
+## 📂 Deployment Patterns
+
+### ❓ Blue-Green/Canary Deployments? *(Tech Mahindra)*
+
+* **Facts**: Two environments (Blue-Green) or partial rollout (Canary).
+* **Flow**: Route % traffic → test → full rollout.
+* **Failures**: Routing failure, insufficient testing.
+* **Fixes**: Automate rollback on alerts, use feature toggles.
+
+### ❓ Zero Downtime? *(Capgemini)*
+
+* **Facts**: No user impact during deployment.
+* **Flow**: Health-checks + Load Balancer + Rolling updates.
+* **Failures**: Sticky sessions, schema changes.
+* **Fixes**: Backward compatible deployments, DB versioning.
+
+### ❓ Serverless pros/cons? *(Accenture)*
+
+* **Facts**: Function-as-a-Service (e.g., AWS Lambda).
+* **Flow**: Event → Function → Result.
+* **Failures**: Cold start, limited runtime.
+* **Fixes**: Use for infrequent or spiky workloads.
+
+### ❓ Docker/K8s deployment? *(HCL Technologies)*
+
+* **Facts**: Docker = Container runtime; K8s = Orchestration.
+* **Flow**: Dockerfile → Image → Pod → Service.
+* **Failures**: Image bloat, lack of auto-recovery.
+* **Fixes**: Use multistage builds, liveness probes, HPA.
+
+---
+
+## 📂 Cross-Cutting Concern Patterns
+
+### ❓ Config management? *(TCS)*
+
+* **Facts**: Centralized config (Spring Cloud Config, Consul).
+* **Flow**: App → Config Server → Refresh Scope.
+* **Failures**: Hardcoded values.
+* **Fixes**: Externalize all configs + version control.
+
+### ❓ Circuit Breaker? *(Infosys)*
+
+* **Facts**: Prevents cascading failures.
+* **Flow**: Fail fast → Wait → Retry.
+* **Failures**: No fallback logic.
+* **Fixes**: Use Resilience4j/Hystrix.
+
+### ❓ Secure service communication? *(Cognizant)*
+
+* **Facts**: HTTPS, mutual TLS, API keys.
+* **Flow**: mTLS handshake → token verification.
+* **Failures**: Plain-text communication.
+* **Fixes**: Use OAuth2 + TLS by default.
+
+### ❓ Rate Limiting? *(Capgemini)*
+
+* **Facts**: Prevent abuse.
+* **Flow**: Token bucket or Leaky bucket algorithms.
+* **Failures**: Poor thresholding.
+* **Fixes**: Use API gateway rate limiters.
+
+### ❓ Bulkhead and Retry? *(Wipro)*
+
+* **Facts**: Bulkhead = isolate failures; Retry = transient error recovery.
+* **Flow**: Thread pools per service + Retry policies.
+* **Failures**: Retry storms, shared resources.
+* **Fixes**: Set timeouts + backoff + circuit breaker.
+
+---
+
+## 📂 Infrastructure / Operational Patterns
+
+### ❓ Service Registry role? *(IBM)*
+
+* **Facts**: Auto registration + discovery.
+* **Flow**: Service registers → Clients discover.
+* **Failures**: Manual configs → tight coupling.
+* **Fixes**: Use Spring Cloud Eureka, Consul, or Istio.
+
+### ❓ Sidecar and Ambassador? *(Infosys)*
+
+* **Facts**: Sidecar = helper container; Ambassador = proxy container.
+* **Flow**: Service + Sidecar → Add logging, mesh, etc.
+* **Failures**: Wrong sidecar injection.
+* **Fixes**: Use Helm or Istio sidecar injection.
+
+### ❓ Load balancing? *(Tech Mahindra)*
+
+* **Facts**: Distribute traffic evenly.
+* **Flow**: Client → Load Balancer (Round Robin/LeastConn) → Services.
+* **Failures**: Uneven load or single LB.
+* **Fixes**: Use L4/L7 load balancers with sticky sessions.
+
+### ❓ Scaling services dynamically? *(Cognizant, HCL)*
+
+* **Facts**: Horizontal/Vertical Scaling.
+* **Flow**: Metric → Auto-scaler → Scale out/in.
+* **Failures**: Latency in scale, no metric threshold.
+* **Fixes**: HPA in Kubernetes, resource limits, Prometheus alerts.

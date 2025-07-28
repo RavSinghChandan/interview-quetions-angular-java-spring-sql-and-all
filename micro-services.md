@@ -335,273 +335,703 @@ NGINX or Spring Cloud LoadBalancer routes to healthy instances.
 
 ## 📂 Decomposition Patterns
 
-- ❓ How would you break a monolithic application into microservices? *(Asked in Infosys, TCS)*
-- ❓ What’s the difference between decomposition by business capability vs. by subdomain? *(Asked in Wipro)*
-- ❓ Can you explain the Strangler Fig pattern and where you've used it? *(Asked in Tech Mahindra)*
+### 1. ❓ How would you break a monolithic application into microservices? *(Asked in Infosys, TCS)*
+
+#### ✅ Answer:
+
+Breaking a monolithic application into microservices is a multi-step process. The key is to gradually identify bounded contexts and migrate functionality in a controlled way.
+
+#### 🔧 Steps:
+
+1. **Understand the Monolith:**
+
+    * Analyze the codebase and domain.
+    * Identify modules, coupling, and dependencies.
+
+2. **Define Bounded Contexts:**
+
+    * Use Domain-Driven Design (DDD) to break into smaller domains.
+    * Group functionality that changes together.
+
+3. **Prioritize Components:**
+
+    * Choose loosely coupled, high-value components first (e.g., User, Orders, Payments).
+
+4. **Extract Microservices One-by-One:**
+
+    * Use techniques like API Gateway and Backend-for-Frontend (BFF).
+    * Extract a domain, expose REST/gRPC API.
+
+5. **Set Up Communication:**
+
+    * Use synchronous (REST/gRPC) or asynchronous (Kafka/RabbitMQ) messaging.
+
+6. **Migrate Data:**
+
+    * Either split the database (database-per-service) or introduce views initially.
+
+7. **Deployment:**
+
+    * Use containers (Docker, K8s) for individual deployment.
+
+
+```text
+[Client] → [API Gateway] → [Order Service] → [Inventory Service] → [Payment Service]
+```
+
+#### 🧪 Follow-up Questions:
+
+* How do you manage shared authentication?
+* What challenges did you face while decoupling the DB?
+* How do you ensure backward compatibility during transition?
+
+---
+
+### 2. ❓ What’s the difference between decomposition by business capability vs. by subdomain? *(Asked in Wipro)*
+
+#### ✅ Answer:
+
+**Business Capability** and **Subdomain** based decomposition both aim to break large systems into manageable units, but with different philosophies.
+
+| Aspect     | Business Capability                                   | Subdomain                                                               |
+| ---------- | ----------------------------------------------------- | ----------------------------------------------------------------------- |
+| Definition | High-level business function (e.g., Payments, Orders) | Logical breakdown of a domain (e.g., Catalog, Pricing inside eCommerce) |
+| Scope      | Broader, based on enterprise goals                    | Finer-grained, based on domain models                                   |
+| Tools      | Business Architecture, Process Maps                   | DDD (Domain-Driven Design), Bounded Contexts                            |
+
+#### 🧠 Example:
+
+In an eCommerce system:
+
+* **Business Capabilities:** User Management, Order Processing, Payment Gateway
+* **Subdomains:** Within Order Processing → Order Validation, Shipping, Invoicing
+
+#### 🧪 Follow-up Questions:
+
+* Which one would you prefer for legacy system decomposition?
+* How do you map these to teams?
+
+---
+
+### 3. ❓ Can you explain the Strangler Fig pattern and where you've used it? *(Asked in Tech Mahindra)*
+
+#### ✅ Answer:
+
+The **Strangler Fig Pattern** is a technique to gradually replace a monolithic system by building a new system around the edges and redirecting traffic, eventually "strangling" the monolith.
+
+#### 🌱 Origin:
+
+It’s named after a fig tree that grows around a host tree and slowly replaces it.
+
+#### 🔧 Steps:
+
+1. Route requests through a **proxy/gateway**.
+2. Implement new features in **microservices**.
+3. Migrate existing features one-by-one.
+4. Decommission parts of the monolith gradually.
+
+#### 💡 Architecture Flow:
+
+```text
+          ┌────────────┐
+Client →  │  Gateway   │
+          └────┬───────┘
+               ↓
+ ┌─────────────────────────────┐
+ │     Monolith (Old)          │
+ └─────────────────────────────┘
+ ┌─────────────────────────────┐
+ │   New Microservices (New)   │
+ └─────────────────────────────┘
+```
+
+#### 💼 Real-world Use Case:
+
+In a legacy payroll system, we used the strangler fig pattern to migrate the attendance, tax, and leave modules individually to Spring Boot-based services while the remaining parts were kept in the monolith.
+
+#### 🧪 Follow-up Questions:
+
+* How do you route requests dynamically to old/new services?
+* How do you track progress and rollback if a new service fails?
+
 
 ## 📂 Integration Patterns
+# Microservices Communication & Integration
 
-- ❓ What is an API Gateway, and why is it important in microservices? *(Asked in Accenture, Cognizant)*
-- ❓ How do you handle communication between services — sync vs async? *(Asked in Capgemini)*
-- ❓ What is service discovery? How do client-side and server-side discovery differ? *(Asked in IBM)*
-- ❓ Have you worked with message brokers like Kafka or RabbitMQ? *(Asked in HCL Technologies)*
+## ❓ What is an API Gateway, and why is it important in microservices? *(Asked in Accenture, Cognizant)*
+
+### ✅ Answer:
+
+An **API Gateway** is a single entry point for all clients to interact with the backend microservices. It acts as a reverse proxy, routing requests, handling authentication, rate limiting, caching, and protocol translation.
+
+### 🧠 Why it’s Important:
+
+* **Single Entry Point**: Centralizes access to services.
+* **Security**: Handles authentication, authorization, and encryption (TLS).
+* **Load Balancing**: Distributes traffic evenly across services.
+* **Request Aggregation**: Combines responses from multiple services into one.
+* **Cross-Cutting Concerns**: Logging, tracing, monitoring, retry policies, etc.
+
+### 🛠️ Example Tools:
+
+* **Spring Cloud Gateway**
+* **Netflix Zuul**
+* **Kong**
+* **Nginx**
+
+---
+
+## ❓ How do you handle communication between services — sync vs async? *(Asked in Capgemini)*
+
+### ✅ Answer:
+
+### 1. **Synchronous Communication (Sync):**
+
+* **Definition**: One service calls another via REST or gRPC and waits for the response.
+* **Protocols**: HTTP/HTTPS, gRPC
+* **Pros**: Simpler, direct responses
+* **Cons**: Tightly coupled, failure-prone if downstream service is slow or down
+
+### 2. **Asynchronous Communication (Async):**
+
+* **Definition**: Services communicate via events or messages without waiting for a response.
+* **Protocols**: Kafka, RabbitMQ, ActiveMQ
+* **Pros**: Loose coupling, better resilience & scalability
+* **Cons**: Complex to debug and monitor, eventual consistency
+
+### 🛠️ When to Use What?
+
+* **Sync** for user-facing requests that require immediate feedback (e.g., login, payments)
+* **Async** for event-driven, background, or batch jobs (e.g., email notifications, audit logging)
+
+---
+
+## ❓ What is service discovery? How do client-side and server-side discovery differ? *(Asked in IBM)*
+
+### ✅ Answer:
+
+**Service discovery** is the process of automatically detecting and resolving the network location (host/port) of microservice instances.
+
+### 🧭 Types:
+
+#### 1. **Client-side discovery**
+
+* The client queries a service registry to find available service instances.
+* **Example**: Netflix Ribbon with Eureka
+
+#### 2. **Server-side discovery**
+
+* The client makes a request to a load balancer, which queries the registry and forwards the request.
+* **Example**: AWS ALB + ECS, Kubernetes with CoreDNS
+
+### 🔄 Service Registry Examples:
+
+* **Eureka**
+* **Consul**
+* **Zookeeper**
+* **Kubernetes** (via DNS)
+
+---
+
+## ❓ Have you worked with message brokers like Kafka or RabbitMQ? *(Asked in HCL Technologies)*
+
+### ✅ Answer:
+
+Yes. In several enterprise projects:
+
+### Apache Kafka:
+
+* Used for real-time data pipelines and streaming.
+* Implemented **event sourcing** and **pub-sub architecture**.
+* Features: High throughput, partitioning, message durability.
+* Example: User sign-up events were published to Kafka and consumed by analytics, email, and audit services.
+
+### RabbitMQ:
+
+* Used for task queues and async processing.
+* Implemented **delayed retry queues** and **dead-letter exchanges**.
+* Suitable for request buffering and load smoothing.
+
+### Key Differences:
+
+| Feature       | Kafka                    | RabbitMQ              |
+| ------------- | ------------------------ | --------------------- |
+| Type          | Distributed log          | Message broker (AMQP) |
+| Use-case      | Stream processing        | Task/message queuing  |
+| Message Order | Maintained per partition | Not guaranteed        |
+| Throughput    | High                     | Medium                |
+
+Both tools were instrumental in building resilient, scalable, and decoupled services.
+
 
 ## 📂 Database Patterns
 
-- ❓ How do you maintain data consistency across microservices? *(Asked in Infosys, Capgemini)*
-- ❓ What is the Saga pattern? Can you explain with an example? *(Asked in TCS)*
-- ❓ What is CQRS and how does it help in a microservices architecture? *(Asked in L&T Infotech)*
-- ❓ Can you describe Event Sourcing and when to use it? *(Asked in Cognizant)*
+## 📂 Database Patterns in Microservices
+
+---
+
+### ❓ How do you maintain data consistency across microservices?
+
+**Interviewed At:** Infosys, Capgemini
+
+**Answer:**
+Maintaining data consistency across distributed microservices is challenging because each service owns its own database. We handle it using:
+
+1. **Eventual Consistency**: Rather than strict ACID guarantees, services communicate via events using brokers like Kafka. Updates propagate eventually.
+2. **SAGA Pattern**: For long-running, multi-service transactions.
+3. **Compensating Transactions**: Used to undo work when a downstream service fails.
+4. **Idempotency & Retries**: Ensures message reprocessing doesn’t corrupt data.
+
+> Example: In an e-commerce app, placing an order triggers events to reserve stock and initiate payment. If payment fails, inventory is released via a compensating transaction.
+
+---
+
+### ❓ What is the Saga pattern? Can you explain with an example?
+
+**Interviewed At:** TCS
+
+**Answer:**
+The Saga Pattern is used to maintain data consistency in distributed transactions by breaking them into a series of local transactions, coordinated through events or commands.
+
+Two main types:
+
+1. **Choreography** – Events trigger actions across services without a central orchestrator.
+2. **Orchestration** – A central saga coordinator issues commands to services.
+
+> Example:
+>
+> 1. Order Service creates order.
+> 2. It emits an event → Inventory Service reserves stock.
+> 3. If successful, → Payment Service charges customer.
+> 4. If payment fails, a rollback event is sent → Inventory Service releases stock → Order Service marks order as failed.
+
+---
+
+### ❓ What is CQRS and how does it help in a microservices architecture?
+
+**Interviewed At:** L\&T Infotech
+
+**Answer:**
+**CQRS (Command Query Responsibility Segregation)** separates read and write operations:
+
+* **Commands**: Update state (Write DB).
+* **Queries**: Retrieve data (Read DB).
+
+**Benefits:**
+
+* Scalability: Read/write parts scale independently.
+* Optimized queries: Read models can be denormalized.
+* Enhanced security: Separate models allow fine-grained permissioning.
+
+> Use Case: In a banking app, `DepositMoneyCommand` updates balance, while `GetTransactionHistoryQuery` fetches past transactions from a separate, fast-read store.
+
+---
+
+### ❓ Can you describe Event Sourcing and when to use it?
+
+**Interviewed At:** Cognizant
+
+**Answer:**
+**Event Sourcing** is a pattern where state changes are stored as a sequence of events instead of directly modifying and storing the current state.
+
+**How it works:**
+
+* Events (e.g., "OrderCreated", "StockReserved") are persisted.
+* Current state is rebuilt by replaying events.
+
+**Benefits:**
+
+* Full audit trail.
+* Replayability and debugging.
+* Naturally fits with CQRS and Kafka.
+
+**Use Cases:**
+
+* Financial apps needing audit logs.
+* Systems with high business rule complexity.
+
+> Example: Instead of saving the latest bank balance, store all transactions (events). The current balance is derived by replaying them.
+
+---
+
+Let me know if you'd like visuals or example code added to any of these patterns.
 
 ## 📂 Observability Patterns
 
-- ❓ How do you implement centralized logging in a microservices setup? *(Asked in Wipro)*
-- ❓ What is distributed tracing and which tools have you used? *(Asked in Infosys, Zensar)*
-- ❓ How do you monitor microservices in production? *(Asked in IBM)*
-- ❓ What health checks do you configure for your services? *(Asked in TCS)*
+### ❓ How do you implement centralized logging in a microservices setup? *(Asked in Wipro)*
+
+**Answer:**
+Centralized logging involves aggregating logs from multiple services into a single location to simplify monitoring and debugging.
+
+**Approach:**
+
+* Use a logging agent like **Fluentd**, **Logstash**, or **Filebeat**.
+* Ship logs to a centralized storage like **Elasticsearch**.
+* Visualize using tools like **Kibana** or **Grafana Loki**.
+
+**Stack Example:**
+
+```
+Service Logs --> Filebeat/Fluentd --> Logstash --> Elasticsearch --> Kibana (ELK Stack)
+```
+
+**Benefits:**
+
+* Correlate logs across services.
+* Easier root cause analysis.
+* Alerting based on log patterns.
+
+---
+
+### ❓ What is distributed tracing and which tools have you used? *(Asked in Infosys, Zensar)*
+
+**Answer:**
+Distributed tracing is a technique to trace a request as it travels across multiple microservices. It provides visibility into latency and bottlenecks.
+
+**Tools Used:**
+
+* **Jaeger**
+* **Zipkin**
+* **OpenTelemetry** (standardized approach)
+
+**How It Works:**
+
+* Each service attaches a trace ID to the request.
+* As the request flows, spans are created.
+* The tracing system aggregates spans and shows a visual call tree.
+
+**Use Case:**
+
+> When a payment service was causing slow response time, tracing revealed a downstream fraud-check service was the bottleneck.
+
+---
+
+### ❓ How do you monitor microservices in production? *(Asked in IBM)*
+
+**Answer:**
+Monitoring involves tracking service health, metrics, and performance in real time.
+
+**Tools & Techniques:**
+
+* **Prometheus**: Metrics collection
+* **Grafana**: Dashboard visualization
+* **Alertmanager**: Threshold-based alerts
+* **New Relic** / **Datadog**: Full-stack observability (APM)
+
+**Metrics to Monitor:**
+
+* CPU/memory usage
+* Request rate and error rate
+* Latency (p50, p90, p99)
+* Uptime & availability
+
+---
+
+### ❓ What health checks do you configure for your services? *(Asked in TCS)*
+
+**Answer:**
+Health checks help load balancers or orchestration tools like Kubernetes determine if a service is running correctly.
+
+**Types of Health Checks:**
+
+* **Liveness Check:** Is the app running?
+* **Readiness Check:** Is the app ready to receive traffic?
+
+**Example Endpoint:**
+
+```http
+GET /actuator/health
+```
+
+**Spring Boot Example:**
+
+```yaml
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+```
+
+**Benefits:**
+
+* Prevent routing to unhealthy services.
+* Enable auto-recovery through container restart.
+
+---
+
 
 ## 📂 Deployment Patterns
 
-- ❓ What deployment strategies have you used — Blue-Green or Canary? *(Asked in Tech Mahindra)*
-- ❓ How do you achieve zero downtime deployments in microservices? *(Asked in Capgemini)*
-- ❓ What are the pros and cons of serverless for microservices? *(Asked in Accenture)*
-- ❓ Explain how you use containers (Docker/K8s) for deployment. *(Asked in HCL Technologies)*
+## 📦 Deployment Patterns in Microservices
 
-## 📂 Cross-Cutting Concern Patterns
+### ❓ What deployment strategies have you used — Blue-Green or Canary? *(Asked in Tech Mahindra)*
 
-- ❓ How do you handle configuration management across services? *(Asked in TCS)*
-- ❓ What is a Circuit Breaker and how have you implemented it? *(Asked in Infosys)*
-- ❓ How do you secure communication between services? *(Asked in Cognizant)*
-- ❓ What is rate limiting and how do you implement it in a gateway? *(Asked in Capgemini)*
-- ❓ Explain bulkhead and retry patterns with real-life examples. *(Asked in Wipro)*
+**Answer:**
+I have implemented both **Blue-Green** and **Canary deployments** depending on the release requirements.
+
+* **Blue-Green Deployment:**
+
+    * Two identical environments (Blue & Green).
+    * New version is deployed to the idle environment (e.g., Green).
+    * After testing, traffic is switched from Blue to Green.
+    * Rollback is instant — just switch back to Blue.
+    * **Used when:** There is high risk, and rollback needs to be fast.
+
+* **Canary Deployment:**
+
+    * New version is released to a small subset of users first.
+    * If no issues, traffic is gradually increased.
+    * **Used when:** You want to test new features in production slowly.
+
+---
+
+### ❓ How do you achieve zero downtime deployments in microservices? *(Asked in Capgemini)*
+
+**Answer:**
+To ensure **zero downtime**, I follow these practices:
+
+1. **Rolling Updates**: Update services one pod/container at a time.
+2. **Load Balancer + Health Checks**: Route traffic only to healthy instances.
+3. **Blue-Green or Canary Deployments**: As discussed above.
+4. **Feature Flags**: Enable/disable features without redeploying code.
+5. **Graceful Shutdown**: Services stop accepting traffic and finish ongoing tasks before termination.
+
+**Tools used:** Kubernetes (`rollingUpdate` strategy), Spring Boot Actuator for health endpoints, LaunchDarkly for feature flags.
+
+---
+
+### ❓ What are the pros and cons of serverless for microservices? *(Asked in Accenture)*
+
+**Answer:**
+**Pros:**
+
+* **No server management:** Fully managed runtime.
+* **Auto-scaling:** Based on actual usage.
+* **Cost-effective:** Pay only for what you use.
+* **Faster time to market.**
+
+**Cons:**
+
+* **Cold starts:** Can lead to latency.
+* **Debugging and monitoring** is harder.
+* **Vendor lock-in.**
+* **Limited execution time and resources**.
+
+**When I used it:**
+
+* For lightweight, event-driven tasks (e.g., image processing, notification services) using AWS Lambda.
+
+---
+
+### ❓ Explain how you use containers (Docker/K8s) for deployment. *(Asked in HCL Technologies)*
+
+**Answer:**
+I containerize each microservice using **Docker**, then manage deployment using **Kubernetes**.
+
+**Steps:**
+
+1. **Dockerfile**: Define environment, dependencies, and entry point.
+2. **CI/CD Pipeline**: Build Docker images → Push to container registry (e.g., ECR/DockerHub).
+3. **Kubernetes Manifests**:
+
+    * **Deployments** for rolling updates
+    * **Services** for service discovery
+    * **Ingress** for routing external traffic
+4. **Helm**: For templated deployments.
+
+**Benefits:**
+
+* Environment consistency
+* Scalable, resilient deployments
+* Easy rollback and horizontal scaling
+
+---
+
+Let me know if you'd like diagrams or YAML examples for these answers!
+
+
+# 📂 Resilience Patterns in Microservices
+
+## ❓ How do you handle configuration management across services? *(Asked in TCS)*
+
+**Answer**:
+In a microservices architecture, centralizing configuration helps ensure consistency and easier updates. I use Spring Cloud Config Server backed by Git to externalize configurations for all services. This allows changes without restarting the services.
+
+- For dynamic refresh, I enable `@RefreshScope` and use Actuator `/refresh` endpoint.
+- Secrets and sensitive values are managed using HashiCorp Vault or AWS Parameter Store.
+
+**Example**: In a project for a retail client, we externalized database URLs, feature toggles, and limits. One update to `application.yml` in Git reflected across environments without redeployments.
+
+---
+
+## ❓ What is a Circuit Breaker and how have you implemented it? *(Asked in Infosys)*
+
+**Answer**:
+A circuit breaker prevents cascading failures by detecting failed remote service calls and halting further calls temporarily.
+
+I’ve implemented it using **Resilience4j** in Spring Boot:
+
+```java
+@CircuitBreaker(name = "inventoryService", fallbackMethod = "fallbackInventory")
+public Inventory checkInventory(String productId) {
+    return inventoryClient.getInventory(productId);
+}
+
+public Inventory fallbackInventory(String productId, Throwable t) {
+    return new Inventory(productId, 0); // Default response
+}
+```
+
+**Real-life**: When an external inventory service was down, circuit breaker reduced downtime by stopping repetitive failing calls and using fallback stock level.
+
+---
+
+## ❓ How do you secure communication between services? *(Asked in Cognizant)*
+
+**Answer**:
+I use **mTLS (Mutual TLS)** and **OAuth2/JWT** for securing service-to-service communication.
+
+- **mTLS** ensures both client and server authenticate each other using certificates.
+- **OAuth2** with Keycloak/Azure AD issues access tokens validated at each service boundary.
+
+**Real-life**: In a fintech project, we used Istio with mTLS enabled by default in the mesh, and each service validated JWT issued by a centralized identity provider.
+
+---
+
+## ❓ What is rate limiting and how do you implement it in a gateway? *(Asked in Capgemini)*
+
+**Answer**:
+Rate limiting restricts the number of requests a client can make in a time window to protect services from abuse.
+
+I use **Spring Cloud Gateway** with Redis-backed rate limiting filters:
+
+```yaml
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: product-api
+        uri: lb://product-service
+        predicates:
+        - Path=/product/**
+        filters:
+        - name: RequestRateLimiter
+          args:
+            redis-rate-limiter.replenishRate: 5
+            redis-rate-limiter.burstCapacity: 10
+```
+
+**Real-life**: In an e-commerce app, we applied per-user rate limiting at gateway level to prevent scraping and brute-force attacks.
+
+---
+
+## ❓ Explain bulkhead and retry patterns with real-life examples. *(Asked in Wipro)*
+
+**Answer**:
+
+- **Bulkhead Pattern**: Isolates service dependencies in separate thread pools to avoid one failing dependency affecting others.
+
+```java
+@Bulkhead(name = "orderService", type = Bulkhead.Type.THREADPOOL)
+public OrderResponse getOrder(String id) { ... }
+```
+
+- **Retry Pattern**: Automatically retries a failed operation a limited number of times.
+
+```java
+@Retry(name = "paymentService", fallbackMethod = "fallbackPayment")
+public Payment processPayment(Request request) { ... }
+```
+
+**Real-life**: In a travel booking system:
+- We used **bulkhead** to separate calls to flight, hotel, and cab services.
+- **Retry** helped recover from transient network issues to external APIs like payment gateways.
+
+---
+
+✅ **Tip**: Use Resilience4j with Spring Boot for all resilience patterns: Circuit Breaker, Bulkhead, Retry, RateLimiter, and TimeLimiter.
 
 ## 📂 Infrastructure/Operational Patterns
 
-- ❓ What is the role of a service registry like Eureka or Consul? *(Asked in IBM)*
-- ❓ Can you explain the Sidecar and Ambassador patterns in service mesh? *(Asked in Infosys)*
-- ❓ How does load balancing work in your architecture? *(Asked in Tech Mahindra)*
-- ❓ How do you scale services dynamically? *(Asked in Cognizant, HCL)*
+# 📂 Microservices Communication & Discovery Patterns
+
+## ❓ What is the role of a service registry like Eureka or Consul? *(Asked in IBM)*
+
+A **service registry** is a database of services and their locations. It enables **service discovery**, which allows microservices to dynamically find and connect to each other without hardcoding IPs or ports.
+
+### ✅ Example:
+- `Eureka` (Spring Cloud Netflix) or `Consul` (HashiCorp) are commonly used.
+- A client registers itself on startup.
+- Other services query the registry to find its instance location.
+
+### 📦 Benefits:
+- Load balancing and fault tolerance (with Ribbon or Spring Cloud LoadBalancer).
+- Helps scale services elastically and avoid stale configs.
+
+---
+
+## ❓ Can you explain the Sidecar and Ambassador patterns in service mesh? *(Asked in Infosys)*
+
+These are **service mesh patterns** that abstract infrastructure concerns from the main application logic.
+
+### 🧩 Sidecar Pattern:
+- A helper container runs alongside your service container in the same pod.
+- It handles logging, metrics, routing, proxying (e.g., Istio’s Envoy proxy).
+
+### 🤝 Ambassador Pattern:
+- A separate service acts as a proxy between your application and external services.
+- Useful for offloading cross-cutting concerns (e.g., rate-limiting, auth).
+
+---
+
+## ❓ How does load balancing work in your architecture? *(Asked in Tech Mahindra)*
+
+Load balancing ensures incoming requests are distributed evenly across multiple instances.
+
+### ⚙️ Common Techniques:
+- **Client-side LB**: e.g., Ribbon, Spring Cloud LoadBalancer, uses service registry to choose a healthy instance.
+- **Server-side LB**: e.g., NGINX, HAProxy, Kubernetes Services, or Ingress Controllers.
+- **Global LB**: e.g., AWS Elastic Load Balancer, GCP Load Balancing.
+
+### 🔁 Example:
+```java
+@LoadBalanced
+@Bean
+public RestTemplate restTemplate() {
+    return new RestTemplate();
+}
+```
+
+---
+
+## ❓ How do you scale services dynamically? *(Asked in Cognizant, HCL)*
+
+### 🛠️ Manual Scaling:
+- Increase/decrease instances manually (e.g., using Kubernetes CLI or Spring Boot Admin).
+
+### 🤖 Auto-Scaling:
+- **Kubernetes Horizontal Pod Autoscaler** based on CPU/memory or custom metrics.
+- **Cloud-native** scaling using AWS EC2 Auto Scaling Groups, GCP App Engine, etc.
+
+### 💡 Example:
+```yaml
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: my-service
+  minReplicas: 2
+  maxReplicas: 10
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 50
+```
+
 ---------
-# 🧠 Senior Developer Microservices Interview Questions (MNC-Level with Company Tags)
-
-## 📂 Decomposition Patterns
-
-### ❓ How would you break a monolithic application into microservices? *(Asked in Infosys, TCS)*
-
-* **Facts**: Monoliths are broken down by business capabilities, team boundaries, scalability needs.
-* **Flow**: Identify domain boundaries → Refactor into bounded contexts → Define service APIs → Extract services iteratively.
-* **Failures**: Tight coupling, no domain-driven boundaries, or database sharing across services.
-* **Fixes**: Apply Domain-Driven Design (DDD), enforce API contracts, use Strangler Fig Pattern.
-
-### ❓ Difference: Decomposition by business capability vs. by subdomain? *(Wipro)*
-
-* **Facts**: Business capability = "What" (e.g., Billing); Subdomain = "How" (e.g., Invoicing, Payment)
-* **Flow**: Business capability → aligns to organization; Subdomain → aligns to code modules.
-* **Failures**: Overlapping boundaries, team misalignment.
-* **Fixes**: Use Event Storming to discover correct bounded contexts.
-
-### ❓ Strangler Fig pattern usage? *(Tech Mahindra)*
-
-* **Facts**: Gradual replacement of legacy code.
-* **Flow**: Route traffic → Replace module → Repeat until full migration.
-* **Failures**: Overlapping routes, parallel data writes.
-* **Fixes**: Use API gateway for routing and feature toggles.
-
----
-
-## 📂 Integration Patterns
-
-### ❓ API Gateway importance? *(Accenture, Cognizant)*
-
-* **Facts**: Central entry point; handles routing, auth, throttling.
-* **Flow**: Client → Gateway → Internal services.
-* **Failures**: Latency, single point of failure.
-* **Fixes**: Use scalable gateways (e.g., Kong, Zuul) + fallback strategies.
-
-### ❓ Sync vs Async communication? *(Capgemini)*
-
-* **Facts**: Sync = HTTP/gRPC; Async = Kafka, RabbitMQ.
-* **Flow**: Event-driven async for decoupling, resiliency.
-* **Failures**: Over-reliance on sync = bottlenecks.
-* **Fixes**: Use CQRS + event sourcing for async operations.
-
-### ❓ What is service discovery? *(IBM)*
-
-* **Facts**: Auto-discover running services (Eureka, Consul).
-* **Flow**: Register on start → Discover via registry.
-* **Failures**: Manual endpoint config → tight coupling.
-* **Fixes**: Use client-side discovery in Spring Cloud or server-side with Istio.
-
-### ❓ Kafka/RabbitMQ usage? *(HCL Technologies)*
-
-* **Facts**: Kafka = distributed log, Rabbit = queue-based broker.
-* **Flow**: Producer → Broker → Consumer.
-* **Failures**: Message loss, no retries, dead-letter queue misuse.
-* **Fixes**: Use idempotent consumers + back-off policies.
-
----
-
-## 📂 Database Patterns
-
-### ❓ Data consistency across microservices? *(Infosys, Capgemini)*
-
-* **Facts**: Use eventual consistency.
-* **Flow**: Local DBs → Event publishing → Sync.
-* **Failures**: Cross-service DB calls, strong consistency.
-* **Fixes**: Use Saga/Event Sourcing patterns.
-
-### ❓ Explain Saga Pattern with example? *(TCS)*
-
-* **Facts**: Sequence of local transactions.
-* **Flow**: Service A does work → triggers B → failure triggers compensating txn.
-* **Failures**: Incomplete rollback, orchestration mix-up.
-* **Fixes**: Use choreography (event-based) or orchestration (central saga manager).
-
-### ❓ What is CQRS? *(L\&T Infotech)*
-
-* **Facts**: Command Query Responsibility Segregation.
-* **Flow**: Write = Command model → DB; Read = Query model → denormalized DB.
-* **Failures**: Complexity, sync lag.
-* **Fixes**: Use when read/write load is high or projections needed.
-
-### ❓ Event Sourcing? *(Cognizant)*
-
-* **Facts**: Persist changes as a sequence of events.
-* **Flow**: Store events → Replay to rebuild state.
-* **Failures**: Complex rehydration, large event log.
-* **Fixes**: Use snapshots + event versioning.
-
----
-
-## 📂 Observability Patterns
-
-### ❓ Centralized logging? *(Wipro)*
-
-* **Facts**: Logs from all services into one place (ELK, EFK).
-* **Flow**: App logs → Fluentd/Logstash → Elasticsearch → Kibana.
-* **Failures**: Missing correlation IDs.
-* **Fixes**: Add trace/request IDs in logs.
-
-### ❓ Distributed tracing? *(Infosys, Zensar)*
-
-* **Facts**: Trace a request across services (Zipkin, Jaeger).
-* **Flow**: Inject trace IDs → Propagate → Visualize.
-* **Failures**: Missing instrumentation.
-* **Fixes**: Use OpenTelemetry/Brave libraries.
-
-### ❓ Monitoring production? *(IBM)*
-
-* **Facts**: Prometheus + Grafana, CloudWatch, Datadog.
-* **Flow**: Metrics → Exporter → Dashboard/Alert.
-* **Failures**: Metric overload or under-monitoring.
-* **Fixes**: Use RED (Rate, Error, Duration) or USE method.
-
-### ❓ Health checks? *(TCS)*
-
-* **Facts**: Liveness vs Readiness probes.
-* **Flow**: /actuator/health or custom.
-* **Failures**: One check = multiple responsibilities.
-* **Fixes**: Separate checks for DB, cache, dependencies.
-
----
-
-## 📂 Deployment Patterns
-
-### ❓ Blue-Green/Canary Deployments? *(Tech Mahindra)*
-
-* **Facts**: Two environments (Blue-Green) or partial rollout (Canary).
-* **Flow**: Route % traffic → test → full rollout.
-* **Failures**: Routing failure, insufficient testing.
-* **Fixes**: Automate rollback on alerts, use feature toggles.
-
-### ❓ Zero Downtime? *(Capgemini)*
-
-* **Facts**: No user impact during deployment.
-* **Flow**: Health-checks + Load Balancer + Rolling updates.
-* **Failures**: Sticky sessions, schema changes.
-* **Fixes**: Backward compatible deployments, DB versioning.
-
-### ❓ Serverless pros/cons? *(Accenture)*
-
-* **Facts**: Function-as-a-Service (e.g., AWS Lambda).
-* **Flow**: Event → Function → Result.
-* **Failures**: Cold start, limited runtime.
-* **Fixes**: Use for infrequent or spiky workloads.
-
-### ❓ Docker/K8s deployment? *(HCL Technologies)*
-
-* **Facts**: Docker = Container runtime; K8s = Orchestration.
-* **Flow**: Dockerfile → Image → Pod → Service.
-* **Failures**: Image bloat, lack of auto-recovery.
-* **Fixes**: Use multistage builds, liveness probes, HPA.
-
----
-
-## 📂 Cross-Cutting Concern Patterns
-
-### ❓ Config management? *(TCS)*
-
-* **Facts**: Centralized config (Spring Cloud Config, Consul).
-* **Flow**: App → Config Server → Refresh Scope.
-* **Failures**: Hardcoded values.
-* **Fixes**: Externalize all configs + version control.
-
-### ❓ Circuit Breaker? *(Infosys)*
-
-* **Facts**: Prevents cascading failures.
-* **Flow**: Fail fast → Wait → Retry.
-* **Failures**: No fallback logic.
-* **Fixes**: Use Resilience4j/Hystrix.
-
-### ❓ Secure service communication? *(Cognizant)*
-
-* **Facts**: HTTPS, mutual TLS, API keys.
-* **Flow**: mTLS handshake → token verification.
-* **Failures**: Plain-text communication.
-* **Fixes**: Use OAuth2 + TLS by default.
-
-### ❓ Rate Limiting? *(Capgemini)*
-
-* **Facts**: Prevent abuse.
-* **Flow**: Token bucket or Leaky bucket algorithms.
-* **Failures**: Poor thresholding.
-* **Fixes**: Use API gateway rate limiters.
-
-### ❓ Bulkhead and Retry? *(Wipro)*
-
-* **Facts**: Bulkhead = isolate failures; Retry = transient error recovery.
-* **Flow**: Thread pools per service + Retry policies.
-* **Failures**: Retry storms, shared resources.
-* **Fixes**: Set timeouts + backoff + circuit breaker.
-
----
-
-## 📂 Infrastructure / Operational Patterns
-
-### ❓ Service Registry role? *(IBM)*
-
-* **Facts**: Auto registration + discovery.
-* **Flow**: Service registers → Clients discover.
-* **Failures**: Manual configs → tight coupling.
-* **Fixes**: Use Spring Cloud Eureka, Consul, or Istio.
-
-### ❓ Sidecar and Ambassador? *(Infosys)*
-
-* **Facts**: Sidecar = helper container; Ambassador = proxy container.
-* **Flow**: Service + Sidecar → Add logging, mesh, etc.
-* **Failures**: Wrong sidecar injection.
-* **Fixes**: Use Helm or Istio sidecar injection.
-
-### ❓ Load balancing? *(Tech Mahindra)*
-
-* **Facts**: Distribute traffic evenly.
-* **Flow**: Client → Load Balancer (Round Robin/LeastConn) → Services.
-* **Failures**: Uneven load or single LB.
-* **Fixes**: Use L4/L7 load balancers with sticky sessions.
-
-### ❓ Scaling services dynamically? *(Cognizant, HCL)*
-
-* **Facts**: Horizontal/Vertical Scaling.
-* **Flow**: Metric → Auto-scaler → Scale out/in.
-* **Failures**: Latency in scale, no metric threshold.
-* **Fixes**: HPA in Kubernetes, resource limits, Prometheus alerts.

@@ -27,8 +27,6 @@
 12. Index-as-Hash / Negation Technique
 
 --------------------------------------------------------------------------------
-# Array DSA Techniques (Categorized by Priority: 0 → 1 → 2)
-
 ---
 
 ## 🧠 General Techniques (Lifelong Patterns)

@@ -1,7 +1,4 @@
 
----
-
-## 🧠 ANGULAR – Topic-wise Tricky & Concept-Proving Questions (10+ per topic)
 
 ---
 

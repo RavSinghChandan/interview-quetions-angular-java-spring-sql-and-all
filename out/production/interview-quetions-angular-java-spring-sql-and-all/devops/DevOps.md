@@ -71,7 +71,7 @@ This document contains the most frequently asked DevOps interview questions, tai
 /build/
 *.class
 *.log
-.idea/
+../.idea/
 *.iml
 ```
 

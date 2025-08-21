@@ -4,7 +4,6 @@ Here’s the **complete `.md` file** for you to copy-paste into your handbook.
 
 ---
 
-```markdown
 # 📘 Future Java Projects (Valhalla, Loom, Panama, Amber)
 
 This document covers the **ongoing and upcoming Java projects** that shape the future of the language and platform.  
@@ -24,6 +23,20 @@ This document covers the **ongoing and upcoming Java projects** that shape the f
 ### Goal
 - Introduce **inline/value types**: classes without object identity, stored efficiently in memory.  
 - Motto: *“Codes like a class, works like an int.”*  
+
+```java
+// Example (syntax may change as Valhalla evolves)
+value class Complex {
+    double re;
+    double im;
+    Complex(double re, double im) {
+        this.re = re;
+        this.im = im;
+    }
+}
+Complex c = new Complex(1.0, 2.0); // No object header, stored efficiently
+```
+<!-- commit: Valhalla brings value types for memory-efficient, high-performance data. -->
 
 ### Benefits
 - More efficient memory layout (no object headers).  
@@ -46,10 +59,27 @@ This document covers the **ongoing and upcoming Java projects** that shape the f
 - **Java 20 (2023)** → Enhanced previews.  
 - **Java 21 (2023 LTS)** → **Virtual Threads finalized**.  
 
+```java
+Runnable task = () -> System.out.println("Hello from virtual thread!");
+Thread vThread = Thread.startVirtualThread(task);
+vThread.join();
+```
+<!-- commit: Loom enables millions of lightweight threads for scalable concurrency. -->
+
 ### Benefits
 - Millions of threads possible.  
 - Simplifies async I/O without callbacks or reactive complexity.  
 - Structured Concurrency for managing tasks together.  
+
+```java
+try (var scope = StructuredTaskScope.ShutdownOnFailure()) {
+    Future<String> user = scope.fork(() -> fetchUser());
+    Future<String> order = scope.fork(() -> fetchOrder());
+    scope.join();
+    System.out.println(user.resultNow() + " " + order.resultNow());
+}
+```
+<!-- commit: Structured concurrency makes managing related tasks safer and easier. -->
 
 ### Future
 - Loom continues to refine scheduling & structured APIs in Java 23+.  
@@ -66,6 +96,15 @@ This document covers the **ongoing and upcoming Java projects** that shape the f
 - **Foreign Function & Memory API**:  
   - Call C libraries directly from Java.  
   - Manage off-heap memory safely.  
+
+```java
+// Example using Panama's Foreign Function API (Java 22+ preview)
+try (Arena arena = Arena.ofConfined()) {
+    MemorySegment str = arena.allocateUtf8String("hello");
+    // Call native function, e.g., strlen(str)
+}
+```
+<!-- commit: Panama makes native interop safer and easier for Java developers. -->
 
 ### Timeline
 - **Java 19–22** → Preview releases.  
@@ -90,6 +129,36 @@ This document covers the **ongoing and upcoming Java projects** that shape the f
 - **Pattern Matching for switch** → Java 19–21.  
 - **Record Patterns & String Templates** → Java 21–22.  
 
+```java
+// Switch Expressions
+String result = switch (day) {
+    case MON, FRI -> "Weekend";
+    case TUE, WED, THU -> "Weekday";
+    default -> "Unknown";
+};
+
+// Records
+record Point(int x, int y) {}
+Point p = new Point(1, 2);
+
+// Pattern Matching for instanceof
+if (obj instanceof String s) {
+    System.out.println(s.toUpperCase());
+}
+
+// Text Blocks
+String html = """
+    <html>
+      <body>Hello</body>
+    </html>
+    """;
+
+// String Templates (Java 22+ preview)
+String name = "Java";
+String msg = STR."Hello, \{name}!";
+```
+<!-- commit: Amber delivers modern, concise, and expressive language features. -->
+
 ### Future
 - More enhancements in pattern matching & sealed hierarchies expected post-Java 23.  
 
@@ -105,10 +174,3 @@ This document covers the **ongoing and upcoming Java projects** that shape the f
 Java’s future is about **performance, concurrency, interoperability, and productivity** — ensuring Java stays competitive in modern enterprise and cloud-native environments.  
 
 ---
-```
-
----
-
-✅ This is the **entire Future Java Projects (Valhalla, Loom, Panama, Amber)** section.
-
-Do you want me to also prepare a **bonus Section 14 → Spring & Spring Boot (since 90% of Java backend interviews ask about it)**, even though it’s not “core Java,” but highly relevant for jobs?

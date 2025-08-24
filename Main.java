@@ -1,16 +1,23 @@
+import java.util.Arrays;
+
 public class Main {
     public static void main(String[] args) {
-        System.out.println(largestDigit(10));
+       String s1 = "Persistent";
+       String s2 = "ersPintets";
+
+       char[] s1c = s1.toCharArray();
+       char[] s2c = s2.toCharArray();
+
+        Arrays.sort(s1c);
+        Arrays.sort(s2c);
+
+        System.out.println(s1c);
+        System.out.println("----------");
+        System.out.println(s2c);
+
+
+
+
     }
-    public static int largestDigit(int n) {
-        int largestDigit = Integer.MIN_VALUE;
-        while(n > 0){
-            int lastDigit = n%10;
-            if(lastDigit > largestDigit){
-                largestDigit = lastDigit;
-            }
-            n = n /10;
-        }
-        return largestDigit;
-    }
+
 }

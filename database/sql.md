@@ -1374,7 +1374,7 @@ END CATCH;
 **Memory Trick:** "Long transactions = Break down + Optimistic + Timeout + Batch + Eventual consistency"
 
 ### Advanced Query Questions
-1. Write a query to identify recent deadlocks in a database using system views (e.g., SQL Server’s `sys.dm_tran_locks`). _(Cognizant)_
+1. Write a query to identify recent deadlocks in a database using system views (e.g., SQL Server's `sys.dm_tran_locks`). _(Cognizant)_
 2. Write a query to monitor transaction logs for long-running transactions. _(Amazon)_
 3. Write a stored procedure to handle batch updates with transaction retry logic. _(Deloitte)_
 4. Write a query to detect uncommitted transactions in a database. _(HCL)_
@@ -2118,25 +2118,551 @@ private void processRowData(String data) {
 **Memory Trick:** "Streaming = Forward-only cursor + Fetch size + Row-by-row processing = Memory efficient"
 
 ### Hard Questions
-1. How would you optimize a Java application’s database interactions for high throughput? _(Amazon)_
+1. How would you optimize a Java application's database interactions for high throughput? _(Amazon)_
+
+**Answer:**
+- **Connection pooling**: Use HikariCP or similar for connection reuse
+- **PreparedStatement caching**: Reuse prepared statements
+- **Batch operations**: Group multiple operations together
+- **Asynchronous processing**: Use CompletableFuture for non-blocking operations
+- **Database optimization**: Proper indexing and query optimization
+- **Connection timeout management**: Prevent hanging connections
+- **Monitoring and metrics**: Track performance bottlenecks
+
+**Memory Trick:** "Pooling + Caching + Batching + Async + Optimization + Timeouts + Monitoring = High throughput"
+
 2. How do you handle connection leaks in a Java application? _(Deloitte)_
+
+**Answer:**
+- **Use try-with-resources**: Automatic resource cleanup
+- **Connection monitoring**: Track connection usage and leaks
+- **Connection timeout**: Set appropriate timeouts
+- **Connection pool monitoring**: Monitor pool statistics
+- **Static analysis tools**: Use tools to detect resource leaks
+- **Proper exception handling**: Ensure connections are closed in finally blocks
+
+**Memory Trick:** "Try-with-resources + Monitoring + Timeouts + Pool stats + Static analysis + Exception handling = Leak prevention"
+
 3. How do you implement retry logic for failed database transactions in Java? _(Cognizant)_
+
+**Answer:**
+```java
+public void executeWithRetry(Runnable operation, int maxRetries) {
+    int retryCount = 0;
+    while (retryCount < maxRetries) {
+        try {
+            operation.run();
+            return; // Success
+        } catch (SQLException e) {
+            retryCount++;
+            if (retryCount >= maxRetries) {
+                throw new RuntimeException("Max retries exceeded", e);
+            }
+            // Exponential backoff
+            try {
+                Thread.sleep(1000 * (long) Math.pow(2, retryCount));
+            } catch (InterruptedException ie) {
+                Thread.currentThread().interrupt();
+                throw new RuntimeException("Interrupted during retry", ie);
+            }
+        }
+    }
+}
+```
+**Memory Trick:** "Retry loop + Exception handling + Exponential backoff + Max retries = Resilient operations"
+
 4. How do you secure sensitive data in JDBC connections? _(Infosys)_
+
+**Answer:**
+- **Encrypted connections**: Use SSL/TLS for database connections
+- **Credential management**: Use environment variables or secure vaults
+- **Connection string security**: Avoid hardcoding credentials
+- **Network security**: Use VPN or private networks
+- **Database user permissions**: Minimal required privileges
+- **Connection encryption**: Enable database-level encryption
+
+**Memory Trick:** "SSL/TLS + Secure credentials + Network security + Minimal privileges + Encryption = Secure connections"
+
 5. How do you handle database connection failures in a production environment? _(TCS)_
+
+**Answer:**
+- **Connection pooling**: Automatic failover and reconnection
+- **Health checks**: Regular database connectivity checks
+- **Circuit breaker pattern**: Prevent cascading failures
+- **Fallback mechanisms**: Use cached data or alternative data sources
+- **Monitoring and alerting**: Real-time failure detection
+- **Graceful degradation**: Continue operation with limited functionality
+
+**Memory Trick:** "Connection pooling + Health checks + Circuit breaker + Fallbacks + Monitoring + Graceful degradation = Production resilience"
 
 ### Hard Query Questions
 1. Write a Java method to execute a transaction across multiple tables with error handling. _(HCL)_
+
+**Answer:**
+```java
+public void executeMultiTableTransaction(int orderId, int customerId, double amount) throws SQLException {
+    Connection conn = null;
+    try {
+        conn = getConnection();
+        conn.setAutoCommit(false); // Start transaction
+
+        // Insert into orders table
+        PreparedStatement orderStmt = conn.prepareStatement(
+            "INSERT INTO orders (order_id, customer_id, amount, order_date) VALUES (?, ?, ?, ?)");
+        orderStmt.setInt(1, orderId);
+        orderStmt.setInt(2, customerId);
+        orderStmt.setDouble(3, amount);
+        orderStmt.setDate(4, new java.sql.Date(System.currentTimeMillis()));
+        orderStmt.executeUpdate();
+
+        // Update customer balance
+        PreparedStatement customerStmt = conn.prepareStatement(
+            "UPDATE customers SET balance = balance - ? WHERE customer_id = ?");
+        customerStmt.setDouble(1, amount);
+        customerStmt.setInt(2, customerId);
+        customerStmt.executeUpdate();
+
+        // Insert into order_history
+        PreparedStatement historyStmt = conn.prepareStatement(
+            "INSERT INTO order_history (order_id, action, timestamp) VALUES (?, ?, ?)");
+        historyStmt.setInt(1, orderId);
+        historyStmt.setString(2, "ORDER_CREATED");
+        historyStmt.setTimestamp(3, new java.sql.Timestamp(System.currentTimeMillis()));
+        historyStmt.executeUpdate();
+
+        conn.commit(); // Commit transaction
+    } catch (SQLException e) {
+        if (conn != null) {
+            conn.rollback(); // Rollback on error
+        }
+        throw e;
+    } finally {
+        if (conn != null) {
+            conn.setAutoCommit(true);
+            conn.close();
+        }
+    }
+}
+```
+**Memory Trick:** "Multi-table transaction: AutoCommit(false) -> Multiple operations -> Commit/Rollback -> AutoCommit(true)"
+
 2. Write a Java method to execute a dynamic SQL query with user input safely. _(Amazon)_
+
+**Answer:**
+```java
+public List<Map<String, Object>> executeDynamicQuery(String tableName, String columnName, String value) throws SQLException {
+    List<Map<String, Object>> results = new ArrayList<>();
+    
+    // Validate table and column names to prevent SQL injection
+    if (!isValidTableName(tableName) || !isValidColumnName(columnName)) {
+        throw new IllegalArgumentException("Invalid table or column name");
+    }
+    
+    String sql = "SELECT * FROM " + tableName + " WHERE " + columnName + " = ?";
+    
+    try (Connection conn = getConnection();
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        pstmt.setString(1, value); // Safe parameter binding
+        
+        try (ResultSet rs = pstmt.executeQuery()) {
+            ResultSetMetaData metaData = rs.getMetaData();
+            int columnCount = metaData.getColumnCount();
+            
+            while (rs.next()) {
+                Map<String, Object> row = new HashMap<>();
+                for (int i = 1; i <= columnCount; i++) {
+                    row.put(metaData.getColumnName(i), rs.getObject(i));
+                }
+                results.add(row);
+            }
+        }
+    }
+    return results;
+}
+
+private boolean isValidTableName(String tableName) {
+    return tableName.matches("^[a-zA-Z_][a-zA-Z0-9_]*$");
+}
+
+private boolean isValidColumnName(String columnName) {
+    return columnName.matches("^[a-zA-Z_][a-zA-Z0-9_]*$");
+}
+```
+**Memory Trick:** "Dynamic SQL safety: Validate names + Use PreparedStatement + Parameter binding = SQL injection prevention"
+
 3. Write a Java method to handle a transaction with retry logic for deadlocks. _(Cognizant)_
+
+**Answer:**
+```java
+public void executeTransactionWithDeadlockRetry(Runnable transaction, int maxRetries) throws SQLException {
+    int retryCount = 0;
+    while (retryCount < maxRetries) {
+        try {
+            transaction.run();
+            return; // Success
+        } catch (SQLException e) {
+            // Check if it's a deadlock error
+            if (isDeadlockError(e) && retryCount < maxRetries - 1) {
+                retryCount++;
+                // Random backoff to reduce contention
+                try {
+                    Thread.sleep(100 + (long) (Math.random() * 900));
+                } catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt();
+                    throw new SQLException("Interrupted during retry", ie);
+                }
+            } else {
+                throw e; // Re-throw if not deadlock or max retries reached
+            }
+        }
+    }
+}
+
+private boolean isDeadlockError(SQLException e) {
+    // MySQL deadlock error code
+    if (e.getErrorCode() == 1213) return true;
+    // SQL Server deadlock error code
+    if (e.getErrorCode() == 1205) return true;
+    // PostgreSQL deadlock error
+    if (e.getMessage().contains("deadlock detected")) return true;
+    return false;
+}
+```
+**Memory Trick:** "Deadlock retry: Check error type + Random backoff + Max retries = Deadlock resolution"
+
 4. Write a Java method to log database query performance metrics. _(Deloitte)_
+
+**Answer:**
+```java
+public class QueryPerformanceLogger {
+    private static final Logger logger = LoggerFactory.getLogger(QueryPerformanceLogger.class);
+    
+    public <T> T executeWithLogging(Supplier<T> queryExecutor, String queryName) {
+        long startTime = System.currentTimeMillis();
+        long startNano = System.nanoTime();
+        
+        try {
+            T result = queryExecutor.get();
+            long endTime = System.currentTimeMillis();
+            long endNano = System.nanoTime();
+            
+            long durationMs = endTime - startTime;
+            long durationNano = endNano - startNano;
+            
+            logger.info("Query '{}' executed successfully in {}ms ({}ns)", 
+                       queryName, durationMs, durationNano);
+            
+            // Log slow queries
+            if (durationMs > 1000) {
+                logger.warn("Slow query detected: '{}' took {}ms", queryName, durationMs);
+            }
+            
+            return result;
+        } catch (Exception e) {
+            long endTime = System.currentTimeMillis();
+            logger.error("Query '{}' failed after {}ms: {}", 
+                        queryName, endTime - startTime, e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
+    
+    public void logConnectionPoolStats(DataSource dataSource) {
+        if (dataSource instanceof HikariDataSource) {
+            HikariDataSource hikariDS = (HikariDataSource) dataSource;
+            logger.info("Connection pool stats - Active: {}, Idle: {}, Total: {}", 
+                       hikariDS.getHikariPoolMXBean().getActiveConnections(),
+                       hikariDS.getHikariPoolMXBean().getIdleConnections(),
+                       hikariDS.getHikariPoolMXBean().getTotalConnections());
+        }
+    }
+}
+```
+**Memory Trick:** "Performance logging: Start time + Execute + End time + Duration check + Slow query alert = Query monitoring"
+
 5. Write a Java method to execute a query with connection pooling and error recovery. _(TCS)_
+
+**Answer:**
+```java
+public class DatabaseService {
+    private final DataSource dataSource;
+    private final QueryPerformanceLogger logger;
+    
+    public <T> T executeWithRecovery(Supplier<T> queryExecutor, String operationName) {
+        int maxRetries = 3;
+        int retryCount = 0;
+        
+        while (retryCount < maxRetries) {
+            try (Connection conn = dataSource.getConnection()) {
+                return logger.executeWithLogging(() -> {
+                    try {
+                        return queryExecutor.get();
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                }, operationName);
+            } catch (SQLException e) {
+                retryCount++;
+                if (retryCount >= maxRetries) {
+                    throw new RuntimeException("Failed to execute " + operationName + " after " + maxRetries + " attempts", e);
+                }
+                
+                // Log retry attempt
+                logger.warn("Retry {} for operation '{}' due to: {}", retryCount, operationName, e.getMessage());
+                
+                // Exponential backoff
+                try {
+                    Thread.sleep(1000 * (long) Math.pow(2, retryCount - 1));
+                } catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt();
+                    throw new RuntimeException("Interrupted during retry", ie);
+                }
+            }
+        }
+        throw new RuntimeException("Unexpected error in executeWithRecovery");
+    }
+}
+```
+**Memory Trick:** "Connection pooling + Error recovery: Try-with-resources + Retry logic + Exponential backoff + Logging = Resilient database operations"
 
 ### Application-Based Questions
 1. Your Java application experiences slow database queries in production. How would you identify and resolve the issue? _(HCL)_
+
+**Answer:**
+**Identification:**
+- **Query monitoring**: Use tools like Hibernate Statistics, P6Spy, or database monitoring
+- **Performance profiling**: Analyze slow query logs and execution plans
+- **Connection pool monitoring**: Check for connection leaks or pool exhaustion
+- **Database metrics**: Monitor CPU, memory, and I/O usage
+
+**Resolution:**
+- **Query optimization**: Add missing indexes, rewrite inefficient queries
+- **Connection pooling**: Optimize pool size and connection timeouts
+- **Caching**: Implement application-level caching for frequently accessed data
+- **Database tuning**: Optimize database configuration and maintenance
+
+**Memory Trick:** "Monitor + Profile + Optimize + Cache + Tune = Performance improvement"
+
 2. Write a Java method to handle a transaction for an order processing system with inventory updates. _(Accenture)_
+
+**Answer:**
+```java
+public class OrderProcessingService {
+    public void processOrder(Order order) throws SQLException {
+        Connection conn = null;
+        try {
+            conn = getConnection();
+            conn.setAutoCommit(false);
+            
+            // Check inventory availability
+            if (!checkInventoryAvailability(conn, order.getItems())) {
+                throw new InsufficientInventoryException("Insufficient inventory for order");
+            }
+            
+            // Create order
+            int orderId = createOrder(conn, order);
+            
+            // Update inventory
+            updateInventory(conn, order.getItems());
+            
+            // Process payment
+            processPayment(conn, order.getPaymentInfo());
+            
+            // Send confirmation
+            sendOrderConfirmation(orderId);
+            
+            conn.commit();
+        } catch (Exception e) {
+            if (conn != null) {
+                conn.rollback();
+            }
+            throw new OrderProcessingException("Failed to process order", e);
+        } finally {
+            if (conn != null) {
+                conn.setAutoCommit(true);
+                conn.close();
+            }
+        }
+    }
+    
+    private boolean checkInventoryAvailability(Connection conn, List<OrderItem> items) throws SQLException {
+        for (OrderItem item : items) {
+            PreparedStatement stmt = conn.prepareStatement(
+                "SELECT quantity FROM inventory WHERE product_id = ? AND quantity >= ?");
+            stmt.setInt(1, item.getProductId());
+            stmt.setInt(2, item.getQuantity());
+            ResultSet rs = stmt.executeQuery();
+            if (!rs.next()) {
+                return false;
+            }
+        }
+        return true;
+    }
+}
+```
+**Memory Trick:** "Order processing: Check inventory + Create order + Update inventory + Process payment + Commit = Complete transaction"
+
 3. Design a Java method to generate a report from a complex SQL query with joins and aggregations. _(Deloitte)_
+
+**Answer:**
+```java
+public class ReportGenerator {
+    public SalesReport generateSalesReport(LocalDate startDate, LocalDate endDate) throws SQLException {
+        String sql = """
+            SELECT 
+                p.category,
+                COUNT(o.order_id) as total_orders,
+                SUM(oi.quantity * oi.unit_price) as total_revenue,
+                AVG(oi.unit_price) as avg_price,
+                COUNT(DISTINCT o.customer_id) as unique_customers
+            FROM orders o
+            JOIN order_items oi ON o.order_id = oi.order_id
+            JOIN products p ON oi.product_id = p.product_id
+            WHERE o.order_date BETWEEN ? AND ?
+            GROUP BY p.category
+            ORDER BY total_revenue DESC
+            """;
+        
+        List<CategorySales> categorySales = new ArrayList<>();
+        
+        try (Connection conn = getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setDate(1, java.sql.Date.valueOf(startDate));
+            pstmt.setDate(2, java.sql.Date.valueOf(endDate));
+            
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    CategorySales sales = new CategorySales();
+                    sales.setCategory(rs.getString("category"));
+                    sales.setTotalOrders(rs.getInt("total_orders"));
+                    sales.setTotalRevenue(rs.getDouble("total_revenue"));
+                    sales.setAvgPrice(rs.getDouble("avg_price"));
+                    sales.setUniqueCustomers(rs.getInt("unique_customers"));
+                    categorySales.add(sales);
+                }
+            }
+        }
+        
+        return new SalesReport(startDate, endDate, categorySales);
+    }
+}
+```
+**Memory Trick:** "Complex report: Multi-table JOIN + Aggregations + GROUP BY + ORDER BY + Result mapping = Comprehensive report"
+
 4. Write a Java method to implement a retry mechanism for failed database operations. _(Cognizant)_
+
+**Answer:**
+```java
+public class RetryableDatabaseOperation {
+    private static final int MAX_RETRIES = 3;
+    private static final long INITIAL_DELAY = 1000; // 1 second
+    
+    public <T> T executeWithRetry(Supplier<T> operation, String operationName) {
+        int retryCount = 0;
+        long delay = INITIAL_DELAY;
+        
+        while (retryCount < MAX_RETRIES) {
+            try {
+                return operation.get();
+            } catch (SQLException e) {
+                retryCount++;
+                
+                if (retryCount >= MAX_RETRIES) {
+                    throw new DatabaseOperationException(
+                        "Operation '" + operationName + "' failed after " + MAX_RETRIES + " attempts", e);
+                }
+                
+                // Log retry attempt
+                logger.warn("Retry {} for operation '{}': {}", retryCount, operationName, e.getMessage());
+                
+                // Exponential backoff with jitter
+                try {
+                    long jitter = (long) (Math.random() * 100);
+                    Thread.sleep(delay + jitter);
+                    delay *= 2; // Exponential backoff
+                } catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt();
+                    throw new DatabaseOperationException("Interrupted during retry", ie);
+                }
+            }
+        }
+        throw new DatabaseOperationException("Unexpected error in retry mechanism");
+    }
+    
+    public void executeWithRetry(Runnable operation, String operationName) {
+        executeWithRetry(() -> {
+            operation.run();
+            return null;
+        }, operationName);
+    }
+}
+```
+**Memory Trick:** "Retry mechanism: Try operation + Catch exception + Increment retry + Exponential backoff + Max retries = Resilient operations"
+
 5. How would you design a Java application to handle batch processing of SQL queries efficiently? _(TCS)_
+
+**Answer:**
+```java
+public class BatchProcessor {
+    private final DataSource dataSource;
+    private final int batchSize;
+    
+    public void processBatch(List<DataRecord> records) throws SQLException {
+        try (Connection conn = dataSource.getConnection()) {
+            conn.setAutoCommit(false);
+            
+            String sql = "INSERT INTO data_table (id, name, value, timestamp) VALUES (?, ?, ?, ?)";
+            
+            try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                int count = 0;
+                
+                for (DataRecord record : records) {
+                    pstmt.setInt(1, record.getId());
+                    pstmt.setString(2, record.getName());
+                    pstmt.setDouble(3, record.getValue());
+                    pstmt.setTimestamp(4, record.getTimestamp());
+                    
+                    pstmt.addBatch();
+                    count++;
+                    
+                    // Execute batch when batch size is reached
+                    if (count % batchSize == 0) {
+                        pstmt.executeBatch();
+                        logger.info("Processed batch of {} records", batchSize);
+                    }
+                }
+                
+                // Execute remaining records
+                if (count % batchSize != 0) {
+                    pstmt.executeBatch();
+                    logger.info("Processed final batch of {} records", count % batchSize);
+                }
+            }
+            
+            conn.commit();
+        } catch (SQLException e) {
+            logger.error("Batch processing failed: {}", e.getMessage());
+            throw e;
+        }
+    }
+    
+    public void processBatchWithChunking(List<DataRecord> records) {
+        // Process in chunks to avoid memory issues
+        int chunkSize = 1000;
+        for (int i = 0; i < records.size(); i += chunkSize) {
+            int endIndex = Math.min(i + chunkSize, records.size());
+            List<DataRecord> chunk = records.subList(i, endIndex);
+            
+            try {
+                processBatch(chunk);
+            } catch (SQLException e) {
+                logger.error("Failed to process chunk {}: {}", i / chunkSize, e.getMessage());
+                // Continue with next chunk or implement retry logic
+            }
+        }
+    }
+}
+```
+**Memory Trick:** "Batch processing: PreparedStatement + addBatch() + executeBatch() + Chunking + Error handling = Efficient bulk operations"
 
 ---
 
@@ -2144,66 +2670,857 @@ private void processRowData(String data) {
 
 ### Basic Questions
 1. What is an index in a database, and how does it improve query performance? _(TCS, Infosys)_
+
+**Answer:**
+An index is a data structure that improves the speed of data retrieval operations on database tables. It works like a book's index - instead of scanning every page, you can quickly find the information you need.
+
+**How it improves performance:**
+- **Faster searches**: Direct access to data without full table scan
+- **Efficient sorting**: Pre-sorted data for ORDER BY operations
+- **Quick joins**: Faster table joining operations
+- **Unique constraint enforcement**: Efficient duplicate checking
+
+**Memory Trick:** "Index = Database book index = Fast lookup = No full table scan"
+
 2. What is the difference between a clustered and non-clustered index? _(Capgemini)_
+
+**Answer:**
+- **Clustered Index**: 
+  - Only one per table
+  - Determines the physical storage order of data
+  - Data is stored in the same order as the index
+  - Usually on primary key
+  - Faster for range queries
+
+- **Non-clustered Index**:
+  - Multiple allowed per table
+  - Separate structure from data
+  - Contains pointers to actual data
+  - Slower than clustered for range queries
+  - Good for covering queries
+
+**Memory Trick:** "Clustered = Physical order (one per table), Non-clustered = Logical order (many per table)"
+
 3. What are the disadvantages of creating too many indexes? _(Wipro)_
+
+**Answer:**
+- **Storage overhead**: Each index consumes additional disk space
+- **Insert/Update/Delete performance**: Each modification requires index updates
+- **Maintenance overhead**: Indexes need regular maintenance and rebuilding
+- **Query optimizer confusion**: Too many indexes can confuse the query planner
+- **Lock contention**: Index updates can cause locking issues
+
+**Memory Trick:** "Too many indexes = Storage cost + Update overhead + Maintenance burden + Optimizer confusion"
+
 4. What is a primary index, and how is it different from a secondary index? _(Accenture)_
+
+**Answer:**
+- **Primary Index**: 
+  - Usually the clustered index on the primary key
+  - Determines physical storage order
+  - Only one per table
+  - Automatically created with primary key
+
+- **Secondary Index**: 
+  - Any additional index on other columns
+  - Multiple allowed per table
+  - Separate structure from data
+  - Manually created for performance optimization
+
+**Memory Trick:** "Primary = Clustered + One per table, Secondary = Non-clustered + Many per table"
+
 5. How do you check if an index exists on a table? _(Cognizant)_
+
+**Answer:**
+**SQL Server:**
+```sql
+SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID('table_name');
+```
+
+**MySQL:**
+```sql
+SHOW INDEX FROM table_name;
+```
+
+**PostgreSQL:**
+```sql
+SELECT indexname, indexdef FROM pg_indexes WHERE tablename = 'table_name';
+```
+
+**Oracle:**
+```sql
+SELECT index_name, index_type FROM user_indexes WHERE table_name = 'TABLE_NAME';
+```
+
+**Memory Trick:** "Check indexes: sys.indexes (SQL Server), SHOW INDEX (MySQL), pg_indexes (PostgreSQL), user_indexes (Oracle)"
 
 ### Basic Query Questions
 1. Write a query to create a non-clustered index on the `email` column of the `customers` table. _(TCS)_
+
+**Answer:**
+```sql
+CREATE INDEX idx_customers_email ON customers(email);
+```
+**Memory Trick:** "CREATE INDEX index_name ON table_name(column_name)"
+
 2. Write a query to drop an index named `idx_email` from the `customers` table. _(Infosys)_
+
+**Answer:**
+```sql
+DROP INDEX idx_email ON customers;
+```
+**Memory Trick:** "DROP INDEX index_name ON table_name"
+
 3. Write a query to create a clustered index on the `order_id` column of the `orders` table. _(Capgemini)_
+
+**Answer:**
+```sql
+CREATE CLUSTERED INDEX idx_orders_order_id ON orders(order_id);
+```
+**Memory Trick:** "CREATE CLUSTERED INDEX = Physical storage order"
+
 4. Write a query to check the indexes on the `employees` table in SQL Server. _(Wipro)_
+
+**Answer:**
+```sql
+SELECT 
+    i.name AS index_name,
+    i.type_desc AS index_type,
+    c.name AS column_name
+FROM sys.indexes i
+JOIN sys.index_columns ic ON i.object_id = ic.object_id AND i.index_id = ic.index_id
+JOIN sys.columns c ON ic.object_id = c.object_id AND ic.column_id = c.column_id
+WHERE i.object_id = OBJECT_ID('employees');
+```
+**Memory Trick:** "sys.indexes + sys.index_columns + sys.columns = Complete index information"
+
 5. Write a query to create a composite index on `department_id` and `salary` in the `employees` table. _(Accenture)_
+
+**Answer:**
+```sql
+CREATE INDEX idx_employees_dept_salary ON employees(department_id, salary);
+```
+**Memory Trick:** "Composite index: Multiple columns in parentheses, order matters (most selective first)"
 
 ### Intermediate Questions
 1. How do you decide which columns to index in a table? _(Wipro)_
+
+**Answer:**
+**Columns to index:**
+- **WHERE clause columns**: Frequently used in filtering conditions
+- **JOIN columns**: Foreign keys and columns used in table joins
+- **ORDER BY columns**: Columns used for sorting results
+- **GROUP BY columns**: Columns used for grouping operations
+- **High selectivity columns**: Columns with many unique values
+
+**Columns to avoid indexing:**
+- **Low selectivity columns**: Columns with few unique values (like gender)
+- **Frequently updated columns**: Columns that change often
+- **Large text columns**: Very long string columns
+- **Columns with NULL values**: Unless specifically needed
+
+**Memory Trick:** "Index: WHERE + JOIN + ORDER BY + GROUP BY + High selectivity = Performance"
+
 2. What is a covering index, and how does it improve query performance? _(Cognizant)_
+
+**Answer:**
+A covering index is an index that contains all the columns needed to satisfy a query, eliminating the need to access the actual table data.
+
+**Benefits:**
+- **Faster queries**: No table lookup required
+- **Reduced I/O**: Less disk access needed
+- **Better cache utilization**: Index data stays in memory longer
+- **Reduced lock contention**: Less table-level locking
+
+**Example:**
+```sql
+-- Query
+SELECT customer_id, name, email FROM customers WHERE status = 'active';
+
+-- Covering index
+CREATE INDEX idx_customers_status_covering ON customers(status, customer_id, name, email);
+```
+
+**Memory Trick:** "Covering index = All needed columns in index = No table lookup = Faster query"
+
 3. How do you analyze a query execution plan to identify performance issues? _(Accenture)_
+
+**Answer:**
+**Steps to analyze execution plan:**
+- **Look for table scans**: Full table scans indicate missing indexes
+- **Check index usage**: Ensure indexes are being used effectively
+- **Analyze join types**: Look for expensive operations like nested loops
+- **Check sort operations**: Sorts can be expensive without proper indexes
+- **Review estimated vs actual rows**: Large differences indicate statistics issues
+
+**Common performance issues:**
+- **Missing indexes**: Leading to table scans
+- **Inefficient joins**: Wrong join types or order
+- **Poor statistics**: Outdated table statistics
+- **Parameter sniffing**: Query plan not optimal for current parameters
+
+**Memory Trick:** "Analyze plan: Table scans + Index usage + Join types + Sort operations + Statistics = Performance diagnosis"
+
 4. What is index fragmentation, and how do you resolve it? _(Infosys)_
+
+**Answer:**
+Index fragmentation occurs when index pages become disorganized due to insertions, updates, and deletions, leading to performance degradation.
+
+**Types of fragmentation:**
+- **Internal fragmentation**: Unused space within index pages
+- **External fragmentation**: Disorganized page order on disk
+
+**Resolution methods:**
+- **Rebuild index**: Complete recreation of the index
+  ```sql
+  ALTER INDEX index_name ON table_name REBUILD;
+  ```
+- **Reorganize index**: Defragmentation without full rebuild
+  ```sql
+  ALTER INDEX index_name ON table_name REORGANIZE;
+  ```
+
+**Memory Trick:** "Fragmentation = Disorganized pages = REBUILD (complete) or REORGANIZE (partial) = Performance restored"
+
 5. How do indexes impact INSERT, UPDATE, and DELETE operations? _(TCS)_
+
+**Answer:**
+**Impact on operations:**
+- **INSERT**: Each index must be updated, slowing down inserts
+- **UPDATE**: Indexes on updated columns must be modified
+- **DELETE**: Index entries must be removed
+
+**Performance considerations:**
+- **More indexes = Slower DML operations**
+- **Batch operations**: More efficient than individual operations
+- **Index maintenance**: Regular rebuilding/reorganizing needed
+- **Selective indexing**: Only index columns that provide significant query benefits
+
+**Optimization strategies:**
+- **Disable indexes**: Temporarily disable non-critical indexes during bulk operations
+- **Batch processing**: Use bulk insert/update operations
+- **Index maintenance**: Schedule regular index maintenance
+
+**Memory Trick:** "Indexes = Faster SELECT but slower INSERT/UPDATE/DELETE = Balance needed"
 
 ### Intermediate Query Questions
 1. Write a query to rebuild an index on the `orders` table to reduce fragmentation. _(Wipro)_
+
+**Answer:**
+```sql
+ALTER INDEX ALL ON orders REBUILD;
+```
+**Memory Trick:** "ALTER INDEX ALL = Rebuild all indexes on table"
+
 2. Write a query to create a covering index for a query selecting `customer_id`, `order_date` from `orders`. _(Cognizant)_
+
+**Answer:**
+```sql
+CREATE INDEX idx_orders_covering ON orders(customer_id, order_date);
+```
+**Memory Trick:** "Covering index = Include all SELECT columns in index"
+
 3. Write a query to check index fragmentation on the `employees` table in SQL Server. _(Accenture)_
+
+**Answer:**
+```sql
+SELECT 
+    OBJECT_NAME(ind.OBJECT_ID) AS TableName,
+    ind.name AS IndexName,
+    indexstats.avg_fragmentation_in_percent
+FROM sys.dm_db_index_physical_stats(DB_ID(), OBJECT_ID('employees'), NULL, NULL, NULL) indexstats
+INNER JOIN sys.indexes ind ON ind.object_id = indexstats.object_id AND ind.index_id = indexstats.index_id
+WHERE indexstats.avg_fragmentation_in_percent > 10;
+```
+**Memory Trick:** "sys.dm_db_index_physical_stats = Check fragmentation percentage"
+
 4. Write a query to create a unique index on the `email` column of the `users` table. _(Infosys)_
+
+**Answer:**
+```sql
+CREATE UNIQUE INDEX idx_users_email ON users(email);
+```
+**Memory Trick:** "CREATE UNIQUE INDEX = Enforce uniqueness constraint"
+
 5. Write a query to analyze the execution plan of a SELECT query on the `sales` table. _(TCS)_
+
+**Answer:**
+```sql
+SET STATISTICS IO ON;
+SET STATISTICS TIME ON;
+
+SELECT * FROM sales WHERE sale_date >= '2023-01-01';
+
+SET STATISTICS IO OFF;
+SET STATISTICS TIME OFF;
+```
+**Memory Trick:** "SET STATISTICS = Show execution plan details and performance metrics"
 
 ### Advanced Questions
 1. How do you optimize a query using indexes for large datasets? _(Cognizant)_
+
+**Answer:**
+**Strategies for large datasets:**
+- **Partitioning**: Divide large tables into smaller, manageable partitions
+- **Selective indexing**: Index only the most frequently queried columns
+- **Composite indexes**: Create indexes on multiple columns used together
+- **Covering indexes**: Include all needed columns to avoid table lookups
+- **Index maintenance**: Regular rebuilding and reorganizing of indexes
+- **Statistics updates**: Keep table statistics current for optimal query plans
+
+**Memory Trick:** "Large dataset optimization: Partitioning + Selective indexing + Composite indexes + Covering indexes + Maintenance = Performance"
+
 2. What is the difference between a B-tree and a bitmap index? _(Amazon)_
+
+**Answer:**
+**B-tree Index:**
+- **Structure**: Balanced tree structure with multiple levels
+- **Use case**: High-cardinality columns (many unique values)
+- **Performance**: Good for equality and range queries
+- **Storage**: Efficient for most data types
+- **Maintenance**: Automatic balancing
+
+**Bitmap Index:**
+- **Structure**: Bitmap representation for each distinct value
+- **Use case**: Low-cardinality columns (few unique values)
+- **Performance**: Excellent for AND/OR operations
+- **Storage**: Space-efficient for low-cardinality data
+- **Maintenance**: Can be expensive for frequent updates
+
+**Memory Trick:** "B-tree = High cardinality + Range queries, Bitmap = Low cardinality + Boolean operations"
+
 3. How do you handle index maintenance in a high-transaction database? _(Deloitte)_
+
+**Answer:**
+**Maintenance strategies:**
+- **Off-peak maintenance**: Schedule index maintenance during low-usage periods
+- **Online operations**: Use ONLINE option to minimize blocking
+- **Incremental maintenance**: Rebuild only fragmented indexes
+- **Monitoring**: Track fragmentation levels and performance impact
+- **Automation**: Use maintenance plans and scripts
+
+**Best practices:**
+- **Regular monitoring**: Check fragmentation levels weekly
+- **Selective rebuilding**: Only rebuild indexes with >30% fragmentation
+- **Reorganizing**: Use for 10-30% fragmentation
+- **Backup strategy**: Ensure backups before major maintenance
+
+**Memory Trick:** "High-transaction maintenance: Off-peak + Online + Incremental + Monitoring + Automation = Minimal disruption"
+
 4. What is a filtered index, and when would you use it? _(Infosys)_
+
+**Answer:**
+A filtered index is an index that includes only a subset of the table's rows based on a WHERE clause condition. It's useful for optimizing queries that access a small percentage of the table's data.
+
+**When to use:**
+- **Sparse data**: When most rows have NULL values in the indexed column
+- **Specific conditions**: Queries that filter on specific values frequently
+- **Storage optimization**: Reduce index size by excluding irrelevant rows
+- **Performance improvement**: Faster queries for specific conditions
+
+**Example:**
+```sql
+-- Query that benefits from filtered index
+SELECT * FROM orders WHERE status = 'pending';
+
+-- Filtered index
+CREATE INDEX idx_orders_pending ON orders(order_date, customer_id) 
+WHERE status = 'pending';
+```
+
+**Memory Trick:** "Filtered index = Index on subset + WHERE clause + Storage savings + Performance gain"
+
 5. How do you balance index usage with storage constraints? _(TCS Digital)_
+
+**Answer:**
+**Balancing strategies:**
+- **Analyze query patterns**: Identify most frequently used queries
+- **Measure index usage**: Monitor which indexes are actually being used
+- **Remove unused indexes**: Drop indexes that provide no benefit
+- **Optimize existing indexes**: Consolidate multiple indexes into composite indexes
+- **Use covering indexes**: Include all needed columns to reduce table lookups
+
+**Storage optimization:**
+- **Compression**: Use index compression where supported
+- **Selective indexing**: Only index columns with high query value
+- **Regular maintenance**: Remove fragmented space through rebuilding
+- **Monitor growth**: Track index size and growth patterns
+
+**Memory Trick:** "Index balance: Analyze usage + Remove unused + Optimize existing + Compression + Maintenance = Storage efficiency"
 
 ### Advanced Query Questions
 1. Write a query to create a filtered index on `orders` for `status = 'pending'`. _(Cognizant)_
+
+**Answer:**
+```sql
+CREATE INDEX idx_orders_pending ON orders(order_date, customer_id, amount) 
+WHERE status = 'pending';
+```
+**Memory Trick:** "Filtered index = CREATE INDEX + WHERE condition = Index only specific rows"
+
 2. Write a query to monitor index usage statistics in a database. _(Amazon)_
+
+**Answer:**
+```sql
+SELECT 
+    OBJECT_NAME(i.object_id) AS TableName,
+    i.name AS IndexName,
+    ius.user_seeks,
+    ius.user_scans,
+    ius.user_lookups,
+    ius.user_updates
+FROM sys.dm_db_index_usage_stats ius
+INNER JOIN sys.indexes i ON ius.object_id = i.object_id AND ius.index_id = i.index_id
+WHERE ius.database_id = DB_ID()
+ORDER BY (ius.user_seeks + ius.user_scans + ius.user_lookups) DESC;
+```
+**Memory Trick:** "sys.dm_db_index_usage_stats = Monitor index usage patterns"
+
 3. Write a query to rebuild all indexes on the `sales` table in SQL Server. _(Deloitte)_
+
+**Answer:**
+```sql
+ALTER INDEX ALL ON sales REBUILD WITH (ONLINE = ON);
+```
+**Memory Trick:** "ALTER INDEX ALL + ONLINE = Rebuild all indexes without blocking"
+
 4. Write a query to create a bitmap index on a low-cardinality column like `gender` in MySQL. _(HCL)_
+
+**Answer:**
+```sql
+-- MySQL doesn't support bitmap indexes directly, but you can create a regular index
+CREATE INDEX idx_users_gender ON users(gender);
+
+-- For bitmap-like behavior, use composite index with high-cardinality column
+CREATE INDEX idx_users_gender_id ON users(gender, user_id);
+```
+**Memory Trick:** "MySQL bitmap alternative = Regular index + Composite with high-cardinality column"
+
 5. Write a query to analyze missing indexes for a slow-running query using system views. _(Accenture)_
+
+**Answer:**
+```sql
+SELECT 
+    dm_mid.database_id,
+    dm_migs.avg_user_impact,
+    dm_migs.last_user_seek,
+    dm_mid.statement AS TableName,
+    dm_mid.equality_columns,
+    dm_mid.inequality_columns,
+    dm_mid.included_columns,
+    dm_migs.unique_compiles,
+    dm_migs.user_seeks,
+    dm_migs.avg_total_user_cost,
+    dm_migs.avg_user_impact
+FROM sys.dm_db_missing_index_group_stats dm_migs
+INNER JOIN sys.dm_db_missing_index_groups dm_mig ON dm_migs.group_handle = dm_mig.index_group_handle
+INNER JOIN sys.dm_db_missing_index_details dm_mid ON dm_mig.index_handle = dm_mid.index_handle
+WHERE dm_mid.database_id = DB_ID()
+ORDER BY dm_migs.avg_user_impact DESC;
+```
+**Memory Trick:** "sys.dm_db_missing_index_* = Find missing indexes for performance improvement"
 
 ### Hard Questions
 1. How do you optimize a database with millions of rows using indexing strategies? _(Amazon)_
+
+**Answer:**
+**Strategies for large databases:**
+- **Partitioning**: Divide tables into smaller, manageable partitions by date, range, or hash
+- **Selective indexing**: Index only the most critical columns based on query analysis
+- **Composite indexes**: Create strategic multi-column indexes for complex queries
+- **Covering indexes**: Include all needed columns to eliminate table lookups
+- **Filtered indexes**: Index only relevant subsets of data
+- **Index maintenance**: Regular rebuilding and monitoring of fragmentation
+
+**Performance considerations:**
+- **Storage planning**: Account for index storage requirements
+- **Maintenance windows**: Schedule index maintenance during off-peak hours
+- **Monitoring**: Track index usage and performance impact
+- **Compression**: Use index compression to reduce storage requirements
+
+**Memory Trick:** "Large database optimization: Partitioning + Selective indexing + Composite indexes + Covering indexes + Maintenance = Scalable performance"
+
 2. What are the challenges of indexing in a distributed database environment? _(Deloitte)_
+
+**Answer:**
+**Challenges:**
+- **Consistency**: Maintaining index consistency across multiple nodes
+- **Performance**: Index updates must be propagated to all nodes
+- **Storage**: Indexes consume storage on each node
+- **Complexity**: Managing indexes across different database technologies
+- **Network overhead**: Index synchronization across network
+
+**Solutions:**
+- **Global vs local indexes**: Choose appropriate index strategy for distribution
+- **Asynchronous updates**: Use eventual consistency for better performance
+- **Index placement**: Strategically place indexes based on data distribution
+- **Monitoring**: Track index performance across all nodes
+
+**Memory Trick:** "Distributed indexing challenges: Consistency + Performance + Storage + Complexity + Network = Complex management"
+
 3. How do you handle index maintenance during peak transaction times? _(Cognizant)_
+
+**Answer:**
+**Strategies for peak time maintenance:**
+- **Online operations**: Use ONLINE option to minimize blocking
+- **Incremental maintenance**: Rebuild only heavily fragmented indexes
+- **Off-peak scheduling**: Schedule major maintenance during low-usage periods
+- **Monitoring**: Track fragmentation levels to prioritize maintenance
+- **Automation**: Use maintenance plans with intelligent scheduling
+
+**Best practices:**
+- **Avoid full rebuilds**: Use reorganize for moderate fragmentation
+- **Monitor blocking**: Check for blocking during maintenance operations
+- **Backup strategy**: Ensure backups before major maintenance
+- **Rollback plan**: Have contingency plans for maintenance failures
+
+**Memory Trick:** "Peak time maintenance: Online operations + Incremental + Off-peak + Monitoring + Automation = Minimal disruption"
+
 4. What is the impact of indexing on a read-heavy vs. write-heavy database? _(Infosys)_
+
+**Answer:**
+**Read-heavy database:**
+- **Benefits**: Indexes significantly improve query performance
+- **Strategy**: Create comprehensive indexes for all query patterns
+- **Maintenance**: Less frequent index maintenance needed
+- **Storage**: Higher storage cost acceptable for performance gain
+
+**Write-heavy database:**
+- **Challenges**: Indexes slow down insert/update/delete operations
+- **Strategy**: Selective indexing, focus on most critical queries
+- **Maintenance**: More frequent index maintenance required
+- **Optimization**: Use batch operations and minimize index updates
+
+**Memory Trick:** "Read-heavy = More indexes = Better performance, Write-heavy = Fewer indexes = Faster writes"
+
 5. How do you troubleshoot a query ignoring an existing index? _(TCS)_
+
+**Answer:**
+**Troubleshooting steps:**
+- **Check index existence**: Verify the index actually exists and is enabled
+- **Analyze execution plan**: Use EXPLAIN or execution plan to see why index is ignored
+- **Check statistics**: Outdated statistics can cause poor index selection
+- **Review query structure**: Ensure WHERE clause matches index columns
+- **Check data distribution**: Skewed data can affect index effectiveness
+
+**Common causes:**
+- **Outdated statistics**: Update table and index statistics
+- **Query structure**: Modify query to match index column order
+- **Data type mismatches**: Ensure consistent data types
+- **Function usage**: Functions on indexed columns can prevent index usage
+- **OR conditions**: Complex OR conditions may prevent index usage
+
+**Memory Trick:** "Troubleshoot index: Check existence + Analyze plan + Update statistics + Review query + Check data = Index usage"
 
 ### Hard Query Questions
 1. Write a query to identify unused indexes in a database and drop them. _(Amazon)_
+
+**Answer:**
+```sql
+-- Find unused indexes
+SELECT 
+    OBJECT_NAME(i.object_id) AS TableName,
+    i.name AS IndexName,
+    ius.user_seeks,
+    ius.user_scans,
+    ius.user_lookups,
+    ius.user_updates
+FROM sys.indexes i
+LEFT JOIN sys.dm_db_index_usage_stats ius ON i.object_id = ius.object_id AND i.index_id = ius.index_id
+WHERE i.is_hypothetical = 0 
+    AND i.object_id > 100 
+    AND i.name IS NOT NULL
+    AND (ius.user_seeks = 0 OR ius.user_seeks IS NULL)
+    AND (ius.user_scans = 0 OR ius.user_scans IS NULL)
+    AND (ius.user_lookups = 0 OR ius.user_lookups IS NULL)
+    AND i.name NOT LIKE 'PK_%'  -- Don't drop primary keys
+ORDER BY OBJECT_NAME(i.object_id), i.name;
+
+-- Drop unused index (example)
+-- DROP INDEX idx_unused_index ON table_name;
+```
+**Memory Trick:** "Find unused: sys.indexes + sys.dm_db_index_usage_stats + Zero usage = Unused indexes"
+
 2. Write a query to create an index for a complex query with multiple joins and filters. _(Deloitte)_
+
+**Answer:**
+```sql
+-- Complex query
+SELECT 
+    c.customer_name,
+    o.order_date,
+    p.product_name,
+    SUM(oi.quantity * oi.unit_price) as total_amount
+FROM customers c
+JOIN orders o ON c.customer_id = o.customer_id
+JOIN order_items oi ON o.order_id = oi.order_id
+JOIN products p ON oi.product_id = p.product_id
+WHERE o.order_date >= '2023-01-01'
+    AND o.status = 'completed'
+    AND c.customer_type = 'premium'
+GROUP BY c.customer_name, o.order_date, p.product_name
+ORDER BY total_amount DESC;
+
+-- Optimizing indexes
+CREATE INDEX idx_orders_complex ON orders(customer_id, order_date, status) 
+INCLUDE (order_id);
+
+CREATE INDEX idx_order_items_complex ON order_items(order_id, product_id) 
+INCLUDE (quantity, unit_price);
+
+CREATE INDEX idx_customers_complex ON customers(customer_type, customer_id) 
+INCLUDE (customer_name);
+```
+**Memory Trick:** "Complex query optimization: JOIN columns + WHERE conditions + INCLUDE needed columns = Efficient indexes"
+
 3. Write a query to monitor index performance impact on a high-transaction table. _(Cognizant)_
+
+**Answer:**
+```sql
+-- Monitor index performance
+SELECT 
+    OBJECT_NAME(i.object_id) AS TableName,
+    i.name AS IndexName,
+    ius.user_seeks,
+    ius.user_scans,
+    ius.user_lookups,
+    ius.user_updates,
+    ius.last_user_seek,
+    ius.last_user_scan,
+    ius.last_user_lookup,
+    ius.last_user_update,
+    -- Calculate read/write ratio
+    CASE 
+        WHEN ius.user_updates = 0 THEN 999999
+        ELSE (ius.user_seeks + ius.user_scans + ius.user_lookups) / ius.user_updates
+    END AS read_write_ratio
+FROM sys.dm_db_index_usage_stats ius
+INNER JOIN sys.indexes i ON ius.object_id = i.object_id AND ius.index_id = i.index_id
+WHERE ius.database_id = DB_ID()
+    AND OBJECT_NAME(i.object_id) = 'high_transaction_table'
+ORDER BY read_write_ratio DESC;
+```
+**Memory Trick:** "Monitor performance: Usage stats + Read/write ratio + Last activity = Index effectiveness"
+
 4. Write a query to defragment an index without locking the table. _(HCL)_
+
+**Answer:**
+```sql
+-- Check fragmentation first
+SELECT 
+    OBJECT_NAME(ind.OBJECT_ID) AS TableName,
+    ind.name AS IndexName,
+    indexstats.avg_fragmentation_in_percent
+FROM sys.dm_db_index_physical_stats(DB_ID(), OBJECT_ID('table_name'), NULL, NULL, NULL) indexstats
+INNER JOIN sys.indexes ind ON ind.object_id = indexstats.object_id AND ind.index_id = indexstats.index_id
+WHERE indexstats.avg_fragmentation_in_percent > 10;
+
+-- Defragment without locking (SQL Server)
+ALTER INDEX index_name ON table_name REORGANIZE;
+
+-- Or rebuild online (minimal locking)
+ALTER INDEX index_name ON table_name REBUILD WITH (ONLINE = ON);
+
+-- For all indexes on a table
+ALTER INDEX ALL ON table_name REORGANIZE;
+```
+**Memory Trick:** "Defragment: REORGANIZE (minimal locking) or REBUILD WITH ONLINE = No table lock"
+
 5. Write a query to analyze index contention issues in a production database. _(TCS)_
+
+**Answer:**
+```sql
+-- Check for index locks and waits
+SELECT 
+    OBJECT_NAME(p.object_id) AS TableName,
+    i.name AS IndexName,
+    p.index_id,
+    p.partition_number,
+    p.rows,
+    p.data_compression_desc,
+    -- Check for locks
+    l.request_mode,
+    l.request_type,
+    l.request_status,
+    l.request_session_id
+FROM sys.partitions p
+INNER JOIN sys.indexes i ON p.object_id = i.object_id AND p.index_id = i.index_id
+LEFT JOIN sys.dm_tran_locks l ON p.object_id = l.resource_associated_entity_id
+WHERE l.resource_type = 'KEY' OR l.resource_type = 'PAGE'
+ORDER BY l.request_session_id;
+
+-- Check for index wait statistics
+SELECT 
+    OBJECT_NAME(i.object_id) AS TableName,
+    i.name AS IndexName,
+    ios.page_latch_wait_count,
+    ios.page_latch_wait_in_ms,
+    ios.page_io_latch_wait_count,
+    ios.page_io_latch_wait_in_ms
+FROM sys.dm_db_index_operational_stats(DB_ID(), NULL, NULL, NULL) ios
+INNER JOIN sys.indexes i ON ios.object_id = i.object_id AND ios.index_id = i.index_id
+WHERE ios.page_latch_wait_count > 0
+ORDER BY ios.page_latch_wait_in_ms DESC;
+```
+**Memory Trick:** "Analyze contention: sys.partitions + sys.dm_tran_locks + sys.dm_db_index_operational_stats = Contention detection"
 
 ### Application-Based Questions
 1. Design an indexing strategy for a sales reporting system with frequent queries. _(HCL)_
+
+**Answer:**
+**Indexing strategy for sales reporting:**
+
+**Primary indexes:**
+```sql
+-- Clustered index on sales table
+CREATE CLUSTERED INDEX idx_sales_date ON sales(sale_date, sale_id);
+
+-- Composite indexes for common query patterns
+CREATE INDEX idx_sales_customer_date ON sales(customer_id, sale_date) 
+INCLUDE (amount, product_id);
+
+CREATE INDEX idx_sales_product_date ON sales(product_id, sale_date) 
+INCLUDE (amount, customer_id);
+
+-- Covering index for summary reports
+CREATE INDEX idx_sales_summary ON sales(sale_date, region_id, product_category) 
+INCLUDE (amount, quantity);
+```
+
+**Query optimization:**
+- **Date-based queries**: Clustered index on sale_date for efficient range queries
+- **Customer analysis**: Composite index on customer_id + sale_date
+- **Product analysis**: Composite index on product_id + sale_date
+- **Summary reports**: Covering index with all needed columns
+
+**Memory Trick:** "Sales reporting strategy: Date clustering + Customer/Product composites + Covering indexes = Fast reports"
+
 2. Write a query to optimize a slow-running report query using appropriate indexes. _(Accenture)_
+
+**Answer:**
+**Slow query:**
+```sql
+SELECT 
+    c.customer_name,
+    COUNT(o.order_id) as total_orders,
+    SUM(oi.quantity * oi.unit_price) as total_spent
+FROM customers c
+LEFT JOIN orders o ON c.customer_id = o.customer_id
+LEFT JOIN order_items oi ON o.order_id = oi.order_id
+WHERE o.order_date >= '2023-01-01'
+    AND c.customer_type = 'premium'
+GROUP BY c.customer_name
+ORDER BY total_spent DESC;
+```
+
+**Optimization indexes:**
+```sql
+-- Optimize customer filtering
+CREATE INDEX idx_customers_type_name ON customers(customer_type, customer_name) 
+INCLUDE (customer_id);
+
+-- Optimize order filtering and joining
+CREATE INDEX idx_orders_customer_date ON orders(customer_id, order_date) 
+INCLUDE (order_id);
+
+-- Optimize order items joining
+CREATE INDEX idx_order_items_order ON order_items(order_id) 
+INCLUDE (quantity, unit_price);
+```
+
+**Memory Trick:** "Query optimization: WHERE conditions + JOIN columns + INCLUDE needed columns = Fast execution"
+
 3. How would you implement indexing for a real-time analytics dashboard? _(Deloitte)_
+
+**Answer:**
+**Real-time analytics indexing strategy:**
+
+**Time-series optimization:**
+```sql
+-- Partitioned table by date
+CREATE TABLE analytics_data (
+    event_id INT,
+    event_date DATE,
+    user_id INT,
+    event_type VARCHAR(50),
+    event_data JSON
+) PARTITION BY RANGE (event_date);
+
+-- Indexes for real-time queries
+CREATE INDEX idx_analytics_time_user ON analytics_data(event_date, user_id);
+CREATE INDEX idx_analytics_type_time ON analytics_data(event_type, event_date);
+```
+
+**Performance considerations:**
+- **Partitioning**: Partition by time for efficient data management
+- **Hot data indexing**: Aggressive indexing on recent data
+- **Cold data optimization**: Archive old data with minimal indexes
+- **Real-time aggregation**: Use materialized views for common aggregations
+
+**Memory Trick:** "Real-time analytics: Time partitioning + Hot data indexing + Cold data archiving + Materialized views = Fast dashboard"
+
 4. Write a query to create indexes for a high-traffic e-commerce database. _(Cognizant)_
+
+**Answer:**
+**E-commerce indexing strategy:**
+```sql
+-- Product catalog optimization
+CREATE INDEX idx_products_category ON products(category_id, price) 
+INCLUDE (product_name, stock_quantity);
+
+CREATE INDEX idx_products_search ON products(product_name, category_id) 
+INCLUDE (price, rating);
+
+-- Order processing optimization
+CREATE INDEX idx_orders_customer_status ON orders(customer_id, order_status, order_date) 
+INCLUDE (total_amount);
+
+CREATE INDEX idx_orders_date_status ON orders(order_date, order_status) 
+INCLUDE (customer_id, total_amount);
+
+-- Inventory management
+CREATE INDEX idx_inventory_product ON inventory(product_id, warehouse_id) 
+INCLUDE (quantity, last_updated);
+
+-- User session optimization
+CREATE INDEX idx_sessions_user ON user_sessions(user_id, session_start) 
+INCLUDE (session_data);
+```
+
+**Memory Trick:** "E-commerce indexes: Product catalog + Order processing + Inventory + User sessions = High performance"
+
 5. How would you monitor and maintain indexes in a production database? _(TCS)_
+
+**Answer:**
+**Monitoring and maintenance strategy:**
+
+**Regular monitoring queries:**
+```sql
+-- Check fragmentation
+SELECT 
+    OBJECT_NAME(ind.OBJECT_ID) AS TableName,
+    ind.name AS IndexName,
+    indexstats.avg_fragmentation_in_percent
+FROM sys.dm_db_index_physical_stats(DB_ID(), NULL, NULL, NULL, NULL) indexstats
+INNER JOIN sys.indexes ind ON ind.object_id = indexstats.object_id AND ind.index_id = indexstats.index_id
+WHERE indexstats.avg_fragmentation_in_percent > 10;
+
+-- Check unused indexes
+SELECT 
+    OBJECT_NAME(i.object_id) AS TableName,
+    i.name AS IndexName
+FROM sys.indexes i
+LEFT JOIN sys.dm_db_index_usage_stats ius ON i.object_id = ius.object_id AND i.index_id = ius.index_id
+WHERE ius.user_seeks IS NULL AND ius.user_scans IS NULL AND ius.user_lookups IS NULL;
+```
+
+**Maintenance schedule:**
+- **Daily**: Monitor fragmentation levels
+- **Weekly**: Reorganize indexes with 10-30% fragmentation
+- **Monthly**: Rebuild indexes with >30% fragmentation
+- **Quarterly**: Review and remove unused indexes
+
+**Memory Trick:** "Production maintenance: Daily monitoring + Weekly reorganize + Monthly rebuild + Quarterly cleanup = Optimal performance"
 
 ---
 
@@ -2211,10 +3528,137 @@ private void processRowData(String data) {
 
 ### Basic Questions
 1. What is a stored procedure, and how is it different from a function? _(TCS, Infosys)_
+
+**Answer:**
+**Stored Procedure:**
+- **Purpose**: Precompiled SQL statements stored in the database
+- **Return value**: Can return multiple values or result sets
+- **Usage**: Called with EXEC or CALL
+- **Transaction control**: Can contain transaction statements
+- **Performance**: Precompiled for better performance
+
+**Function:**
+- **Purpose**: Returns a single value or table
+- **Return value**: Must return exactly one value
+- **Usage**: Used in SELECT statements
+- **Transaction control**: Cannot contain transaction statements
+- **Performance**: Can be inlined by query optimizer
+
+**Memory Trick:** "Stored Procedure = Multiple returns + Transaction control, Function = Single return + Used in queries"
+
 2. What is a trigger, and what are its common use cases? _(Capgemini)_
+
+**Answer:**
+A trigger is a special type of stored procedure that automatically executes when certain events occur on a table.
+
+**Common use cases:**
+- **Data validation**: Enforce business rules before data changes
+- **Audit trails**: Log changes to data for compliance
+- **Referential integrity**: Maintain relationships between tables
+- **Calculated fields**: Automatically update derived columns
+- **Notifications**: Send alerts when data changes
+
+**Types of triggers:**
+- **DML triggers**: AFTER INSERT, UPDATE, DELETE
+- **DDL triggers**: AFTER CREATE, ALTER, DROP
+- **INSTEAD OF triggers**: Replace the triggering action
+
+**Memory Trick:** "Triggers = Automatic execution + Data validation + Audit trails + Referential integrity + Notifications"
+
 3. What are the advantages of using stored procedures in a database? _(Wipro)_
+
+**Answer:**
+**Performance advantages:**
+- **Precompiled**: Faster execution than dynamic SQL
+- **Reduced network traffic**: Single call instead of multiple queries
+- **Query plan reuse**: Execution plans are cached
+
+**Security advantages:**
+- **Access control**: Grant execute permissions without table access
+- **SQL injection prevention**: Parameters are properly handled
+- **Data encapsulation**: Hide table structure from applications
+
+**Maintenance advantages:**
+- **Centralized logic**: Business rules in one place
+- **Version control**: Easy to track changes
+- **Reusability**: Multiple applications can use the same procedure
+
+**Memory Trick:** "Stored procedure advantages: Performance + Security + Maintenance = Better database design"
+
 4. What is the difference between a DML trigger and a DDL trigger? _(Accenture)_
+
+**Answer:**
+**DML Triggers:**
+- **Scope**: Data Manipulation Language (INSERT, UPDATE, DELETE)
+- **Timing**: BEFORE or AFTER the data change
+- **Use cases**: Data validation, audit trails, calculated fields
+- **Access**: Can access inserted and deleted tables
+
+**DDL Triggers:**
+- **Scope**: Data Definition Language (CREATE, ALTER, DROP)
+- **Timing**: AFTER the schema change
+- **Use cases**: Schema auditing, security enforcement
+- **Access**: Can access EVENTDATA() function
+
+**Example:**
+```sql
+-- DML trigger
+CREATE TRIGGER tr_audit_employees
+ON employees AFTER INSERT, UPDATE, DELETE
+AS BEGIN
+    -- Audit logic
+END;
+
+-- DDL trigger
+CREATE TRIGGER tr_audit_schema
+ON DATABASE AFTER CREATE_TABLE, ALTER_TABLE, DROP_TABLE
+AS BEGIN
+    -- Schema audit logic
+END;
+```
+
+**Memory Trick:** "DML trigger = Data changes + BEFORE/AFTER, DDL trigger = Schema changes + AFTER only"
+
 5. How do you call a stored procedure in SQL? _(Cognizant)_
+
+**Answer:**
+**Different ways to call stored procedures:**
+
+**SQL Server:**
+```sql
+-- Basic call
+EXEC procedure_name;
+
+-- With parameters
+EXEC procedure_name @param1 = 'value1', @param2 = 'value2';
+
+-- Using EXECUTE
+EXECUTE procedure_name 'value1', 'value2';
+```
+
+**MySQL:**
+```sql
+-- Basic call
+CALL procedure_name();
+
+-- With parameters
+CALL procedure_name('value1', 'value2');
+```
+
+**Oracle:**
+```sql
+-- Basic call
+BEGIN
+    procedure_name;
+END;
+
+-- With parameters
+BEGIN
+    procedure_name('value1', 'value2');
+END;
+```
+
+**Memory Trick:** "Call procedures: EXEC (SQL Server), CALL (MySQL), BEGIN/END (Oracle)"
 
 ### Basic Query Questions
 1. Write a stored procedure to insert a record into the `employees` table. _(TCS)_
@@ -2343,7 +3787,7 @@ private void processRowData(String data) {
 
 ### Tips for Answering in an Interview
 1. **Be Concise**: For conceptual questions, provide clear definitions and examples in 2-3 sentences (e.g., for ACID properties, briefly explain Atomicity, Consistency, Isolation, Durability).
-2. **Explain Your Approach**: For query or coding questions, outline your logic first (e.g., "I’ll use a LEFT JOIN to include all customers, even those without orders"), then provide the SQL or Java code.
+2. **Explain Your Approach**: For query or coding questions, outline your logic first (e.g., "I'll use a LEFT JOIN to include all customers, even those without orders"), then provide the SQL or Java code.
 3. **Address Edge Cases**: For advanced/hard questions, mention considerations like NULL handling, performance optimization, or error recovery to demonstrate expertise.
 4. **Focus on Optimization**: For performance-related questions, discuss indexing, query plans, connection pooling, or batch processing to show depth.
 5. **Practice Common Patterns**: Prioritize JOINs, GROUP BY, transactions, JDBC integration, indexing, stored procedures, and schema design, as these are frequently tested in MNC interviews.

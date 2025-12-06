@@ -1,1695 +1,1801 @@
-# 🧠 Sliding Window Interview Questions Categorized by Subtype
-
-A detailed breakdown of Sliding Window interview questions, categorized by subtypes, with examples from various companies.
+Certainly! Here's a comprehensive breakdown of **TIER 1 — Core Patterns** in Data Structures and Algorithms (DSA), focusing on the **Sliding Window** technique. This compilation includes 48 curated problems, categorized by difficulty and company-specific interview relevance, across the six subtypes of Sliding Window problems.
 
 ---
 
-## 🥇 Fixed-Size Window Problems
+## 🥇 Sliding Window — Fixed-Size Window Problems
 
-### 1. Maximum Sum of Subarray of Size K
-- **Problem**: Given an array of integers, find the maximum sum of a subarray of size `k`.
-- **Example**: `arr = [2, 1, 5, 1, 3, 2], k = 3`
-- **Company**: Amazon
-- **Source**: [GeeksforGeeks](https://www.geeksforgeeks.org/dsa/top-problems-on-sliding-window-technique-for-interviews/)
+### **Easy**
 
-### 2. Longest Substring Without Repeating Characters
-- **Problem**: Given a string, find the length of the longest substring without repeating characters.
-- **Example**: `s = "abcabcbb"`
-- **Company**: Microsoft
-- **Source**: [Medium](https://medium.com/@kirti07arora/top-10-most-asked-sliding-window-interview-questions-cf8dfdb3fe48)
+1. **Maximum Sum Subarray of Size K**
 
-### 3. Maximum Average Subarray of Size K
-- **Problem**: Given an array of integers, find the contiguous subarray of size `k` that has the maximum average value.
-- **Example**: `arr = [1, 12, -5, -6, 50, 3], k = 4`
-- **Company**: Facebook
-- **Source**: [LeetCode Discuss](https://leetcode.com/discuss/study-guide/3630462/Top-20-Sliding-Window-Problems-for-beginners)
+  * **Company**: Amazon
+  * **LeetCode**: [Problem 643](https://leetcode.com/problems/maximum-average-subarray-i/)
+  * **Difficulty**: Easy
 
-### 4. Find All Anagrams in a String
-- **Problem**: Given a string `s` and a non-empty string `p`, find all the start indices of `p`'s anagrams in `s`.
-- **Example**: `s = "cbaebabacd", p = "abc"`
-- **Company**: Apple
-- **Source**: [LeetCode Discuss](https://leetcode.com/discuss/study-guide/3630462/Top-20-Sliding-Window-Problems-for-beginners)
+2. **Smallest Window Containing 0, 1, and 2**
 
-### 5. Permutation in String
-- **Problem**: Given two strings `s1` and `s2`, return true if `s2` contains a permutation of `s1`.
-- **Example**: `s1 = "ab", s2 = "eidbaooo"`
-- **Company**: Google
-- **Source**: [LeetCode Discuss](https://leetcode.com/discuss/study-guide/3630462/Top-20-Sliding-Window-Problems-for-beginners)
+  * **Company**: Microsoft
+  * **GeeksforGeeks**: [Link](https://www.geeksforgeeks.org/smallest-window-containing-0-1-and-2/)
+  * **Difficulty**: Easy
 
----
+3. **Check if Permutation of Pattern is Substring**
 
-## 🥈 Variable-Size Window Problems
+  * **Company**: Flipkart
+  * **LeetCode**: [Problem 567](https://leetcode.com/problems/permutation-in-string/)
+  * **Difficulty**: Easy
 
-### 1. Longest Substring with At Most K Distinct Characters
-- **Problem**: Given a string, find the length of the longest substring that contains at most `k` distinct characters.
-- **Example**: `s = "eceba", k = 2`
-- **Company**: Amazon
-- **Source**: [GeeksforGeeks](https://www.geeksforgeeks.org/dsa/top-problems-on-sliding-window-technique-for-interviews/)
+### **Medium**
 
-### 2. Subarrays with K Different Integers
-- **Problem**: Given an array of integers, return the number of subarrays that contain exactly `k` different integers.
-- **Example**: `arr = [1, 2, 1, 2, 3], k = 2`
-- **Company**: Microsoft
-- **Source**: [LeetCode Discuss](https://leetcode.com/discuss/study-guide/3630462/Top-20-Sliding-Window-Problems-for-beginners)
+4. **Longest Substring Without Repeating Characters**
 
-### 3. Subarray Product Less Than K
-- **Problem**: Given an array of integers, find the number of contiguous subarrays where the product of all the elements in the subarray is less than `k`.
-- **Example**: `arr = [10, 5, 2, 6], k = 100`
-- **Company**: Facebook
-- **Source**: [LeetCode Discuss](https://leetcode.com/discuss/study-guide/3630462/Top-20-Sliding-Window-Problems-for-beginners)
+  * **Company**: Google
+  * **LeetCode**: [Problem 3](https://leetcode.com/problems/longest-substring-without-repeating-characters/)
+  * **Difficulty**: Medium
 
-### 4. Smallest Subarray with Sum Greater Than or Equal to K
-- **Problem**: Given an array of positive integers, find the length of the smallest contiguous subarray whose sum is greater than or equal to `k`.
-- **Example**: `arr = [2, 3, 1, 2, 4, 3], k = 7`
-- **Company**: Apple
-- **Source**: [LeetCode Discuss](https://leetcode.com/discuss/study-guide/3630462/Top-20-Sliding-Window-Problems-for-beginners)
+5. **Longest Substring with At Most K Distinct Characters**
 
-### 5. Longest Substring with At Most Two Distinct Characters
-- **Problem**: Given a string, find the length of the longest substring that contains at most two distinct characters.
-- **Example**: `s = "eceba"`
-- **Company**: Google
-- **Source**: [LeetCode Discuss](https://leetcode.com/discuss/study-guide/3630462/Top-20-Sliding-Window-Problems-for-beginners)
+  * **Company**: Amazon
+  * **LeetCode**: [Problem 340](https://leetcode.com/problems/longest-substring-with-at-most-k-distinct-characters/)
+  * **Difficulty**: Medium
+
+6. **Count Occurrences of Anagrams**
+
+  * **Company**: Microsoft
+  * **LeetCode**: [Problem 438](https://leetcode.com/problems/find-all-anagrams-in-a-string/)
+  * **Difficulty**: Medium
+
+### **Hard**
+
+7. **Minimum Window Substring**
+
+  * **Company**: Facebook
+  * **LeetCode**: [Problem 76](https://leetcode.com/problems/minimum-window-substring/)
+  * **Difficulty**: Hard
+
+8. **Longest Repeating Character Replacement**
+
+  * **Company**: Apple
+  * **LeetCode**: [Problem 424](https://leetcode.com/problems/longest-repeating-character-replacement/)
+  * **Difficulty**: Hard
 
 ---
 
-## 🥉 Window with Condition (Sum, Distinct Count, Character Frequency)
+## 🥈 Sliding Window — Variable-Size Window Problems
 
-### 1. Longest Substring with At Most K Distinct Characters
-- **Problem**: Given a string, find the length of the longest substring that contains at most `k` distinct characters.
-- **Example**: `s = "eceba", k = 2`
-- **Company**: Amazon
-- **Source**: [GeeksforGeeks](https://www.geeksforgeeks.org/dsa/top-problems-on-sliding-window-technique-for-interviews/)
+### **Easy**
 
-### 2. Subarrays with K Different Integers
-- **Problem**: Given an array of integers, return the number of subarrays that contain exactly `k` different integers.
-- **Example**: `arr = [1, 2, 1, 2, 3], k = 2`
-- **Company**: Microsoft
-- **Source**: [LeetCode Discuss](https://leetcode.com/discuss/study-guide/3630462/Top-20-Sliding-Window-Problems-for-beginners)
+1. **Maximum Sum Subarray Less Than or Equal to K**
 
-### 3. Subarray Product Less Than K
-- **Problem**: Given an array of integers, find the number of contiguous subarrays where the product of all the elements in the subarray is less than `k`.
-- **Example**: `arr = [10, 5, 2, 6], k = 100`
-- **Company**: Facebook
-- **Source**: [LeetCode Discuss](https://leetcode.com/discuss/study-guide/3630462/Top-20-Sliding-Window-Problems-for-beginners)
+  * **Company**: Amazon
+  * **LeetCode**: [Problem 1004](https://leetcode.com/problems/max-consecutive-ones-iii/)
+  * **Difficulty**: Easy
 
-### 4. Smallest Subarray with Sum Greater Than or Equal to K
-- **Problem**: Given an array of positive integers, find the length of the smallest contiguous subarray whose sum is greater than or equal to `k`.
-- **Example**: `arr = [2, 3, 1, 2, 4, 3], k = 7`
-- **Company**: Apple
-- **Source**: [LeetCode Discuss](https://leetcode.com/discuss/study-guide/3630462/Top-20-Sliding-Window-Problems-for-beginners)
+2. **Longest Substring with At Most K Distinct Characters**
 
-### 5. Longest Substring with At Most Two Distinct Characters
-- **Problem**: Given a string, find the length of the longest substring that contains at most two distinct characters.
-- **Example**: `s = "eceba"`
-- **Company**: Google
-- **Source**: [LeetCode Discuss](https://leetcode.com/discuss/study-guide/3630462/Top-20-Sliding-Window-Problems-for-beginners)
+  * **Company**: Google
+  * **LeetCode**: [Problem 340](https://leetcode.com/problems/longest-substring-with-at-most-k-distinct-characters/)
+  * **Difficulty**: Easy
 
----
+3. **Subarrays Product Less Than K**
 
-## 🏅 Shrinking and Expanding Window
+  * **Company**: Microsoft
+  * **LeetCode**: [Problem 713](https://leetcode.com/problems/subarray-product-less-than-k/)
+  * **Difficulty**: Easy
 
-### 1. Longest Substring Without Repeating Characters
-- **Problem**: Given a string, find the length of the longest substring without repeating characters.
-- **Example**: `s = "abcabcbb"`
-- **Company**: Amazon
-- **Source**: [GeeksforGeeks](https://www.geeksforgeeks.org/dsa/top-problems-on-sliding-window-technique-for-interviews/)
+### **Medium**
 
-### 2. Subarrays with K Different Integers
-- **Problem**: Given an array of integers, return the number of subarrays that contain exactly `k` different integers.
-- **Example**: `arr = [1, 2, 1, 2, 3], k = 2`
-- **Company**: Microsoft
-- **Source**: [LeetCode Discuss](https://leetcode.com/discuss/study-guide/3630462/Top-20-Sliding-Window-Problems-for-beginners)
+4. **Longest Substring Without Repeating Characters**
 
-### 3. Subarray Product Less Than K
-- **Problem**: Given an array of integers, find the number of contiguous subarrays where the product of all the elements in the subarray is less than `k`.
-- **Example**: `arr = [10, 5, 2, 6], k = 100`
-- **Company**: Facebook
-- **Source**: [LeetCode Discuss](https://leetcode.com/discuss/study-guide/3630462/Top-20-Sliding-Window-Problems-for-beginners)
+  * **Company**: Facebook
+  * **LeetCode**: [Problem 3](https://leetcode.com/problems/longest-substring-without-repeating-characters/)
+  * **Difficulty**: Medium
 
-### 4. Smallest Subarray with Sum Greater Than or Equal to K
-- **Problem**: Given an array of positive integers, find the length of the smallest contiguous subarray whose sum is greater than or equal to `k`.
-- **Example**: `arr = [2, 3, 1, 2, 4, 3], k = 7`
-- **Company**: Apple
-- **Source**: [LeetCode Discuss](https://leetcode.com/discuss/study-guide/3630462/Top-20-Sliding-Window-Problems-for-beginners)
+5. **Longest Subarray with Sum Less Than or Equal to K**
 
-### 5. Longest Substring with At Most Two Distinct Characters
-- **Problem**: Given a string, find the length of the longest substring that contains at most two distinct characters.
-- **Example**: `s = "
-  ::contentReference[oaicite:0]{index=0}
-## 🏅 Maximum / Minimum / Count-Based Window Logic
+  * **Company**: Apple
+  * **LeetCode**: [Problem 862](https://leetcode.com/problems/shortest-subarray-with-sum-at-least-k/)
+  * **Difficulty**: Medium
 
-### 1. Maximum of All Subarrays of Size K
-- **Problem**: Given an array, find the maximum of all subarrays of size `k`.
-- **Example**: `arr = [1,3,-1,-3,5,3,6,7], k = 3`
-- **Company**: Amazon
-- **Source**: [LeetCode 239](https://leetcode.com/problems/sliding-window-maximum/)
+6. **Fruit Into Baskets**
 
-### 2. Minimum Window Substring
-- **Problem**: Given strings `s` and `t`, find the minimum window in `s` which contains all the characters in `t`.
-- **Example**: `s = "ADOBECODEBANC", t = "ABC"`
-- **Company**: Google
-- **Source**: [LeetCode 76](https://leetcode.com/problems/minimum-window-substring/)
+  * **Company**: Amazon
+  * **LeetCode**: [Problem 904](https://leetcode.com/problems/fruit-into-baskets/)
+  * **Difficulty**: Medium
 
-### 3. Sliding Window Maximum Sum
-- **Problem**: Find the maximum sum of any window of size `k` in the array.
-- **Example**: `arr = [2,1,5,1,3,2], k = 3`
-- **Company**: Microsoft
-- **Source**: [GeeksforGeeks](https://www.geeksforgeeks.org/sliding-window-maximum-maximum-of-all-subarrays-of-size-k/)
+### **Hard**
 
-### 4. Count of Distinct Elements in Every Window of Size K
-- **Problem**: Count distinct numbers in all windows of size `k`.
-- **Example**: `arr = [1,2,1,3,4,3], k = 3`
-- **Company**: Facebook
-- **Source**: [GeeksforGeeks](https://www.geeksforgeeks.org/count-distinct-elements-in-every-window-of-size-k/)
+7. **Longest Substring with At Most K Distinct Characters**
 
-### 5. Maximum Consecutive Ones with Replacement
-- **Problem**: Given a binary array, you can flip at most `k` 0’s. Find the maximum number of consecutive 1’s.
-- **Example**: `arr = [1,1,0,0,1,1,1,0], k = 2`
-- **Company**: Apple
-- **Source**: [LeetCode 1004](https://leetcode.com/problems/max-consecutive-ones-iii/)
+  * **Company**: Microsoft
+  * **LeetCode**: [Problem 340](https://leetcode.com/problems/longest-substring-with-at-most-k-distinct-characters/)
+  * **Difficulty**: Hard
+
+8. **Subarrays with K Different Integers**
+
+  * **Company**: Facebook
+  * **LeetCode**: [Problem 992](https://leetcode.com/problems/subarrays-with-k-different-integers/)
+  * **Difficulty**: Hard
 
 ---
 
-## 🏅 Two Array or String Window Comparison (Anagram Type)
+## 🥉 Sliding Window — Window with Condition (Sum, Distinct Count, Character Frequency)
 
-### 1. Find All Anagrams in a String
-- **Problem**: Find all start indices of `p`'s anagrams in `s`.
-- **Example**: `s = "cbaebabacd", p = "abc"`
-- **Company**: Amazon
-- **Source**: [LeetCode 438](https://leetcode.com/problems/find-all-anagrams-in-a-string/)
+### **Easy**
 
-### 2. Permutation in String
-- **Problem**: Check if `s2` contains any permutation of `s1`.
-- **Example**: `s1 = "ab", s2 = "eidbaooo"`
-- **Company**: Google
-- **Source**: [LeetCode 567](https://leetcode.com/problems/permutation-in-string/)
+1. **Maximum Sum Subarray of Size K**
 
-### 3. Minimum Window Substring
-- **Problem**: Find minimum window in `s` containing all chars of `t`.
-- **Example**: `s = "ADOBECODEBANC", t = "ABC"`
-- **Company**: Microsoft
-- **Source**: [LeetCode 76](https://leetcode.com/problems/minimum-window-substring/)
+  * **Company**: Amazon
+  * **LeetCode**: [Problem 643](https://leetcode.com/problems/maximum-average-subarray-i/)
+  * **Difficulty**: Easy
 
-### 4. Check Inclusion of String
-- **Problem**: Check if s2 contains a permutation of s1.
-- **Example**: `s1 = "ab", s2 = "eidbaooo"`
-- **Company**: Facebook
-- **Source**: [LeetCode 567](https://leetcode.com/problems/permutation-in-string/)
+2. **Longest Substring Without Repeating Characters**
 
-### 5. Count Occurrences of Anagrams
-- **Problem**: Count all anagram occurrences of `p` in `s`.
-- **Example**: `s = "cbaebabacd", p = "abc"`
-- **Company**: Apple
-- **Source**: [GeeksforGeeks](https://www.geeksforgeeks.org/count-occurrences-of-anagrams/)
+  * **Company**: Google
+  * **LeetCode**: [Problem 3](https://leetcode.com/problems/longest-substring-without-repeating-characters/)
+  * **Difficulty**: Easy
 
----
-# 🧠 Two Pointers Interview Questions Categorized by Subtype
+3. **Check if Permutation of Pattern is Substring**
 
-A detailed breakdown of Two Pointers interview questions, categorized by subtypes, with examples from various companies.
+  * **Company**: Flipkart
+  * **LeetCode**: [Problem 567](https://leetcode.com/problems/permutation-in-string/)
+  * **Difficulty**: Easy
 
----
+### **Medium**
 
-## 🥇 Opposite Direction Pointers (Start–End)
+4. **Longest Substring with At Most K Distinct Characters**
 
-### 1. Two Sum (Sorted Array)
-- **Problem**: Find two numbers in a sorted array that add up to a target.
-- **Example**: `nums = [2,7,11,15], target = 9`
-- **Company**: Amazon
-- **Source**: [LeetCode 167](https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/)
+  * **Company**: Amazon
+  * **LeetCode**: [Problem 340](https://leetcode.com/problems/longest-substring-with-at-most-k-distinct-characters/)
+  * **Difficulty**: Medium
 
-### 2. Container With Most Water
-- **Problem**: Find two lines that together with x-axis forms a container with max water.
-- **Example**: `height = [1,8,6,2,5,4,8,3,7]`
-- **Company**: Google
-- **Source**: [LeetCode 11](https://leetcode.com/problems/container-with-most-water/)
+5. **Count Occurrences of Anagrams**
 
-### 3. Trapping Rain Water II (2D variant)
-- **Problem**: Max water trapped between elevation maps using two pointers.
-- **Company**: Microsoft
-- **Source**: [LeetCode 42](https://leetcode.com/problems/trapping-rain-water/)
+  * **Company**: Microsoft
+  * **LeetCode**: [Problem 438](https://leetcode.com/problems/find-all-anagrams-in-a-string/)
+  * **Difficulty**: Medium
 
-### 4. Valid Palindrome
-- **Problem**: Check if string is a palindrome ignoring non-alphanumerics.
-- **Example**: `s = "A man, a plan, a canal: Panama"`
-- **Company**: Facebook
-- **Source**: [LeetCode 125](https://leetcode.com/problems/valid-palindrome/)
+6. **Subarrays Product Less Than K**
 
-### 5. Reverse String
-- **Problem**: Reverse a string in-place using two pointers.
-- **Example**: `s = ["h","e","l","l","o"]`
-- **Company**: Apple
-- **Source**: [LeetCode 344](https://leetcode.com/problems/reverse-string/)
+  * **Company**: Microsoft
+  * **LeetCode**: [Problem 713](https://leetcode.com/problems/subarray-product-less-than-k/)
+  * **Difficulty**: Medium
+
+### **Hard**
+
+7. **Minimum Window Substring**
+
+  * **Company**: Facebook
+  * **LeetCode**: [Problem 76](https://leetcode.com/problems/minimum-window-substring/)
+  * **Difficulty**: Hard
+
+8. **Longest Repeating Character Replacement**
+
+  * **Company**: Apple
+  * **LeetCode**: [Problem 424](https://leetcode.com/problems/longest-repeating-character-replacement/)
+  * **Difficulty**: Hard
 
 ---
 
-## 🥈 Same Direction Pointers (Fast-Slow / Slow-Fast)
+## 🏅 Sliding Window — Shrinking and Expanding Window
 
-### 1. Linked List Cycle Detection
-- **Problem**: Detect if a linked list has a cycle.
-- **Company**: Amazon
-- **Source**: [LeetCode 141](https://leetcode.com/problems/linked-list-cycle/)
+### **Easy**
 
-### 2. Find Duplicate Number
-- **Problem**: Find duplicate in array using fast/slow pointer.
-- **Example**: `nums = [1,3,4,2,2]`
-- **Company**: Google
-- **Source**: [LeetCode 287](https://leetcode.com/problems/find-the-duplicate-number/)
+1. **Maximum Sum Subarray of Size K**
 
-### 3. Happy Number
-- **Problem**: Determine if a number is happy using slow/fast cycle detection.
-- **Example**: `n = 19`
-- **Company**: Microsoft
-- **Source**: [LeetCode 202](https://leetcode.com/problems/happy-number/)
+  * **Company**: Amazon
+  * **LeetCode**: [Problem 643](https://leetcode.com/problems/maximum-average-subarray-i/)
+  * **Difficulty**: Easy
 
-### 4. Linked List Cycle Length
-- **Problem**: Find length of cycle in linked list if exists.
-- **Company**: Facebook
-- **Source**: [LeetCode Discuss](https://leetcode.com/discuss/)
+2. **Smallest Window Containing 0, 1, and 2**
 
-### 5. Linked List Cycle Start Node
-- **Problem**: Find the node where cycle begins.
-- **Company**: Apple
-- **Source**: [LeetCode 142](https://leetcode.com/problems/linked-list-cycle-ii/)
+  * **Company**: Microsoft
+  * **GeeksforGeeks**: [Link](https://www.geeksforgeeks.org/smallest-window-containing-0-1-and-2/)
+  * **Difficulty**: Easy
 
----
+3. **Check if Permutation of Pattern is Substring**
 
-## 🥉 Pointer Convergence Problems (Meeting in Middle)
+  * **Company**: Flipkart
+  * **LeetCode**: [Problem 567](https://leetcode.com/problems/permutation-in-string/)
+  * **Difficulty**: Easy
 
-### 1. Intersection of Two Linked Lists
-- **Problem**: Find the node where two singly linked lists intersect.
-- **Company**: Amazon
-- **Source**: [LeetCode 160](https://leetcode.com/problems/intersection-of-two-linked-lists/)
+### **Medium**
 
-### 2. Middle of Linked List
-- **Problem**: Find the middle node of a linked list.
-- **Company**: Google
-- **Source**: [LeetCode 876](https://leetcode.com/problems/middle-of-the-linked-list/)
+4. **Longest Substring Without Repeating Characters**
 
-### 3. Palindrome Linked List
-- **Problem**: Check if a linked list is palindrome using convergence.
-- **Company**: Microsoft
-- **Source**: [LeetCode 234](https://leetcode.com/problems/palindrome-linked-list/)
+  * **Company**: Google
+  * **LeetCode**: [Problem 3](https://leetcode.com/problems/longest-substring-without-repeating-characters/)
+  * **Difficulty**: Medium
 
-### 4. Reorder List
-- **Problem**: Reorder linked list as L0→Ln→L1→Ln-1→…
-- **Company**: Facebook
-- **Source**: [LeetCode 143](https://leetcode.com/problems/reorder-list/)
+5. **Longest Substring with At Most K Distinct Characters**
 
-### 5. Linked List Remove Nth From End
-- **Problem**: Remove nth node from end using two-pointer convergence.
-- **Company**: Apple
-- **Source**: [LeetCode 19](https://leetcode.com/problems/remove-nth-node-from-end-of-list/)
+  * **Company**: Amazon
+  * **LeetCode**: [Problem 340](https://leetcode.com/problems/longest-substring-with-at-most-k-distinct-characters/)
+  * **Difficulty**: Medium
+
+6. **Count Occurrences of Anagrams**
+
+  * **Company**: Microsoft
+  * **LeetCode**: [Problem 438](https://leetcode.com/problems/find-all-anagrams-in-a-string/)
+  * **Difficulty**: Medium
+
+### **Hard**
+
+7. **Minimum Window Substring**
+
+  * **Company**: Facebook
+  * **LeetCode**: [Problem 76](https://leetcode.com/problems/minimum-window-substring/)
+  * **Difficulty**: Hard
+
+8. **Longest Repeating Character Replacement**
+
+  * **Company**: Apple
+  * **LeetCode**: [Problem 424](https://leetcode.com/problems/longest-repeating-character-replacement/)
+  * **Difficulty**: Hard
 
 ---
 
-## 🏅 Sorted Array Operations Using Pointers
-
-### 1. Remove Duplicates from Sorted Array
-- **Problem**: Remove duplicates in-place and return new length.
-- **Company**: Amazon
-- **Source**: [LeetCode 26](https://leetcode.com/problems/remove-duplicates-from-sorted-array/)
-
-### 2. Squares of a Sorted Array
-- **Problem**: Return array of squares sorted.
-- **Company**: Google
-- **Source**: [LeetCode 977](https://leetcode.com/problems/squares-of-a-sorted-array/)
-
-### 3. Merge Sorted Array
-- **Problem**: Merge two sorted arrays into one.
-- **Company**: Microsoft
-- **Source**: [LeetCode 88](https://leetcode.com/problems/merge-sorted-array/)
-
-### 4. Two Sum II (Input Array is Sorted)
-- **Problem**: Find indices of two numbers in sorted array that sum to target.
-- **Company**: Facebook
-- **Source**: [LeetCode 167](https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/)
-
-### 5. Remove Element (Sorted Variant)
-- **Problem**: Remove all instances of a value in-place.
-- **Company**: Apple
-- **Source**: [LeetCode 27](https://leetcode.com/problems/remove-element/)
+Perfect! Let’s complete the last two **Sliding Window subtypes** in the same structured `.md` format:
 
 ---
 
-## 🏅 Merging or Removing Duplicates with Pointers
+## 🏆 Sliding Window — Maximum/Minimum/Count-Based Window Logic
 
-### 1. Merge Two Sorted Lists
-- **Problem**: Merge two sorted linked lists.
-- **Company**: Amazon
-- **Source**: [LeetCode 21](https://leetcode.com/problems/merge-two-sorted-lists/)
+### **Easy**
 
-### 2. Remove Duplicates from Sorted List
-- **Problem**: Delete duplicates in a sorted linked list.
-- **Company**: Google
-- **Source**: [LeetCode 83](https://leetcode.com/problems/remove-duplicates-from-sorted-list/)
+1. **Maximum Sum Subarray of Size K**
 
-### 3. Remove Duplicates from Sorted List II
-- **Problem**: Delete all nodes with duplicate numbers.
-- **Company**: Microsoft
-- **Source**: [LeetCode 82](https://leetcode.com/problems/remove-duplicates-from-sorted-list-ii/)
+  * **Company**: Amazon
+  * **LeetCode**: [Problem 643](https://leetcode.com/problems/maximum-average-subarray-i/)
+  * **Difficulty**: Easy
 
-### 4. Merge Intervals
-- **Problem**: Merge overlapping intervals using two pointers.
-- **Company**: Facebook
-- **Source**: [LeetCode 56](https://leetcode.com/problems/merge-intervals/)
+2. **Minimum Size Subarray Sum**
 
-### 5. Partition List
-- **Problem**: Partition linked list around value x.
-- **Company**: Apple
-- **Source**: [LeetCode 86](https://leetcode.com/problems/partition-list/)
+  * **Company**: Microsoft
+  * **LeetCode**: [Problem 209](https://leetcode.com/problems/minimum-size-subarray-sum/)
+  * **Difficulty**: Easy
 
----
+3. **Maximum Average Subarray II**
 
-## 🏅 Partitioning Arrays Using Two Pointers
+  * **Company**: Google
+  * **LeetCode**: [Problem 644](https://leetcode.com/problems/maximum-average-subarray-ii/)
+  * **Difficulty**: Easy
 
-### 1. Dutch National Flag Problem
-- **Problem**: Sort array with 0,1,2 using pointers.
-- **Company**: Amazon
-- **Source**: [LeetCode 75](https://leetcode.com/problems/sort-colors/)
+### **Medium**
 
-### 2. Move Zeroes
-- **Problem**: Move all zeroes to end while maintaining order.
-- **Company**: Google
-- **Source**: [LeetCode 283](https://leetcode.com/problems/move-zeroes/)
+4. **Longest Subarray with Sum ≤ K**
 
-### 3. Partition Array for QuickSort
-- **Problem**: Partition array based on pivot value.
-- **Company**: Microsoft
-- **Source**: [LeetCode Discuss](https://leetcode.com/discuss/)
+  * **Company**: Amazon
+  * **LeetCode**: [Problem 862](https://leetcode.com/problems/shortest-subarray-with-sum-at-least-k/)
+  * **Difficulty**: Medium
 
-### 4. Sort Array By Parity
-- **Problem**: Move even numbers first, odd numbers last.
-- **Company**: Facebook
-- **Source**: [LeetCode 905](https://leetcode.com/problems/sort-array-by-parity/)
+5. **Max Consecutive Ones III**
 
-### 5. Remove Duplicates from Sorted Array
-- **Problem**: Partition array to remove duplicates in-place.
-- **Company**: Apple
-- **Source**: [LeetCode 26](https://leetcode.com/problems/remove-duplicates-from-sorted-array/)
+  * **Company**: Facebook
+  * **LeetCode**: [Problem 1004](https://leetcode.com/problems/max-consecutive-ones-iii/)
+  * **Difficulty**: Medium
 
-# 🧠 Fast & Slow Pointers Interview Questions Categorized by Subtype
+6. **Sliding Window Maximum**
 
-A detailed breakdown of Fast & Slow Pointers interview questions, categorized by subtypes, with examples from various companies.
+  * **Company**: Apple
+  * **LeetCode**: [Problem 239](https://leetcode.com/problems/sliding-window-maximum/)
+  * **Difficulty**: Medium
+
+### **Hard**
+
+7. **Longest Repeating Character Replacement**
+
+  * **Company**: Microsoft
+  * **LeetCode**: [Problem 424](https://leetcode.com/problems/longest-repeating-character-replacement/)
+  * **Difficulty**: Hard
+
+8. **Minimum Window Substring**
+
+  * **Company**: Facebook
+  * **LeetCode**: [Problem 76](https://leetcode.com/problems/minimum-window-substring/)
+  * **Difficulty**: Hard
 
 ---
 
-## 🥇 Cycle Detection in Linked Lists or Arrays
+## 🏆 Sliding Window — Two Array or String Window Comparison (Anagram Type)
 
-### 1. Linked List Cycle
-- **Problem**: Detect if a linked list has a cycle.
-- **Company**: Amazon
-- **Source**: [LeetCode 141](https://leetcode.com/problems/linked-list-cycle/)
+### **Easy**
 
-### 2. Linked List Cycle II
-- **Problem**: Detect the node where a linked list cycle begins.
-- **Company**: Google
-- **Source**: [LeetCode 142](https://leetcode.com/problems/linked-list-cycle-ii/)
+1. **Check if String Contains Permutation of Another String**
 
-### 3. Happy Number
-- **Problem**: Determine if a number becomes 1 eventually using cycle detection.
-- **Company**: Microsoft
-- **Source**: [LeetCode 202](https://leetcode.com/problems/happy-number/)
+  * **Company**: Flipkart
+  * **LeetCode**: [Problem 567](https://leetcode.com/problems/permutation-in-string/)
+  * **Difficulty**: Easy
 
-### 4. Find Duplicate Number
-- **Problem**: Detect duplicate number in array using fast/slow pointer approach.
-- **Company**: Facebook
-- **Source**: [LeetCode 287](https://leetcode.com/problems/find-the-duplicate-number/)
+2. **Valid Anagram**
 
-### 5. Circular Array Loop
-- **Problem**: Detect loop in circular array.
-- **Company**: Apple
-- **Source**: [LeetCode 457](https://leetcode.com/problems/circular-array-loop/)
+  * **Company**: Amazon
+  * **LeetCode**: [Problem 242](https://leetcode.com/problems/valid-anagram/)
+  * **Difficulty**: Easy
+
+3. **Group Anagrams**
+
+  * **Company**: Microsoft
+  * **LeetCode**: [Problem 49](https://leetcode.com/problems/group-anagrams/)
+  * **Difficulty**: Easy
+
+### **Medium**
+
+4. **Find All Anagrams in a String**
+
+  * **Company**: Google
+  * **LeetCode**: [Problem 438](https://leetcode.com/problems/find-all-anagrams-in-a-string/)
+  * **Difficulty**: Medium
+
+5. **Minimum Window Subsequence**
+
+  * **Company**: Amazon
+  * **LeetCode**: [Problem 727](https://leetcode.com/problems/minimum-window-subsequence/)
+  * **Difficulty**: Medium
+
+6. **Longest Substring with At Most Two Distinct Characters**
+
+  * **Company**: Facebook
+  * **LeetCode**: [Problem 159](https://leetcode.com/problems/longest-substring-with-at-most-two-distinct-characters/)
+  * **Difficulty**: Medium
+
+### **Hard**
+
+7. **Substring with Concatenation of All Words**
+
+  * **Company**: Apple
+  * **LeetCode**: [Problem 30](https://leetcode.com/problems/substring-with-concatenation-of-all-words/)
+  * **Difficulty**: Hard
+
+8. **Minimum Window Substring**
+
+  * **Company**: Microsoft
+  * **LeetCode**: [Problem 76](https://leetcode.com/problems/minimum-window-substring/)
+  * **Difficulty**: Hard
+
+---
+Perfect! Let’s do **TIER 1 — Two Pointers** pattern in the same structured `.md` format, with **6 subtypes** and **8 questions each (3 easy, 3 medium, 2 hard)** including company names and LeetCode/GFG references.
 
 ---
 
-## 🥈 Midpoint or Length-Based Traversal
+## 🥇 Two Pointers — Opposite Direction Pointers (Start–End)
 
-### 1. Middle of Linked List
-- **Problem**: Find the middle node of a linked list.
-- **Company**: Amazon
-- **Source**: [LeetCode 876](https://leetcode.com/problems/middle-of-the-linked-list/)
+### **Easy**
 
-### 2. Linked List Length Determination
-- **Problem**: Find length of a singly linked list using traversal.
-- **Company**: Google
-- **Source**: [LeetCode Discuss](https://leetcode.com/discuss/)
+1. **Two Sum II – Input Array Is Sorted**
 
-### 3. Reorder List
-- **Problem**: Split and reorder a list as L0→Ln→L1→Ln-1→…
-- **Company**: Microsoft
-- **Source**: [LeetCode 143](https://leetcode.com/problems/reorder-list/)
+   * **Company**: Amazon
+   * **LeetCode**: [Problem 167](https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/)
+   * **Difficulty**: Easy
 
-### 4. Palindrome Linked List (First Half Traversal)
-- **Problem**: Traverse to midpoint to check palindrome.
-- **Company**: Facebook
-- **Source**: [LeetCode 234](https://leetcode.com/problems/palindrome-linked-list/)
+2. **Palindrome Check**
 
-### 5. Split Linked List in Parts
-- **Problem**: Split linked list into k nearly equal parts.
-- **Company**: Apple
-- **Source**: [LeetCode 725](https://leetcode.com/problems/split-linked-list-in-parts/)
+   * **Company**: Microsoft
+   * **LeetCode**: [Problem 125](https://leetcode.com/problems/valid-palindrome/)
+   * **Difficulty**: Easy
 
----
+3. **Reverse String**
 
-## 🥉 Detect Intersection Points
+   * **Company**: Google
+   * **LeetCode**: [Problem 344](https://leetcode.com/problems/reverse-string/)
+   * **Difficulty**: Easy
 
-### 1. Intersection of Two Linked Lists
-- **Problem**: Find intersection node of two singly linked lists.
-- **Company**: Amazon
-- **Source**: [LeetCode 160](https://leetcode.com/problems/intersection-of-two-linked-lists/)
+### **Medium**
 
-### 2. Linked List Cycle Start
-- **Problem**: Detect start of cycle in a linked list.
-- **Company**: Google
-- **Source**: [LeetCode 142](https://leetcode.com/problems/linked-list-cycle-ii/)
+4. **Container With Most Water**
 
-### 3. Find Duplicate Number
-- **Problem**: Find duplicate using slow/fast pointers as cycle detection.
-- **Company**: Microsoft
-- **Source**: [LeetCode 287](https://leetcode.com/problems/find-the-duplicate-number/)
+   * **Company**: Facebook
+   * **LeetCode**: [Problem 11](https://leetcode.com/problems/container-with-most-water/)
+   * **Difficulty**: Medium
 
-### 4. Detect Loop in Linked List
-- **Problem**: Check if a linked list forms a loop.
-- **Company**: Facebook
-- **Source**: [LeetCode 141](https://leetcode.com/problems/linked-list-cycle/)
+5. **Trapping Rain Water**
 
-### 5. Circular Array Loop Detection
-- **Problem**: Detect loop in array using fast/slow pointer.
-- **Company**: Apple
-- **Source**: [LeetCode 457](https://leetcode.com/problems/circular-array-loop/)
+   * **Company**: Amazon
+   * **LeetCode**: [Problem 42](https://leetcode.com/problems/trapping-rain-water/)
+   * **Difficulty**: Medium
 
----
+6. **3Sum**
 
-## 🏅 Reversing or Splitting Linked Lists Using Pointers
+   * **Company**: Google
+   * **LeetCode**: [Problem 15](https://leetcode.com/problems/3sum/)
+   * **Difficulty**: Medium
 
-### 1. Reverse Linked List
-- **Problem**: Reverse a singly linked list in-place.
-- **Company**: Amazon
-- **Source**: [LeetCode 206](https://leetcode.com/problems/reverse-linked-list/)
+### **Hard**
 
-### 2. Reorder List
-- **Problem**: Reorder list using fast/slow to split and reverse second half.
-- **Company**: Google
-- **Source**: [LeetCode 143](https://leetcode.com/problems/reorder-list/)
+7. **4Sum**
 
-### 3. Split Linked List into Two Halves
-- **Problem**: Divide linked list into front and back halves.
-- **Company**: Microsoft
-- **Source**: [LeetCode Discuss](https://leetcode.com/discuss/)
+   * **Company**: Microsoft
+   * **LeetCode**: [Problem 18](https://leetcode.com/problems/4sum/)
+   * **Difficulty**: Hard
 
-### 4. Reverse Linked List II
-- **Problem**: Reverse a linked list between positions m and n.
-- **Company**: Facebook
-- **Source**: [LeetCode 92](https://leetcode.com/problems/reverse-linked-list-ii/)
+8. **Container With Most Water II** *(Variation / Hard Concept)*
 
-### 5. Split Linked List in Parts
-- **Problem**: Divide linked list into k equal parts.
-- **Company**: Apple
-- **Source**: [LeetCode 725](https://leetcode.com/problems/split-linked-list-in-parts/)
+   * **Company**: Facebook
+   * **LeetCode**: [Problem 11 (with constraints)](https://leetcode.com/problems/container-with-most-water/)
+   * **Difficulty**: Hard
 
 ---
 
-## 🏅 Linked List Palindrome Checking
+## 🥇 Two Pointers — Same Direction Pointers (Fast–Slow)
 
-### 1. Palindrome Linked List
-- **Problem**: Check if a linked list is a palindrome using fast/slow pointers.
-- **Company**: Amazon
-- **Source**: [LeetCode 234](https://leetcode.com/problems/palindrome-linked-list/)
+### **Easy**
 
-### 2. Palindrome Linked List (Reverse Second Half)
-- **Problem**: Reverse second half and compare halves.
-- **Company**: Google
-- **Source**: [LeetCode 234](https://leetcode.com/problems/palindrome-linked-list/)
+1. **Linked List Cycle Detection**
 
-### 3. Check Palindrome Using Stack
-- **Problem**: Use fast/slow to push first half to stack and compare.
-- **Company**: Microsoft
-- **Source**: [LeetCode Discuss](https://leetcode.com/discuss/)
+   * **Company**: Amazon
+   * **LeetCode**: [Problem 141](https://leetcode.com/problems/linked-list-cycle/)
+   * **Difficulty**: Easy
 
-### 4. Check Palindrome (Recursive)
-- **Problem**: Recursively check palindrome using fast pointer as length tracker.
-- **Company**: Facebook
-- **Source**: [LeetCode Discuss](https://leetcode.com/discuss/)
+2. **Remove Duplicates from Sorted Array**
 
-### 5. Convert Linked List to Array and Check Palindrome
-- **Problem**: Convert to array and compare two halves.
-- **Company**: Apple
-- **Source**: [LeetCode Discuss](https://leetcode.com/discuss/)
-# 🧠 Prefix Sum / Difference Array Interview Questions Categorized by Subtype
+   * **Company**: Microsoft
+   * **LeetCode**: [Problem 26](https://leetcode.com/problems/remove-duplicates-from-sorted-array/)
+   * **Difficulty**: Easy
 
-A detailed breakdown of Prefix Sum / Difference Array interview questions, categorized by subtypes, with examples from various companies.
+3. **Move Zeroes**
 
----
+   * **Company**: Google
+   * **LeetCode**: [Problem 283](https://leetcode.com/problems/move-zeroes/)
+   * **Difficulty**: Easy
 
-## 🥇 Prefix Sum (1D Cumulative Addition)
+### **Medium**
 
-### 1. Running Sum of 1D Array
-- **Problem**: Compute running sum of an array.
-- **Example**: `nums = [1,2,3,4]`
-- **Company**: Amazon
-- **Source**: [LeetCode 1480](https://leetcode.com/problems/running-sum-of-1d-array/)
+4. **Linked List Cycle II (Find Cycle Start)**
 
-### 2. Subarray Sum Equals K
-- **Problem**: Count subarrays with sum equal to k using prefix sum.
-- **Example**: `nums = [1,1,1], k = 2`
-- **Company**: Google
-- **Source**: [LeetCode 560](https://leetcode.com/problems/subarray-sum-equals-k/)
+   * **Company**: Facebook
+   * **LeetCode**: [Problem 142](https://leetcode.com/problems/linked-list-cycle-ii/)
+   * **Difficulty**: Medium
 
-### 3. Maximum Size Subarray Sum Equals k
-- **Problem**: Find max length subarray with sum k.
-- **Company**: Microsoft
-- **Source**: [LeetCode 325](https://leetcode.com/problems/maximum-size-subarray-sum-equals-k/)
+5. **Remove Duplicates from Sorted List II**
 
-### 4. Continuous Subarray Sum
-- **Problem**: Check if array has subarray of sum multiple of k.
-- **Company**: Facebook
-- **Source**: [LeetCode 523](https://leetcode.com/problems/continuous-subarray-sum/)
+   * **Company**: Amazon
+   * **LeetCode**: [Problem 82](https://leetcode.com/problems/remove-duplicates-from-sorted-list-ii/)
+   * **Difficulty**: Medium
 
-### 5. Range Sum Query - Immutable
-- **Problem**: Implement sumRange(i,j) using prefix sum.
-- **Company**: Apple
-- **Source**: [LeetCode 303](https://leetcode.com/problems/range-sum-query-immutable/)
+6. **Longest Subarray of 1’s After Replacement**
+
+   * **Company**: Google
+   * **LeetCode**: [Problem 1004](https://leetcode.com/problems/max-consecutive-ones-iii/)
+   * **Difficulty**: Medium
+
+### **Hard**
+
+7. **Linked List Reordering (Odd-Even or Reorder List)**
+
+   * **Company**: Microsoft
+   * **LeetCode**: [Problem 143](https://leetcode.com/problems/reorder-list/)
+   * **Difficulty**: Hard
+
+8. **Longest Repeating Character Replacement**
+
+   * **Company**: Facebook
+   * **LeetCode**: [Problem 424](https://leetcode.com/problems/longest-repeating-character-replacement/)
+   * **Difficulty**: Hard
 
 ---
 
-## 🥈 Prefix XOR / Prefix Product
+## 🥇 Two Pointers — Pointer Convergence Problems (Meeting in Middle)
 
-### 1. Subarray XOR Equals K
-- **Problem**: Count subarrays with XOR equal to k using prefix XOR.
-- **Example**: `arr = [4,2,2,6,4], k = 6`
-- **Company**: Amazon
-- **Source**: [LeetCode Discuss](https://leetcode.com/discuss/)
+### **Easy**
 
-### 2. Maximum XOR of Two Numbers in Array
-- **Problem**: Use prefix XOR trie to find max XOR.
-- **Company**: Google
-- **Source**: [LeetCode 421](https://leetcode.com/problems/maximum-xor-of-two-numbers-in-an-array/)
+1. **Linked List Middle Node**
 
-### 3. XOR Queries of a Subarray
-- **Problem**: Compute XOR of elements from L to R using prefix XOR.
-- **Company**: Microsoft
-- **Source**: [LeetCode 1310](https://leetcode.com/problems/xor-queries-of-a-subarray/)
+   * **Company**: Amazon
+   * **LeetCode**: [Problem 876](https://leetcode.com/problems/middle-of-the-linked-list/)
+   * **Difficulty**: Easy
 
-### 4. Product of Array Except Self
-- **Problem**: Compute product prefix and suffix arrays.
-- **Company**: Facebook
-- **Source**: [LeetCode 238](https://leetcode.com/problems/product-of-array-except-self/)
+2. **Palindrome Linked List**
 
-### 5. Find Duplicate Using XOR
-- **Problem**: Detect duplicate using XOR trick.
-- **Company**: Apple
-- **Source**: [LeetCode 287](https://leetcode.com/problems/find-the-duplicate-number/)
+   * **Company**: Microsoft
+   * **LeetCode**: [Problem 234](https://leetcode.com/problems/palindrome-linked-list/)
+   * **Difficulty**: Easy
 
----
+3. **Detect Cycle in Linked List**
 
-## 🥉 Difference Array (Range Updates Efficiently)
+   * **Company**: Google
+   * **LeetCode**: [Problem 141](https://leetcode.com/problems/linked-list-cycle/)
+   * **Difficulty**: Easy
 
-### 1. Range Addition
-- **Problem**: Apply multiple range increments efficiently.
-- **Example**: `length = 5, updates = [[1,3,2],[2,4,3]]`
-- **Company**: Amazon
-- **Source**: [LeetCode 370](https://leetcode.com/problems/range-addition/)
+### **Medium**
 
-### 2. Corporate Flight Bookings
-- **Problem**: Incremental updates on ranges using difference array.
-- **Company**: Google
-- **Source**: [LeetCode 1109](https://leetcode.com/problems/corporate-flight-bookings/)
+4. **Linked List Cycle II**
 
-### 3. Flight Bookings Difference Array Variant
-- **Problem**: Efficiently compute cumulative range updates.
-- **Company**: Microsoft
-- **Source**: [LeetCode Discuss](https://leetcode.com/discuss/)
+   * **Company**: Facebook
+   * **LeetCode**: [Problem 142](https://leetcode.com/problems/linked-list-cycle-ii/)
+   * **Difficulty**: Medium
 
-### 4. Car Pooling Problem
-- **Problem**: Use difference array to track capacity changes efficiently.
-- **Company**: Facebook
-- **Source**: [LeetCode 1094](https://leetcode.com/problems/car-pooling/)
+5. **Reorder Linked List**
 
-### 5. Interval Addition
-- **Problem**: Increment array elements in multiple intervals.
-- **Company**: Apple
-- **Source**: [LeetCode Discuss](https://leetcode.com/discuss/)
+   * **Company**: Amazon
+   * **LeetCode**: [Problem 143](https://leetcode.com/problems/reorder-list/)
+   * **Difficulty**: Medium
+
+6. **Remove N-th Node From End**
+
+   * **Company**: Google
+   * **LeetCode**: [Problem 19](https://leetcode.com/problems/remove-nth-node-from-end-of-list/)
+   * **Difficulty**: Medium
+
+### **Hard**
+
+7. **Linked List Reversal in K-Group**
+
+   * **Company**: Microsoft
+   * **LeetCode**: [Problem 25](https://leetcode.com/problems/reverse-nodes-in-k-group/)
+   * **Difficulty**: Hard
+
+8. **Sort List (Merge Sort on Linked List)**
+
+   * **Company**: Facebook
+   * **LeetCode**: [Problem 148](https://leetcode.com/problems/sort-list/)
+   * **Difficulty**: Hard
 
 ---
 
-## 🏅 Subarray Sum Problems Using Prefix
+### **Easy**
 
-### 1. Subarray Sum Equals K
-- **Problem**: Count subarrays with sum equal to k.
-- **Company**: Amazon
-- **Source**: [LeetCode 560](https://leetcode.com/problems/subarray-sum-equals-k/)
+1. **Two Sum II – Input Array Is Sorted**
 
-### 2. Maximum Size Subarray Sum Equals k
-- **Problem**: Find max length subarray with sum k.
-- **Company**: Google
-- **Source**: [LeetCode 325](https://leetcode.com/problems/maximum-size-subarray-sum-equals-k/)
+   * **Company**: Amazon
+   * **LeetCode**: [Problem 167](https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/)
+   * **Difficulty**: Easy
 
-### 3. Continuous Subarray Sum
-- **Problem**: Check if array has subarray of sum multiple of k.
-- **Company**: Microsoft
-- **Source**: [LeetCode 523](https://leetcode.com/problems/continuous-subarray-sum/)
+2. **Remove Duplicates from Sorted Array**
 
-### 4. Count Subarrays with Sum Divisible by K
-- **Problem**: Use prefix sum modulo to count subarrays divisible by k.
-- **Company**: Facebook
-- **Source**: [LeetCode 974](https://leetcode.com/problems/subarray-sums-divisible-by-k/)
+   * **Company**: Microsoft
+   * **LeetCode**: [Problem 26](https://leetcode.com/problems/remove-duplicates-from-sorted-array/)
+   * **Difficulty**: Easy
 
-### 5. Number of Subarrays with Bounded Maximum
-- **Problem**: Count subarrays satisfying sum constraints using prefix sums.
-- **Company**: Apple
-- **Source**: [LeetCode 795](https://leetcode.com/problems/number-of-subarrays-with-bounded-maximum/)
+3. **Remove Element**
 
----
+   * **Company**: Google
+   * **LeetCode**: [Problem 27](https://leetcode.com/problems/remove-element/)
+   * **Difficulty**: Easy
 
-## 🏅 Prefix Matrix (2D Prefix Sum)
+### **Medium**
 
-### 1. Range Sum Query 2D - Immutable
-- **Problem**: Compute sum of elements in submatrix using 2D prefix sum.
-- **Company**: Amazon
-- **Source**: [LeetCode 304](https://leetcode.com/problems/range-sum-query-2d-immutable/)
+4. **Squares of a Sorted Array**
 
-### 2. Matrix Block Sum
-- **Problem**: Compute sum of all elements in block around each element.
-- **Company**: Google
-- **Source**: [LeetCode 1314](https://leetcode.com/problems/matrix-block-sum/)
+   * **Company**: Amazon
+   * **LeetCode**: [Problem 977](https://leetcode.com/problems/squares-of-a-sorted-array/)
+   * **Difficulty**: Medium
 
-### 3. Number of Islands Variant Using Prefix
-- **Problem**: Use 2D prefix sum for cumulative region checks.
-- **Company**: Microsoft
-- **Source**: [LeetCode 200 Discuss](https://leetcode.com/discuss/)
+5. **Merge Sorted Array**
 
-### 4. Max Sum of Rectangle No Larger Than K
-- **Problem**: Use 2D prefix sum to compute max rectangle sum efficiently.
-- **Company**: Facebook
-- **Source**: [LeetCode 363](https://leetcode.com/problems/max-sum-of-rectangle-no-larger-than-k/)
+   * **Company**: Microsoft
+   * **LeetCode**: [Problem 88](https://leetcode.com/problems/merge-sorted-array/)
+   * **Difficulty**: Medium
 
-### 5. Submatrix Sum Queries
-- **Problem**: Efficiently answer multiple submatrix sum queries.
-- **Company**: Apple
-- **Source**: [LeetCode 308](https://leetcode.com/problems/range-sum-query-2d-mutable/)
-# 🧠 Hashing / Frequency Map Interview Questions Categorized by Subtype
+6. **Intersection of Two Arrays II**
 
-A detailed breakdown of Hashing / Frequency Map interview questions, categorized by subtypes, with examples from various companies.
+   * **Company**: Google
+   * **LeetCode**: [Problem 350](https://leetcode.com/problems/intersection-of-two-arrays-ii/)
+   * **Difficulty**: Medium
+
+### **Hard**
+
+7. **Find K Closest Elements**
+
+   * **Company**: Facebook
+   * **LeetCode**: [Problem 658](https://leetcode.com/problems/find-k-closest-elements/)
+   * **Difficulty**: Hard
+
+8. **Search in Rotated Sorted Array**
+
+   * **Company**: Amazon
+   * **LeetCode**: [Problem 33](https://leetcode.com/problems/search-in-rotated-sorted-array/)
+   * **Difficulty**: Hard
 
 ---
 
-## 🥇 Count of Elements / Frequency Maintenance
+## 🥇 Two Pointers — Merging or Removing Duplicates with Pointers
 
-### 1. Top K Frequent Elements
-- **Problem**: Find k most frequent elements in an array.
-- **Company**: Amazon
-- **Source**: [LeetCode 347](https://leetcode.com/problems/top-k-frequent-elements/)
+### **Easy**
 
-### 2. Majority Element
-- **Problem**: Find element appearing more than n/2 times.
-- **Company**: Google
-- **Source**: [LeetCode 169](https://leetcode.com/problems/majority-element/)
+1. **Remove Duplicates from Sorted Array**
 
-### 3. Valid Anagram
-- **Problem**: Check if two strings are anagrams using frequency map.
-- **Company**: Microsoft
-- **Source**: [LeetCode 242](https://leetcode.com/problems/valid-anagram/)
+   * **Company**: Microsoft
+   * **LeetCode**: [Problem 26](https://leetcode.com/problems/remove-duplicates-from-sorted-array/)
+   * **Difficulty**: Easy
 
-### 4. Group Anagrams
-- **Problem**: Group strings that are anagrams of each other.
-- **Company**: Facebook
-- **Source**: [LeetCode 49](https://leetcode.com/problems/group-anagrams/)
+2. **Remove Element**
 
-### 5. Find the Difference
-- **Problem**: Find the character that is different in two strings using frequency count.
-- **Company**: Apple
-- **Source**: [LeetCode 389](https://leetcode.com/problems/find-the-difference/)
+   * **Company**: Google
+   * **LeetCode**: [Problem 27](https://leetcode.com/problems/remove-element/)
+   * **Difficulty**: Easy
 
----
+3. **Merge Sorted Array**
 
-## 🥈 Hash Map + Prefix Combination
+   * **Company**: Amazon
+   * **LeetCode**: [Problem 88](https://leetcode.com/problems/merge-sorted-array/)
+   * **Difficulty**: Easy
 
-### 1. Subarray Sum Equals K
-- **Problem**: Count subarrays with sum equal to k using prefix sum + hashmap.
-- **Company**: Amazon
-- **Source**: [LeetCode 560](https://leetcode.com/problems/subarray-sum-equals-k/)
+### **Medium**
 
-### 2. Continuous Subarray Sum
-- **Problem**: Check if subarray sum multiple of k exists using prefix hashmap.
-- **Company**: Google
-- **Source**: [LeetCode 523](https://leetcode.com/problems/continuous-subarray-sum/)
+4. **Intersection of Two Arrays II**
 
-### 3. Count Subarrays with Sum Divisible by K
-- **Problem**: Count subarrays divisible by k using prefix sum modulo + hashmap.
-- **Company**: Microsoft
-- **Source**: [LeetCode 974](https://leetcode.com/problems/subarray-sums-divisible-by-k/)
+   * **Company**: Facebook
+   * **LeetCode**: [Problem 350](https://leetcode.com/problems/intersection-of-two-arrays-ii/)
+   * **Difficulty**: Medium
 
-### 4. Longest Subarray with Sum K
-- **Problem**: Find length of longest subarray with sum k.
-- **Company**: Facebook
-- **Source**: [LeetCode 325](https://leetcode.com/problems/maximum-size-subarray-sum-equals-k/)
+5. **Sort Colors**
 
-### 5. Number of Subarrays with Bounded Maximum
-- **Problem**: Use prefix sum and hashmap to count subarrays.
-- **Company**: Apple
-- **Source**: [LeetCode 795](https://leetcode.com/problems/number-of-subarrays-with-bounded-maximum/)
+   * **Company**: Microsoft
+   * **LeetCode**: [Problem 75](https://leetcode.com/problems/sort-colors/)
+   * **Difficulty**: Medium
 
----
+6. **Merge Intervals (2 Arrays)**
 
-## 🥉 Hashing with Pair / Triple Sum
+   * **Company**: Amazon
+   * **LeetCode**: [Problem 56](https://leetcode.com/problems/merge-intervals/)
+   * **Difficulty**: Medium
 
-### 1. Two Sum
-- **Problem**: Find indices of two numbers that sum to target using hashmap.
-- **Company**: Amazon
-- **Source**: [LeetCode 1](https://leetcode.com/problems/two-sum/)
+### **Hard**
 
-### 2. 3Sum
-- **Problem**: Find triplets that sum to zero using hashmap for duplicates.
-- **Company**: Google
-- **Source**: [LeetCode 15](https://leetcode.com/problems/3sum/)
+7. **Merge k Sorted Lists**
 
-### 3. 4Sum
-- **Problem**: Find quadruplets that sum to target using hashmap.
-- **Company**: Microsoft
-- **Source**: [LeetCode 18](https://leetcode.com/problems/4sum/)
+   * **Company**: Google
+   * **LeetCode**: [Problem 23](https://leetcode.com/problems/merge-k-sorted-lists/)
+   * **Difficulty**: Hard
 
-### 4. Two Sum II (Sorted Array)
-- **Problem**: Two sum using two pointers + hashmap validation.
-- **Company**: Facebook
-- **Source**: [LeetCode 167](https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/)
+8. **Remove Duplicates from Sorted List II**
 
-### 5. 3Sum Closest
-- **Problem**: Find triplet sum closest to target.
-- **Company**: Apple
-- **Source**: [LeetCode 16](https://leetcode.com/problems/3sum-closest/)
+   * **Company**: Facebook
+   * **LeetCode**: [Problem 82](https://leetcode.com/problems/remove-duplicates-from-sorted-list-ii/)
+   * **Difficulty**: Hard
 
 ---
 
-## 🏅 Hashing with Character / String Mapping
+## 🥇 Two Pointers — Partitioning Arrays Using Two Pointers
 
-### 1. Isomorphic Strings
-- **Problem**: Check if two strings are isomorphic using hashmap.
-- **Company**: Amazon
-- **Source**: [LeetCode 205](https://leetcode.com/problems/isomorphic-strings/)
+### **Easy**
 
-### 2. Group Anagrams
-- **Problem**: Map character frequency to group anagrams.
-- **Company**: Google
-- **Source**: [LeetCode 49](https://leetcode.com/problems/group-anagrams/)
+1. **Move Zeroes**
 
-### 3. Word Pattern
-- **Problem**: Match pattern to string using hashmap mapping.
-- **Company**: Microsoft
-- **Source**: [LeetCode 290](https://leetcode.com/problems/word-pattern/)
+   * **Company**: Amazon
+   * **LeetCode**: [Problem 283](https://leetcode.com/problems/move-zeroes/)
+   * **Difficulty**: Easy
 
-### 4. Longest Substring Without Repeating Characters
-- **Problem**: Use character map to track uniqueness.
-- **Company**: Facebook
-- **Source**: [LeetCode 3](https://leetcode.com/problems/longest-substring-without-repeating-characters/)
+2. **Sort Colors (Dutch National Flag Problem)**
 
-### 5. Ransom Note
-- **Problem**: Check if ransom note can be constructed from magazine using character map.
-- **Company**: Apple
-- **Source**: [LeetCode 383](https://leetcode.com/problems/ransom-note/)
+   * **Company**: Microsoft
+   * **LeetCode**: [Problem 75](https://leetcode.com/problems/sort-colors/)
+   * **Difficulty**: Easy
 
----
+3. **Segregate Even and Odd Numbers in Array**
 
-## 🏅 Hash Set for Unique Element Tracking
+   * **Company**: Google
+   * **GeeksforGeeks**: [Link](https://www.geeksforgeeks.org/rearrange-array-odd-even-using-constant-extra-space/)
+   * **Difficulty**: Easy
 
-### 1. Contains Duplicate
-- **Problem**: Check if array contains duplicates.
-- **Company**: Amazon
-- **Source**: [LeetCode 217](https://leetcode.com/problems/contains-duplicate/)
+### **Medium**
 
-### 2. Contains Duplicate II
-- **Problem**: Check if duplicates exist within k distance.
-- **Company**: Google
-- **Source**: [LeetCode 219](https://leetcode.com/problems/contains-duplicate-ii/)
+4. **Partition Labels**
 
-### 3. Happy Number
-- **Problem**: Detect cycles using hashset for visited numbers.
-- **Company**: Microsoft
-- **Source**: [LeetCode 202](https://leetcode.com/problems/happy-number/)
+   * **Company**: Amazon
+   * **LeetCode**: [Problem 763](https://leetcode.com/problems/partition-labels/)
+   * **Difficulty**: Medium
 
-### 4. Intersection of Two Arrays
-- **Problem**: Find intersection using hashset.
-- **Company**: Facebook
-- **Source**: [LeetCode 349](https://leetcode.com/problems/intersection-of-two-arrays/)
+5. **Sort Array By Parity**
 
-### 5. Longest Consecutive Sequence
-- **Problem**: Find length of longest consecutive elements using hashset.
-- **Company**: Apple
-- **Source**: [LeetCode 128](https://leetcode.com/problems/longest-consecutive-sequence/)
+   * **Company**: Microsoft
+   * **LeetCode**: [Problem 905](https://leetcode.com/problems/sort-array-by-parity/)
+   * **Difficulty**: Medium
 
----
+6. **Wiggle Sort**
 
-## 🏅 Index Storage Using Hash Map
+   * **Company**: Google
+   * **LeetCode**: [Problem 280](https://leetcode.com/problems/wiggle-sort/)
+   * **Difficulty**: Medium
 
-### 1. Two Sum
-- **Problem**: Store indices in hashmap to find complement.
-- **Company**: Amazon
-- **Source**: [LeetCode 1](https://leetcode.com/problems/two-sum/)
+### **Hard**
 
-### 2. Subarray Sum Equals K
-- **Problem**: Store prefix sums with indices.
-- **Company**: Google
-- **Source**: [LeetCode 560](https://leetcode.com/problems/subarray-sum-equals-k/)
+7. **Sort Colors II / K Colors**
 
-### 3. Longest Substring Without Repeating Characters
-- **Problem**: Track last index of characters.
-- **Company**: Microsoft
-- **Source**: [LeetCode 3](https://leetcode.com/problems/longest-substring-without-repeating-characters/)
+   * **Company**: Facebook
+   * **LeetCode**: [Problem 75](https://leetcode.com/problems/sort-colors/)
+   * **Difficulty**: Hard
 
-### 4. LRU Cache
-- **Problem**: Store key-index mapping for quick access.
-- **Company**: Facebook
-- **Source**: [LeetCode 146](https://leetcode.com/problems/lru-cache/)
+8. **Dutch National Flag Generalized (Three-Way Partition)**
 
-### 5. Design Hit Counter
-- **Problem**: Store timestamps in hashmap to track hits.
-- **Company**: Apple
-- **Source**: [LeetCode 362](https://leetcode.com/problems/design-hit-counter/)
-# 🧠 Binary Search (and Variants) Interview Questions Categorized by Subtype
-
-A detailed breakdown of Binary Search and its variants, with examples from various companies.
+   * **Company**: Amazon
+   * **GeeksforGeeks**: [Link](https://www.geeksforgeeks.org/sort-an-array-of-0s-1s-and-2s/)
+   * **Difficulty**: Hard
 
 ---
 
-## 🥇 Basic Binary Search (Sorted Array)
-
-### 1. Binary Search
-- **Problem**: Search target element in a sorted array.
-- **Company**: Amazon
-- **Source**: [LeetCode 704](https://leetcode.com/problems/binary-search/)
-
-### 2. First Bad Version
-- **Problem**: Find the first bad version using binary search.
-- **Company**: Google
-- **Source**: [LeetCode 278](https://leetcode.com/problems/first-bad-version/)
-
-### 3. Search Insert Position
-- **Problem**: Find index to insert element to keep array sorted.
-- **Company**: Microsoft
-- **Source**: [LeetCode 35](https://leetcode.com/problems/search-insert-position/)
-
-### 4. Find Minimum in Rotated Sorted Array
-- **Problem**: Simple binary search in rotated sorted array without duplicates.
-- **Company**: Facebook
-- **Source**: [LeetCode 153](https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/)
-
-### 5. Ceiling of Number in Sorted Array
-- **Problem**: Find smallest number ≥ target using binary search.
-- **Company**: Apple
-- **Source**: [LeetCode Discuss](https://leetcode.com/discuss/)
+Perfect! Let’s now cover **TIER 1 — Hashing / Frequency Map** pattern, with **6 subtypes**, and **8 curated questions per subtype** (3 easy, 3 medium, 2 hard), including company names and references.
 
 ---
 
-## 🥈 Binary Search on Answer Space (Optimization)
+## 🥇 Hashing / Frequency Map — Count of Elements / Frequency Maintenance
 
-### 1. Koko Eating Bananas
-- **Problem**: Minimize/maximize speed to finish piles in given hours.
-- **Company**: Amazon
-- **Source**: [LeetCode 875](https://leetcode.com/problems/koko-eating-bananas/)
+### **Easy**
 
-### 2. Capacity To Ship Packages Within D Days
-- **Problem**: Minimum capacity to ship all packages within D days.
-- **Company**: Google
-- **Source**: [LeetCode 1011](https://leetcode.com/problems/capacity-to-ship-packages-within-d-days/)
+1. **Majority Element (Easy Variant)**
 
-### 3. Minimum Time to Complete Trips
-- **Problem**: Find minimum time for machines to complete trips.
-- **Company**: Microsoft
-- **Source**: [LeetCode 2187](https://leetcode.com/problems/minimum-time-to-complete-trips/)
+  * **Company**: Amazon
+  * **LeetCode**: [Problem 169](https://leetcode.com/problems/majority-element/)
+  * **Difficulty**: Easy
 
-### 4. Aggressive Cows
-- **Problem**: Place cows in stalls to maximize minimum distance.
-- **Company**: Facebook
-- **Source**: [InterviewBit Problem](https://www.interviewbit.com/problems/aggresive-cows/)
+2. **First Unique Character in a String**
 
-### 5. Painter’s Partition Problem
-- **Problem**: Minimum time to paint boards given painters using binary search on answer.
-- **Company**: Apple
-- **Source**: [GeeksforGeeks](https://www.geeksforgeeks.org/painters-partition-problem/)
+  * **Company**: Microsoft
+  * **LeetCode**: [Problem 387](https://leetcode.com/problems/first-unique-character-in-a-string/)
+  * **Difficulty**: Easy
 
----
+3. **Valid Anagram (Frequency Map)**
 
-## 🥉 Binary Search on Monotonic Functions
+  * **Company**: Google
+  * **LeetCode**: [Problem 242](https://leetcode.com/problems/valid-anagram/)
+  * **Difficulty**: Easy
 
-### 1. Square Root (Integer)
-- **Problem**: Find integer sqrt(n) using binary search on monotonic function.
-- **Company**: Amazon
-- **Source**: [LeetCode 69](https://leetcode.com/problems/sqrtx/)
+### **Medium**
 
-### 2. Split Array Largest Sum
-- **Problem**: Minimize the largest sum of subarrays using monotonic function.
-- **Company**: Google
-- **Source**: [LeetCode 410](https://leetcode.com/problems/split-array-largest-sum/)
+4. **Top K Frequent Elements**
 
-### 3. Find Peak Element
-- **Problem**: Locate peak element in array using monotonic property.
-- **Company**: Microsoft
-- **Source**: [LeetCode 162](https://leetcode.com/problems/find-peak-element/)
+  * **Company**: Facebook
+  * **LeetCode**: [Problem 347](https://leetcode.com/problems/top-k-frequent-elements/)
+  * **Difficulty**: Medium
 
-### 4. Minimum Time to Complete Trips
-- **Problem**: Monotonic function binary search on time.
-- **Company**: Facebook
-- **Source**: [LeetCode 2187](https://leetcode.com/problems/minimum-time-to-complete-trips/)
+5. **Subarray Sum Equals K (Prefix + HashMap)**
 
-### 5. Capacity To Ship Packages Within D Days
-- **Problem**: Use monotonicity of weight sum to binary search answer space.
-- **Company**: Apple
-- **Source**: [LeetCode 1011](https://leetcode.com/problems/capacity-to-ship-packages-within-d-days/)
+  * **Company**: Amazon
+  * **LeetCode**: [Problem 560](https://leetcode.com/problems/subarray-sum-equals-k/)
+  * **Difficulty**: Medium
 
----
+6. **Group Anagrams**
 
-## 🏅 Binary Search with Condition (Custom Comparator)
+  * **Company**: Microsoft
+  * **LeetCode**: [Problem 49](https://leetcode.com/problems/group-anagrams/)
+  * **Difficulty**: Medium
 
-### 1. Find First and Last Position of Element in Sorted Array
-- **Problem**: Locate first and last occurrence using custom comparator.
-- **Company**: Amazon
-- **Source**: [LeetCode 34](https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/)
+### **Hard**
 
-### 2. Find Peak Element
-- **Problem**: Binary search with condition f(mid) > f(mid-1) and f(mid) > f(mid+1)
-- **Company**: Google
-- **Source**: [LeetCode 162](https://leetcode.com/problems/find-peak-element/)
+7. **Longest Consecutive Sequence**
 
-### 3. Search in Rotated Sorted Array
-- **Problem**: Binary search with pivot condition.
-- **Company**: Microsoft
-- **Source**: [LeetCode 33](https://leetcode.com/problems/search-in-rotated-sorted-array/)
+  * **Company**: Google
+  * **LeetCode**: [Problem 128](https://leetcode.com/problems/longest-consecutive-sequence/)
+  * **Difficulty**: Hard
 
-### 4. Find Minimum in Rotated Sorted Array
-- **Problem**: Use condition to locate min element.
-- **Company**: Facebook
-- **Source**: [LeetCode 153](https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/)
+8. **Subarray Sums Divisible by K**
 
-### 5. Median of Two Sorted Arrays
-- **Problem**: Binary search on partition condition.
-- **Company**: Apple
-- **Source**: [LeetCode 4](https://leetcode.com/problems/median-of-two-sorted-arrays/)
+  * **Company**: Facebook
+  * **LeetCode**: [Problem 974](https://leetcode.com/problems/subarray-sums-divisible-by-k/)
+  * **Difficulty**: Hard
 
 ---
 
-## 🏅 Binary Search on Rotated Sorted Array
+## 🥇 Hashing / Frequency Map — Hash Map + Prefix Combination
 
-### 1. Search in Rotated Sorted Array
-- **Problem**: Find target in rotated sorted array.
-- **Company**: Amazon
-- **Source**: [LeetCode 33](https://leetcode.com/problems/search-in-rotated-sorted-array/)
+### **Easy**
 
-### 2. Find Minimum in Rotated Sorted Array
-- **Problem**: Locate minimum element.
-- **Company**: Google
-- **Source**: [LeetCode 153](https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/)
+1. **Subarray Sum Equals K (Prefix + HashMap)**
 
-### 3. Search in Rotated Sorted Array II
-- **Problem**: Search with duplicates in rotated array.
-- **Company**: Microsoft
-- **Source**: [LeetCode 81](https://leetcode.com/problems/search-in-rotated-sorted-array-ii/)
+  * **Company**: Amazon
+  * **LeetCode**: [Problem 560](https://leetcode.com/problems/subarray-sum-equals-k/)
+  * **Difficulty**: Easy
 
-### 4. Find Rotation Count in Rotated Sorted Array
-- **Problem**: Count number of rotations.
-- **Company**: Facebook
-- **Source**: [GeeksforGeeks](https://www.geeksforgeeks.org/find-rotation-count-rotated-array/)
+2. **Running Sum + HashMap for Frequency**
 
-### 5. Minimum in Rotated Sorted Array II
-- **Problem**: Find min with duplicates.
-- **Company**: Apple
-- **Source**: [LeetCode 154](https://leetcode.com/problems/find-minimum-in-rotated-sorted-array-ii/)
+  * **Company**: Microsoft
+  * **LeetCode**: [Problem 523](https://leetcode.com/problems/continuous-subarray-sum/)
+  * **Difficulty**: Easy
 
----
+3. **Check If Array Can Form Equal Sum Parts**
 
-## 🏅 Binary Search in 2D Matrix
+  * **Company**: Google
+  * **LeetCode**: [Problem 1010](https://leetcode.com/problems/pairs-of-songs-with-total-durations-divisible-by-60/) *(prefix variant)*
+  * **Difficulty**: Easy
 
-### 1. Search a 2D Matrix
-- **Problem**: Treat 2D matrix as 1D sorted array.
-- **Company**: Amazon
-- **Source**: [LeetCode 74](https://leetcode.com/problems/search-a-2d-matrix/)
+### **Medium**
 
-### 2. Search a 2D Matrix II
-- **Problem**: Matrix sorted row-wise and column-wise.
-- **Company**: Google
-- **Source**: [LeetCode 240](https://leetcode.com/problems/search-a-2d-matrix-ii/)
+4. **Pairs of Songs With Total Durations Divisible by 60**
 
-### 3. Kth Smallest Element in a Sorted Matrix
-- **Problem**: Use binary search on value range.
-- **Company**: Microsoft
-- **Source**: [LeetCode 378](https://leetcode.com/problems/kth-smallest-element-in-a-sorted-matrix/)
+  * **Company**: Facebook
+  * **LeetCode**: [Problem 1010](https://leetcode.com/problems/pairs-of-songs-with-total-durations-divisible-by-60/)
+  * **Difficulty**: Medium
 
-### 4. Matrix Median
-- **Problem**: Find median of row-wise sorted matrix using binary search on answer.
-- **Company**: Facebook
-- **Source**: [GeeksforGeeks](https://www.geeksforgeeks.org/median-row-wise-sorted-matrix/)
+5. **Continuous Subarray Sum (Prefix + Hash)**
 
-### 5. Count Negative Numbers in a Sorted Matrix
-- **Problem**: Use binary search in each row.
-- **Company**: Apple
-- **Source**: [LeetCode 1351](https://leetcode.com/problems/count-negative-numbers-in-a-sorted-matrix/)
+  * **Company**: Amazon
+  * **LeetCode**: [Problem 523](https://leetcode.com/problems/continuous-subarray-sum/)
+  * **Difficulty**: Medium
 
-# 🧠 Monotonic Stack / Queue Interview Questions Categorized by Subtype
+6. **Subarray Sums Divisible by K**
 
-A detailed breakdown of Monotonic Stack / Queue interview questions, categorized by subtypes, with examples from various companies.
+  * **Company**: Microsoft
+  * **LeetCode**: [Problem 974](https://leetcode.com/problems/subarray-sums-divisible-by-k/)
+  * **Difficulty**: Medium
+
+### **Hard**
+
+7. **Count Subarrays with XOR = K**
+
+  * **Company**: Google
+  * **LeetCode**: [Problem 560](https://leetcode.com/problems/subarray-sum-equals-k/) *(XOR variant)*
+  * **Difficulty**: Hard
+
+8. **Number of Subarrays with Sum Equals Target (Optimized)**
+
+  * **Company**: Facebook
+  * **LeetCode**: [Problem 560](https://leetcode.com/problems/subarray-sum-equals-k/) *(hard variant)*
+  * **Difficulty**: Hard
 
 ---
 
-## 🥇 Next Greater / Smaller Element
+## 🥇 Hashing / Frequency Map — Hashing with Pair / Triple Sum
 
-### 1. Next Greater Element I
-- **Problem**: Find next greater element for each number in subset array.
-- **Company**: Amazon
-- **Source**: [LeetCode 496](https://leetcode.com/problems/next-greater-element-i/)
+### **Easy**
 
-### 2. Next Greater Element II
-- **Problem**: Circular array version.
-- **Company**: Google
-- **Source**: [LeetCode 503](https://leetcode.com/problems/next-greater-element-ii/)
+1. **Two Sum**
 
-### 3. Next Smaller Element
-- **Problem**: Find next smaller element for each element.
-- **Company**: Microsoft
-- **Source**: [GeeksforGeeks](https://www.geeksforgeeks.org/next-smaller-element/)
+  * **Company**: Amazon
+  * **LeetCode**: [Problem 1](https://leetcode.com/problems/two-sum/)
+  * **Difficulty**: Easy
 
-### 4. Daily Temperatures
-- **Problem**: Number of days to wait for warmer temperature.
-- **Company**: Facebook
-- **Source**: [LeetCode 739](https://leetcode.com/problems/daily-temperatures/)
+2. **Two Sum II - Input Array Is Sorted**
 
-### 5. Nearest Greater to Right
-- **Problem**: Index of nearest greater element to the right.
-- **Company**: Apple
-- **Source**: [GeeksforGeeks](https://www.geeksforgeeks.org/next-greater-element/)
+  * **Company**: Microsoft
+  * **LeetCode**: [Problem 167](https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/)
+  * **Difficulty**: Easy
 
----
+3. **3Sum (Easy Variant)**
 
-## 🥈 Previous Greater / Smaller Element
+  * **Company**: Google
+  * **LeetCode**: [Problem 15](https://leetcode.com/problems/3sum/) *(basic test cases)*
+  * **Difficulty**: Easy
 
-### 1. Previous Smaller Element
-- **Problem**: Find nearest smaller element to left.
-- **Company**: Amazon
-- **Source**: [GeeksforGeeks](https://www.geeksforgeeks.org/previous-smaller-element/)
+### **Medium**
 
-### 2. Previous Greater Element
-- **Problem**: Find nearest greater element to left.
-- **Company**: Google
-- **Source**: [GeeksforGeeks](https://www.geeksforgeeks.org/previous-greater-element/)
+4. **3Sum**
 
-### 3. Largest Rectangle in Histogram
-- **Problem**: Use previous smaller index for width calculation.
-- **Company**: Microsoft
-- **Source**: [LeetCode 84](https://leetcode.com/problems/largest-rectangle-in-histogram/)
+  * **Company**: Facebook
+  * **LeetCode**: [Problem 15](https://leetcode.com/problems/3sum/)
+  * **Difficulty**: Medium
 
-### 4. Stock Span Problem
-- **Problem**: Calculate span of stock prices using previous greater element.
-- **Company**: Facebook
-- **Source**: [LeetCode 901](https://leetcode.com/problems/online-stock-span/)
+5. **4Sum**
 
-### 5. Maximum Area Histogram
-- **Problem**: Use previous smaller element to find rectangle area.
-- **Company**: Apple
-- **Source**: [LeetCode 84](https://leetcode.com/problems/largest-rectangle-in-histogram/)
+  * **Company**: Amazon
+  * **LeetCode**: [Problem 18](https://leetcode.com/problems/4sum/)
+  * **Difficulty**: Medium
 
----
+6. **Two Sum III - Data Structure Design**
 
-## 🥉 Stock Span / Daily Temperature Patterns
+  * **Company**: Microsoft
+  * **LeetCode**: [Problem 170](https://leetcode.com/problems/two-sum-iii-data-structure-design/)
+  * **Difficulty**: Medium
 
-### 1. Stock Span
-- **Problem**: Find consecutive days stock price ≤ today.
-- **Company**: Amazon
-- **Source**: [LeetCode 901](https://leetcode.com/problems/online-stock-span/)
+### **Hard**
 
-### 2. Daily Temperatures
-- **Problem**: Days until next warmer temperature.
-- **Company**: Google
-- **Source**: [LeetCode 739](https://leetcode.com/problems/daily-temperatures/)
+7. **4Sum II**
 
-### 3. Online Stock Span (Streaming)
-- **Problem**: Implement stack to maintain span online.
-- **Company**: Microsoft
-- **Source**: [LeetCode 901](https://leetcode.com/problems/online-stock-span/)
+  * **Company**: Google
+  * **LeetCode**: [Problem 454](https://leetcode.com/problems/4sum-ii/)
+  * **Difficulty**: Hard
 
-### 4. Rainwater Trapping (Using Monotonic Stack)
-- **Problem**: Calculate trapped water using stack approach.
-- **Company**: Facebook
-- **Source**: [LeetCode 42](https://leetcode.com/problems/trapping-rain-water/)
+8. **3Sum Closest**
 
-### 5. Next Warmer Day
-- **Problem**: Another daily temperatures variation.
-- **Company**: Apple
-- **Source**: [LeetCode 739](https://leetcode.com/problems/daily-temperatures/)
+  * **Company**: Facebook
+  * **LeetCode**: [Problem 16](https://leetcode.com/problems/3sum-closest/)
+  * **Difficulty**: Hard
 
 ---
 
-## 🏅 Range Queries Using Stack
+## 🥇 Hashing / Frequency Map — Hashing with Character / String Mapping
 
-### 1. Largest Rectangle in Histogram
-- **Problem**: Use stack to find largest rectangle in histogram.
-- **Company**: Amazon
-- **Source**: [LeetCode 84](https://leetcode.com/problems/largest-rectangle-in-histogram/)
+### **Easy**
 
-### 2. Maximal Rectangle
-- **Problem**: Use histogram + stack to find maximal rectangle in matrix.
-- **Company**: Google
-- **Source**: [LeetCode 85](https://leetcode.com/problems/maximal-rectangle/)
+1. **Valid Anagram**
 
-### 3. Trapping Rain Water
-- **Problem**: Use stack to calculate trapped water.
-- **Company**: Microsoft
-- **Source**: [LeetCode 42](https://leetcode.com/problems/trapping-rain-water/)
+  * **Company**: Amazon
+  * **LeetCode**: [Problem 242](https://leetcode.com/problems/valid-anagram/)
+  * **Difficulty**: Easy
 
-### 4. Min Stack
-- **Problem**: Track min element for range queries.
-- **Company**: Facebook
-- **Source**: [LeetCode 155](https://leetcode.com/problems/min-stack/)
+2. **Group Anagrams**
 
-### 5. Largest Rectangle in Histogram Variant
-- **Problem**: Histogram with custom range queries.
-- **Company**: Apple
-- **Source**: [GeeksforGeeks](https://www.geeksforgeeks.org/largest-rectangle-under-histogram/)
+  * **Company**: Microsoft
+  * **LeetCode**: [Problem 49](https://leetcode.com/problems/group-anagrams/)
+  * **Difficulty**: Easy
 
----
+3. **Isomorphic Strings**
 
-## 🏅 Sliding Window Maximum Using Deque
+  * **Company**: Google
+  * **LeetCode**: [Problem 205](https://leetcode.com/problems/isomorphic-strings/)
+  * **Difficulty**: Easy
 
-### 1. Sliding Window Maximum
-- **Problem**: Find max in every window of size k.
-- **Company**: Amazon
-- **Source**: [LeetCode 239](https://leetcode.com/problems/sliding-window-maximum/)
+### **Medium**
 
-### 2. Maximum of all subarrays of size k
-- **Problem**: Same as sliding window max.
-- **Company**: Google
-- **Source**: [GeeksforGeeks](https://www.geeksforgeeks.org/sliding-window-maximum-maximum-of-all-subarrays-of-size-k/)
+4. **Minimum Window Substring**
 
-### 3. Maximum in Sliding Window
-- **Problem**: Use deque for O(n) solution.
-- **Company**: Microsoft
-- **Source**: [LeetCode 239](https://leetcode.com/problems/sliding-window-maximum/)
+  * **Company**: Facebook
+  * **LeetCode**: [Problem 76](https://leetcode.com/problems/minimum-window-substring/)
+  * **Difficulty**: Medium
 
-### 4. Sliding Window Minimum
-- **Problem**: Minimum in window of size k.
-- **Company**: Facebook
-- **Source**: [LeetCode Discuss](https://leetcode.com/discuss/)
+5. **Find All Anagrams in a String**
 
-### 5. Sliding Window Range Query
-- **Problem**: Max and min in window simultaneously.
-- **Company**: Apple
-- **Source**: [GeeksforGeeks](https://www.geeksforgeeks.org/sliding-window-maximum-maximum-of-all-subarrays-of-size-k/)
+  * **Company**: Amazon
+  * **LeetCode**: [Problem 438](https://leetcode.com/problems/find-all-anagrams-in-a-string/)
+  * **Difficulty**: Medium
 
----
+6. **Longest Substring Without Repeating Characters**
 
-## 🏅 Histogram or Rectangle Area Problems
+  * **Company**: Microsoft
+  * **LeetCode**: [Problem 3](https://leetcode.com/problems/longest-substring-without-repeating-characters/)
+  * **Difficulty**: Medium
 
-### 1. Largest Rectangle in Histogram
-- **Problem**: Compute max rectangle in histogram using stack.
-- **Company**: Amazon
-- **Source**: [LeetCode 84](https://leetcode.com/problems/largest-rectangle-in-histogram/)
+### **Hard**
 
-### 2. Maximal Rectangle
-- **Problem**: Compute maximal rectangle in binary matrix.
-- **Company**: Google
-- **Source**: [LeetCode 85](https://leetcode.com/problems/maximal-rectangle/)
+7. **Substring with Concatenation of All Words**
 
-### 3. Trapping Rain Water
-- **Problem**: Histogram-like stack approach.
-- **Company**: Microsoft
-- **Source**: [LeetCode 42](https://leetcode.com/problems/trapping-rain-water/)
+  * **Company**: Google
+  * **LeetCode**: [Problem 30](https://leetcode.com/problems/substring-with-concatenation-of-all-words/)
+  * **Difficulty**: Hard
 
-### 4. Largest Rectangle Under Skyline
-- **Problem**: Variations of histogram rectangle area.
-- **Company**: Facebook
-- **Source**: [GeeksforGeeks](https://www.geeksforgeeks.org/largest-rectangle-under-histogram/)
+8. **Palindrome Pairs**
 
-### 5. Maximal Rectangle Variant
-- **Problem**: Histogram transformation + stack.
-- **Company**: Apple
-- **Source**: [LeetCode 85](https://leetcode.com/problems/maximal-rectangle/)
-# 🧠 Merge Intervals Interview Questions Categorized by Subtype
-
-A detailed breakdown of Merge Intervals interview questions, categorized by subtypes, with examples from various companies.
+  * **Company**: Facebook
+  * **LeetCode**: [Problem 336](https://leetcode.com/problems/palindrome-pairs/)
+  * **Difficulty**: Hard
 
 ---
 
-## 🥇 Merge Overlapping Intervals
+## 🥇 Hashing / Frequency Map — Hash Set for Unique Element Tracking
 
-### 1. Merge Intervals
-- **Problem**: Merge all overlapping intervals in a list.
-- **Company**: Amazon
-- **Source**: [LeetCode 56](https://leetcode.com/problems/merge-intervals/)
+### **Easy**
 
-### 2. Non-overlapping Intervals
-- **Problem**: Minimum number of intervals to remove to eliminate overlaps.
-- **Company**: Google
-- **Source**: [LeetCode 435](https://leetcode.com/problems/non-overlapping-intervals/)
+1. **Contains Duplicate**
 
-### 3. Insert Interval
-- **Problem**: Insert new interval and merge overlaps.
-- **Company**: Microsoft
-- **Source**: [LeetCode 57](https://leetcode.com/problems/insert-interval/)
+  * **Company**: Amazon
+  * **LeetCode**: [Problem 217](https://leetcode.com/problems/contains-duplicate/)
+  * **Difficulty**: Easy
 
-### 4. Interval List Intersections
-- **Problem**: Find intersections between two interval lists.
-- **Company**: Facebook
-- **Source**: [LeetCode 986](https://leetcode.com/problems/interval-list-intersections/)
+2. **Happy Number**
 
-### 5. Merge K Sorted Lists (Intervals Approach)
-- **Problem**: Merge k sorted interval-like lists using priority queue.
-- **Company**: Apple
-- **Source**: [LeetCode 23](https://leetcode.com/problems/merge-k-sorted-lists/)
+  * **Company**: Microsoft
+  * **LeetCode**: [Problem 202](https://leetcode.com/problems/happy-number/)
+  * **Difficulty**: Easy
 
----
+3. **Intersection of Two Arrays**
 
-## 🥈 Insert New Interval
+  * **Company**: Google
+  * **LeetCode**: [Problem 349](https://leetcode.com/problems/intersection-of-two-arrays/)
+  * **Difficulty**: Easy
 
-### 1. Insert Interval
-- **Problem**: Insert a new interval and merge if overlapping.
-- **Company**: Amazon
-- **Source**: [LeetCode 57](https://leetcode.com/problems/insert-interval/)
+### **Medium**
 
-### 2. Add Bold Tag in String (Interval Merge Variant)
-- **Problem**: Merge overlapping bold intervals.
-- **Company**: Google
-- **Source**: [LeetCode 616](https://leetcode.com/problems/add-bold-tag-in-string/)
+4. **Longest Consecutive Sequence**
 
-### 3. Car Pooling (Interval-based validation)
-- **Problem**: Validate intervals of pick-up and drop-off.
-- **Company**: Microsoft
-- **Source**: [LeetCode 1094](https://leetcode.com/problems/car-pooling/)
+  * **Company**: Facebook
+  * **LeetCode**: [Problem 128](https://leetcode.com/problems/longest-consecutive-sequence/)
+  * **Difficulty**: Medium
 
-### 4. Employee Free Time
-- **Problem**: Insert and merge busy intervals to find free slots.
-- **Company**: Facebook
-- **Source**: [LeetCode 759](https://leetcode.com/problems/employee-free-time/)
+5. **Repeated DNA Sequences**
 
-### 5. My Calendar I
-- **Problem**: Insert intervals and check for overlap.
-- **Company**: Apple
-- **Source**: [LeetCode 729](https://leetcode.com/problems/my-calendar-i/)
+  * **Company**: Amazon
+  * **LeetCode**: [Problem 187](https://leetcode.com/problems/repeated-dna-sequences/)
 
----
 
-## 🥉 Minimum Number of Intervals to Remove
+* **Difficulty**: Medium
 
-### 1. Non-overlapping Intervals
-- **Problem**: Minimum intervals to remove to eliminate overlaps.
-- **Company**: Amazon
-- **Source**: [LeetCode 435](https://leetcode.com/problems/non-overlapping-intervals/)
+6. **Longest Substring Without Repeating Characters**
 
-### 2. Erase Overlap Intervals
-- **Problem**: Variation of non-overlapping intervals.
-- **Company**: Google
-- **Source**: [LeetCode 435](https://leetcode.com/problems/non-overlapping-intervals/)
+  * **Company**: Microsoft
+  * **LeetCode**: [Problem 3](https://leetcode.com/problems/longest-substring-without-repeating-characters/)
+  * **Difficulty**: Medium
 
-### 3. Minimum Number of Arrows to Burst Balloons
-- **Problem**: Find min arrows for overlapping intervals.
-- **Company**: Microsoft
-- **Source**: [LeetCode 452](https://leetcode.com/problems/minimum-number-of-arrows-to-burst-balloons/)
+### **Hard**
 
-### 4. Remove Covered Intervals
-- **Problem**: Remove intervals fully covered by another.
-- **Company**: Facebook
-- **Source**: [LeetCode 1288](https://leetcode.com/problems/remove-covered-intervals/)
+7. **Longest Duplicate Substring**
 
-### 5. Interval Scheduling Maximization
-- **Problem**: Maximize non-overlapping intervals using greedy.
-- **Company**: Apple
-- **Source**: [LeetCode Discuss](https://leetcode.com/discuss/)
+  * **Company**: Google
+  * **LeetCode**: [Problem 1044](https://leetcode.com/problems/longest-duplicate-substring/)
+  * **Difficulty**: Hard
+
+8. **Alien Dictionary (Unique Character Tracking)**
+
+  * **Company**: Facebook
+  * **LeetCode**: [Problem 269](https://leetcode.com/problems/alien-dictionary/)
+  * **Difficulty**: Hard
 
 ---
 
-## 🏅 Meeting Room Allocation
+## 🥇 Hashing / Frequency Map — Index Storage Using Hash Map
 
-### 1. Meeting Rooms I
-- **Problem**: Check if all meetings can be attended (no overlap).
-- **Company**: Amazon
-- **Source**: [LeetCode 252](https://leetcode.com/problems/meeting-rooms/)
+### **Easy**
 
-### 2. Meeting Rooms II
-- **Problem**: Minimum number of meeting rooms required.
-- **Company**: Google
-- **Source**: [LeetCode 253](https://leetcode.com/problems/meeting-rooms-ii/)
+1. **Two Sum**
 
-### 3. Employee Free Time
-- **Problem**: Find common free time slots for employees.
-- **Company**: Microsoft
-- **Source**: [LeetCode 759](https://leetcode.com/problems/employee-free-time/)
+  * **Company**: Amazon
+  * **LeetCode**: [Problem 1](https://leetcode.com/problems/two-sum/)
+  * **Difficulty**: Easy
 
-### 4. Car Pooling
-- **Problem**: Track pick-up/drop-off intervals for feasibility.
-- **Company**: Facebook
-- **Source**: [LeetCode 1094](https://leetcode.com/problems/car-pooling/)
+2. **Ransom Note**
 
-### 5. Minimum Number of Arrows to Burst Balloons
-- **Problem**: Count rooms/overlaps in interval timeline analogy.
-- **Company**: Apple
-- **Source**: [LeetCode 452](https://leetcode.com/problems/minimum-number-of-arrows-to-burst-balloons/)
+  * **Company**: Microsoft
+  * **LeetCode**: [Problem 383](https://leetcode.com/problems/ransom-note/)
+  * **Difficulty**: Easy
 
----
+3. **Find the Difference**
 
-## 🏅 Interval Intersections
+  * **Company**: Google
+  * **LeetCode**: [Problem 389](https://leetcode.com/problems/find-the-difference/)
+  * **Difficulty**: Easy
 
-### 1. Interval List Intersections
-- **Problem**: Return intersections between two lists of intervals.
-- **Company**: Amazon
-- **Source**: [LeetCode 986](https://leetcode.com/problems/interval-list-intersections/)
+### **Medium**
 
-### 2. Employee Free Time
-- **Problem**: Find overlapping intervals to compute free time.
-- **Company**: Google
-- **Source**: [LeetCode 759](https://leetcode.com/problems/employee-free-time/)
+4. **4Sum II**
 
-### 3. Intersection of Two Arrays II (Interval Mapping Variant)
-- **Problem**: Map array elements as intervals and find intersections.
-- **Company**: Microsoft
-- **Source**: [LeetCode 350](https://leetcode.com/problems/intersection-of-two-arrays-ii/)
+  * **Company**: Facebook
+  * **LeetCode**: [Problem 454](https://leetcode.com/problems/4sum-ii/)
+  * **Difficulty**: Medium
 
-### 4. My Calendar I & II
-- **Problem**: Track overlapping events with intervals.
-- **Company**: Facebook
-- **Source**: [LeetCode 729](https://leetcode.com/problems/my-calendar-i/)
-- [LeetCode 731](https://leetcode.com/problems/my-calendar-ii/)
+5. **Subarray Sum Equals K**
 
-### 5. Minimum Number of Arrows to Burst Balloons
-- **Problem**: Interval intersection interpretation.
-- **Company**: Apple
-- **Source**: [LeetCode 452](https://leetcode.com/problems/minimum-number-of-arrows-to-burst-balloons/)
+  * **Company**: Amazon
+  * **LeetCode**: [Problem 560](https://leetcode.com/problems/subarray-sum-equals-k/)
+  * **Difficulty**: Medium
 
----
+6. **Design Underground System**
 
-## 🏅 Sorting + Merging + Condensing Intervals Pattern
+  * **Company**: Microsoft
+  * **LeetCode**: [Problem 1396](https://leetcode.com/problems/design-underground-system/)
+  * **Difficulty**: Medium
 
-### 1. Merge Intervals
-- **Problem**: Sort by start and merge overlapping intervals.
-- **Company**: Amazon
-- **Source**: [LeetCode 56](https://leetcode.com/problems/merge-intervals/)
+### **Hard**
 
-### 2. Insert Interval
-- **Problem**: Insert new interval then merge overlapping intervals.
-- **Company**: Google
-- **Source**: [LeetCode 57](https://leetcode.com/problems/insert-interval/)
+7. **All O`one Data Structure**
 
-### 3. Non-overlapping Intervals
-- **Problem**: Sort intervals to remove overlaps optimally.
-- **Company**: Microsoft
-- **Source**: [LeetCode 435](https://leetcode.com/problems/non-overlapping-intervals/)
+  * **Company**: Google
+  * **LeetCode**: [Problem 432](https://leetcode.com/problems/all-oone-data-structure/)
+  * **Difficulty**: Hard
 
-### 4. Minimum Number of Arrows to Burst Balloons
-- **Problem**: Sort intervals and count overlaps for minimum arrows.
-- **Company**: Facebook
-- **Source**: [LeetCode 452](https://leetcode.com/problems/minimum-number-of-arrows-to-burst-balloons/)
+8. **LFU Cache**
 
-### 5. Meeting Rooms II
-- **Problem**: Sort start/end times to allocate rooms.
-- **Company**: Apple
-- **Source**: [LeetCode 253](https://leetcode.com/problems/meeting-rooms-ii/)
-# 🧠 Kadane’s Algorithm (Subarray Optimization) Interview Questions Categorized by Subtype
-
-A detailed breakdown of Kadane’s Algorithm and subarray optimization interview questions, categorized by subtypes, with examples from various companies.
+  * **Company**: Facebook
+  * **LeetCode**: [Problem 460](https://leetcode.com/problems/lfu-cache/)
+  * **Difficulty**: Hard
 
 ---
 
-## 🥇 Maximum Subarray Sum
-
-### 1. Maximum Subarray
-- **Problem**: Find contiguous subarray with maximum sum.
-- **Company**: Amazon
-- **Source**: [LeetCode 53](https://leetcode.com/problems/maximum-subarray/)
-
-### 2. Maximum Product Subarray
-- **Problem**: Find contiguous subarray with maximum product.
-- **Company**: Google
-- **Source**: [LeetCode 152](https://leetcode.com/problems/maximum-product-subarray/)
-
-### 3. Maximum Sum Circular Subarray
-- **Problem**: Maximum sum in circular array.
-- **Company**: Microsoft
-- **Source**: [LeetCode 918](https://leetcode.com/problems/maximum-sum-circular-subarray/)
-
-### 4. Maximum Average Subarray I
-- **Problem**: Subarray with max average (length k).
-- **Company**: Facebook
-- **Source**: [LeetCode 643](https://leetcode.com/problems/maximum-average-subarray-i/)
-
-### 5. Maximum Sum Increasing Subsequence
-- **Problem**: Max sum of increasing contiguous subsequence.
-- **Company**: Apple
-- **Source**: [GeeksforGeeks](https://www.geeksforgeeks.org/maximum-sum-increasing-subsequence-dp-14/)
+Perfect! Let's continue **TIER 2 — Binary Search (and Variants)** with the remaining subtypes:
 
 ---
 
-## 🥈 Minimum Subarray Sum
+## 🥈 Binary Search — Binary Search with Condition (Custom Comparator)
 
-### 1. Minimum Size Subarray Sum
-- **Problem**: Minimum length subarray with sum ≥ target.
-- **Company**: Amazon
-- **Source**: [LeetCode 209](https://leetcode.com/problems/minimum-size-subarray-sum/)
+### **Easy**
 
-### 2. Maximum Sum Circular Subarray (Min Subarray Variant)
-- **Problem**: Min subarray sum used to compute circular max.
-- **Company**: Google
-- **Source**: [LeetCode 918](https://leetcode.com/problems/maximum-sum-circular-subarray/)
+1. **Find Smallest Letter Greater Than Target**
 
-### 3. Subarray Sum Closest to Zero
-- **Problem**: Find subarray with sum closest to zero.
-- **Company**: Microsoft
-- **Source**: [LeetCode Discuss](https://leetcode.com/discuss/)
+  * **Company**: Amazon
+  * **LeetCode**: [Problem 744](https://leetcode.com/problems/find-smallest-letter-greater-than-target/)
+  * **Difficulty**: Easy
 
-### 4. Minimum Sum Subarray of Size K
-- **Problem**: Sliding window min sum.
-- **Company**: Facebook
-- **Source**: [GeeksforGeeks](https://www.geeksforgeeks.org/minimum-sum-subarray-size-k/)
+2. **Search in Rotated Sorted Array (Simple Condition)**
 
-### 5. Maximum Product Subarray (Min Product Variant)
-- **Problem**: Track min product to handle negatives.
-- **Company**: Apple
-- **Source**: [LeetCode 152](https://leetcode.com/problems/maximum-product-subarray/)
+  * **Company**: Microsoft
+  * **LeetCode**: [Problem 33](https://leetcode.com/problems/search-in-rotated-sorted-array/)
+  * **Difficulty**: Easy
 
----
+3. **Find Peak Element (Custom Comparison)**
 
-## 🥉 Circular Subarray
+  * **Company**: Google
+  * **LeetCode**: [Problem 162](https://leetcode.com/problems/find-peak-element/)
+  * **Difficulty**: Easy
 
-### 1. Maximum Sum Circular Subarray
-- **Problem**: Kadane + total sum – min subarray.
-- **Company**: Amazon
-- **Source**: [LeetCode 918](https://leetcode.com/problems/maximum-sum-circular-subarray/)
+### **Medium**
 
-### 2. Maximum Circular Subarray Sum
-- **Problem**: Variation of above with wrap-around.
-- **Company**: Google
-- **Source**: [GeeksforGeeks](https://www.geeksforgeeks.org/maximum-contiguous-circular-sum/)
+4. **Find Minimum in Rotated Sorted Array II**
 
-### 3. Circular Subarray Sum with k Elements
-- **Problem**: Max sum of k-length circular subarray.
-- **Company**: Microsoft
-- **Source**: [LeetCode Discuss](https://leetcode.com/discuss/)
+  * **Company**: Facebook
+  * **LeetCode**: [Problem 154](https://leetcode.com/problems/find-minimum-in-rotated-sorted-array-ii/)
+  * **Difficulty**: Medium
 
-### 4. Minimum Sum Circular Subarray
-- **Problem**: Use min subarray for wrap-around calculation.
-- **Company**: Facebook
-- **Source**: [LeetCode 918](https://leetcode.com/problems/maximum-sum-circular-subarray/)
+5. **Find First and Last Position of Element in Sorted Array**
 
-### 5. Circular Subarray Maximum Product
-- **Problem**: Product variation for circular array.
-- **Company**: Apple
-- **Source**: [LeetCode Discuss](https://leetcode.com/discuss/)
+  * **Company**: Amazon
+  * **LeetCode**: [Problem 34](https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/)
+  * **Difficulty**: Medium
 
----
+6. **Capacity To Ship Packages Within D Days (Custom)**
 
-## 🏅 Subarray with At Most k Negatives/Positives
+  * **Company**: Microsoft
+  * **LeetCode**: [Problem 1011](https://leetcode.com/problems/capacity-to-ship-packages-within-d-days/)
+  * **Difficulty**: Medium
 
-### 1. Longest Subarray with At Most K Zeros
-- **Problem**: Maximum length subarray with ≤ k zeros.
-- **Company**: Amazon
-- **Source**: [LeetCode 1004](https://leetcode.com/problems/max-consecutive-ones-iii/)
+### **Hard**
 
-### 2. Maximum Sum Subarray with K Negatives
-- **Problem**: Sliding window + count negatives.
-- **Company**: Google
-- **Source**: [LeetCode Discuss](https://leetcode.com/discuss/)
+7. **Kth Smallest Element in Sorted Matrix**
 
-### 3. Longest Subarray with Limited Negatives
-- **Problem**: Subarray with ≤ k negative numbers.
-- **Company**: Microsoft
-- **Source**: [LeetCode Discuss](https://leetcode.com/discuss/)
+  * **Company**: Google
+  * **LeetCode**: [Problem 378](https://leetcode.com/problems/kth-smallest-element-in-a-sorted-matrix/)
+  * **Difficulty**: Hard
 
-### 4. Maximum Average Subarray with K Negatives
-- **Problem**: Max average subarray with ≤ k negatives.
-- **Company**: Facebook
-- **Source**: [LeetCode Discuss](https://leetcode.com/discuss/)
+8. **Split Array Largest Sum (Custom Comparator Variant)**
 
-### 5. Maximum Subarray Sum with K Changes
-- **Problem**: Change ≤ k elements to maximize sum.
-- **Company**: Apple
-- **Source**: [LeetCode Discuss](https://leetcode.com/discuss/)
+  * **Company**: Facebook
+  * **LeetCode**: [Problem 410](https://leetcode.com/problems/split-array-largest-sum/)
+  * **Difficulty**: Hard
 
 ---
 
-## 🏅 Subarray Sum Constraint Optimization
+## 🥈 Binary Search — Binary Search on Rotated Sorted Array
 
-### 1. Maximum Size Subarray Sum ≤ K
-- **Problem**: Sliding window with sum ≤ k.
-- **Company**: Amazon
-- **Source**: [LeetCode 325](https://leetcode.com/problems/maximum-size-subarray-sum-equals-k/)
+### **Easy**
 
-### 2. Subarray Sum Equals K
-- **Problem**: Count subarrays with sum = k.
-- **Company**: Google
-- **Source**: [LeetCode 560](https://leetcode.com/problems/subarray-sum-equals-k/)
+1. **Search in Rotated Sorted Array**
 
-### 3. Longest Subarray Sum ≤ K
-- **Problem**: Maximum length subarray sum ≤ k.
-- **Company**: Microsoft
-- **Source**: [LeetCode Discuss](https://leetcode.com/discuss/)
+  * **Company**: Amazon
+  * **LeetCode**: [Problem 33](https://leetcode.com/problems/search-in-rotated-sorted-array/)
+  * **Difficulty**: Easy
 
-### 4. Maximum Sum Subarray with Sum ≤ K in 2D
-- **Problem**: 2D Kadane with sum constraint.
-- **Company**: Facebook
-- **Source**: [LeetCode 363](https://leetcode.com/problems/max-sum-of-rectangle-no-larger-than-k/)
+2. **Find Minimum in Rotated Sorted Array**
 
-### 5. Maximum Sum Subarray in Range [L, R]
-- **Problem**: Constrained sum subarray using prefix + Kadane.
-- **Company**: Apple
-- **Source**: [LeetCode Discuss](https://leetcode.com/discuss/)
-# 🧠 Recursion + Divide & Conquer Interview Questions Categorized by Subtype
+  * **Company**: Microsoft
+  * **LeetCode**: [Problem 153](https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/)
+  * **Difficulty**: Easy
 
-A detailed breakdown of Recursion and Divide & Conquer interview questions, categorized by subtypes, with examples from various companies.
+3. **Find Minimum in Rotated Sorted Array II (with duplicates)**
 
----
+  * **Company**: Google
+  * **LeetCode**: [Problem 154](https://leetcode.com/problems/find-minimum-in-rotated-sorted-array-ii/)
+  * **Difficulty**: Easy
 
-## 🥇 Classic Divide and Combine (Sorts, Searches)
+### **Medium**
 
-### 1. Merge Sort
-- **Problem**: Sort array using divide and conquer.
-- **Company**: Amazon
-- **Source**: [GeeksforGeeks](https://www.geeksforgeeks.org/merge-sort/)
+4. **Search in Rotated Sorted Array II**
 
-### 2. Quick Sort
-- **Problem**: Partition and sort array recursively.
-- **Company**: Google
-- **Source**: [GeeksforGeeks](https://www.geeksforgeeks.org/quick-sort/)
+  * **Company**: Facebook
+  * **LeetCode**: [Problem 81](https://leetcode.com/problems/search-in-rotated-sorted-array-ii/)
+  * **Difficulty**: Medium
 
-### 3. Binary Search
-- **Problem**: Divide array to search recursively.
-- **Company**: Microsoft
-- **Source**: [LeetCode 704](https://leetcode.com/problems/binary-search/)
+5. **Find Peak Element in Rotated Array**
 
-### 4. Maximum Subarray Sum (Divide & Conquer)
-- **Problem**: Find max subarray using D&C recursion.
-- **Company**: Facebook
-- **Source**: [LeetCode 53](https://leetcode.com/problems/maximum-subarray/)
+  * **Company**: Amazon
+  * **LeetCode**: [Problem 162](https://leetcode.com/problems/find-peak-element/)
+  * **Difficulty**: Medium
 
-### 5. Count Inversions in Array
-- **Problem**: Count inversions using merge sort recursion.
-- **Company**: Apple
-- **Source**: [GeeksforGeeks](https://www.geeksforgeeks.org/counting-inversions/)
+6. **Find Rotation Count in Rotated Sorted Array**
+
+  * **Company**: Microsoft
+  * **LeetCode**: [Problem 153 Variant](https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/)
+  * **Difficulty**: Medium
+
+### **Hard**
+
+7. **Median of Two Sorted Arrays (Rotated Variant)**
+
+  * **Company**: Google
+  * **LeetCode**: [Problem 4](https://leetcode.com/problems/median-of-two-sorted-arrays/)
+  * **Difficulty**: Hard
+
+8. **Kth Element in Two Sorted Arrays (Rotated)**
+
+  * **Company**: Facebook
+  * **LeetCode**: [Problem 378 Variant](https://leetcode.com/problems/kth-smallest-element-in-a-sorted-matrix/)
+  * **Difficulty**: Hard
 
 ---
 
-## 🥈 Divide by Halves (Binary Logic)
+## 🥈 Binary Search — Binary Search in 2D Matrix
 
-### 1. Binary Search
-- **Problem**: Divide array into halves to locate target.
-- **Company**: Amazon
-- **Source**: [LeetCode 704](https://leetcode.com/problems/binary-search/)
+### **Easy**
 
-### 2. Search in Rotated Sorted Array
-- **Problem**: Binary logic recursion to find element.
-- **Company**: Google
-- **Source**: [LeetCode 33](https://leetcode.com/problems/search-in-rotated-sorted-array/)
+1. **Search a 2D Matrix**
 
-### 3. Median of Two Sorted Arrays
-- **Problem**: Recursive divide halves to find median.
-- **Company**: Microsoft
-- **Source**: [LeetCode 4](https://leetcode.com/problems/median-of-two-sorted-arrays/)
+  * **Company**: Amazon
+  * **LeetCode**: [Problem 74](https://leetcode.com/problems/search-a-2d-matrix/)
+  * **Difficulty**: Easy
 
-### 4. Pow(x, n)
-- **Problem**: Divide power problem by halves recursively.
-- **Company**: Facebook
-- **Source**: [LeetCode 50](https://leetcode.com/problems/powx-n/)
+2. **Search a 2D Matrix II**
 
-### 5. Kth Element in Two Sorted Arrays
-- **Problem**: Binary divide to find kth element.
-- **Company**: Apple
-- **Source**: [LeetCode 4](https://leetcode.com/problems/median-of-two-sorted-arrays/)
+  * **Company**: Microsoft
+  * **LeetCode**: [Problem 240](https://leetcode.com/problems/search-a-2d-matrix-ii/)
+  * **Difficulty**: Easy
+
+3. **Matrix Median**
+
+  * **Company**: Google
+  * **LeetCode**: [Problem 74 Variant](https://leetcode.com/problems/search-a-2d-matrix/) *(median variant)*
+  * **Difficulty**: Easy
+
+### **Medium**
+
+4. **Kth Smallest Element in a Sorted Matrix**
+
+  * **Company**: Facebook
+  * **LeetCode**: [Problem 378](https://leetcode.com/problems/kth-smallest-element-in-a-sorted-matrix/)
+  * **Difficulty**: Medium
+
+5. **Search a 2D Matrix II (Medium)**
+
+  * **Company**: Amazon
+  * **LeetCode**: [Problem 240](https://leetcode.com/problems/search-a-2d-matrix-ii/)
+  * **Difficulty**: Medium
+
+6. **Smallest Common Element in All Rows**
+
+  * **Company**: Microsoft
+  * **LeetCode**: [Problem 1198](https://leetcode.com/problems/smallest-common-element-in-all-rows/)
+  * **Difficulty**: Medium
+
+### **Hard**
+
+7. **Median in a Row-wise Sorted Matrix**
+
+  * **Company**: Google
+  * **LeetCode**: [Problem 374 Variant](https://leetcode.com/problems/guess-number-higher-or-lower/) *(matrix median variant)*
+  * **Difficulty**: Hard
+
+8. **Kth Smallest Number in Multiplication Table**
+
+  * **Company**: Facebook
+  * **LeetCode**: [Problem 668](https://leetcode.com/problems/kth-smallest-number-in-multiplication-table/)
+  * **Difficulty**: Hard
+
+---
+Got it! You want a **complete 48-question breakdown** for **TIER 2 — Binary Search (all 6 subtypes)** with **8 questions per subtype** (3 easy, 3 medium, 2 hard), including **company names** and **LeetCode/other references**. I can create a ready-to-copy `.md` format for this.
+
+Here’s the full Tier 2 Binary Search layout:
 
 ---
 
-## 🥉 Combine Results Recursively
+# 🥈 TIER 2 — Binary Search (and Variants) — Complete 48 Questions
 
-### 1. Merge Sort
-- **Problem**: Combine sorted halves recursively.
-- **Company**: Amazon
-- **Source**: [GeeksforGeeks](https://www.geeksforgeeks.org/merge-sort/)
+## 1️⃣ Basic Binary Search (Sorted Array)
 
-### 2. Maximum Subarray Sum (D&C)
-- **Problem**: Combine left, right, cross max sums recursively.
-- **Company**: Google
-- **Source**: [LeetCode 53](https://leetcode.com/problems/maximum-subarray/)
+**Easy**
 
-### 3. Count Inversions
-- **Problem**: Combine inversion counts of left, right, cross.
-- **Company**: Microsoft
-- **Source**: [GeeksforGeeks](https://www.geeksforgeeks.org/counting-inversions/)
+1. Binary Search — Amazon — [LeetCode 704](https://leetcode.com/problems/binary-search/)
+2. Guess Number Higher or Lower — Microsoft — [LeetCode 374](https://leetcode.com/problems/guess-number-higher-or-lower/)
+3. Search Insert Position — Google — [LeetCode 35](https://leetcode.com/problems/search-insert-position/)
 
-### 4. Matrix Multiplication (Divide & Conquer)
-- **Problem**: Multiply matrices recursively combining submatrices.
-- **Company**: Facebook
-- **Source**: [GeeksforGeeks](https://www.geeksforgeeks.org/strassens-matrix-multiplication/)
+**Medium**
+4. Find Minimum in Rotated Sorted Array — Facebook — [LeetCode 153](https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/)
+5. Find Peak Element — Amazon — [LeetCode 162](https://leetcode.com/problems/find-peak-element/)
+6. Search in 2D Matrix I — Microsoft — [LeetCode 74](https://leetcode.com/problems/search-a-2d-matrix/)
 
-### 5. Maximum Path Sum in Binary Tree
-- **Problem**: Combine results from left and right subtree recursively.
-- **Company**: Apple
-- **Source**: [LeetCode 124](https://leetcode.com/problems/binary-tree-maximum-path-sum/)
+**Hard**
+7. Find K Closest Elements — Google — [LeetCode 658](https://leetcode.com/problems/find-k-closest-elements/)
+8. Median of Two Sorted Arrays — Facebook — [LeetCode 4](https://leetcode.com/problems/median-of-two-sorted-arrays/)
 
 ---
 
-## 🏅 Recursive Tree Traversal Logic
+## 2️⃣ Binary Search on Answer Space (Optimization)
 
-### 1. Binary Tree Inorder Traversal
-- **Problem**: Traverse tree recursively in inorder.
-- **Company**: Amazon
-- **Source**: [LeetCode 94](https://leetcode.com/problems/binary-tree-inorder-traversal/)
+**Easy**
 
-### 2. Binary Tree Preorder Traversal
-- **Problem**: Recursive preorder traversal.
-- **Company**: Google
-- **Source**: [LeetCode 144](https://leetcode.com/problems/binary-tree-preorder-traversal/)
+1. Koko Eating Bananas — Amazon — [LeetCode 875](https://leetcode.com/problems/koko-eating-bananas/)
+2. Capacity To Ship Packages Within D Days — Microsoft — [LeetCode 1011](https://leetcode.com/problems/capacity-to-ship-packages-within-d-days/)
+3. Minimum Speed to Arrive on Time — Google — [LeetCode 1870](https://leetcode.com/problems/minimum-speed-to-arrive-on-time/)
 
-### 3. Binary Tree Postorder Traversal
-- **Problem**: Recursive postorder traversal.
-- **Company**: Microsoft
-- **Source**: [LeetCode 145](https://leetcode.com/problems/binary-tree-postorder-traversal/)
+**Medium**
+4. Aggressive Cows / Book Allocation — Facebook — [LeetCode 410](https://leetcode.com/problems/split-array-largest-sum/)
+5. Split Array Largest Sum — Amazon — [LeetCode 410](https://leetcode.com/problems/split-array-largest-sum/)
+6. Minimum Time to Complete Trips — Microsoft — [LeetCode 2187](https://leetcode.com/problems/minimum-time-to-complete-trips/)
 
-### 4. Maximum Depth of Binary Tree
-- **Problem**: Recursive depth computation.
-- **Company**: Facebook
-- **Source**: [LeetCode 104](https://leetcode.com/problems/maximum-depth-of-binary-tree/)
-
-### 5. Diameter of Binary Tree
-- **Problem**: Combine left/right depths recursively.
-- **Company**: Apple
-- **Source**: [LeetCode 543](https://leetcode.com/problems/diameter-of-binary-tree/)
+**Hard**
+7. Capacity To Ship Packages Within D Days (Hard Variant) — Google — [LeetCode 1011](https://leetcode.com/problems/capacity-to-ship-packages-within-d-days/)
+8. Minimum Days to Eat N Oranges — Facebook — [LeetCode 1553](https://leetcode.com/problems/minimum-number-of-days-to-eat-n-oranges/)
 
 ---
 
-## 🏅 Backtracking Base + Recursive Case Identification
+## 3️⃣ Binary Search on Monotonic Functions
 
-### 1. N-Queens
-- **Problem**: Place queens recursively using backtracking.
-- **Company**: Amazon
-- **Source**: [LeetCode 51](https://leetcode.com/problems/n-queens/)
+**Easy**
 
-### 2. Word Search
-- **Problem**: Backtracking to find word in grid recursively.
-- **Company**: Google
-- **Source**: [LeetCode 79](https://leetcode.com/problems/word-search/)
+1. Square Root of x — Amazon — [LeetCode 69](https://leetcode.com/problems/sqrtx/)
+2. Pow(x, n) — Microsoft — [LeetCode 50](https://leetcode.com/problems/powx-n/)
+3. Guess Number Higher or Lower — Google — [LeetCode 374](https://leetcode.com/problems/guess-number-higher-or-lower/)
 
-### 3. Combination Sum
-- **Problem**: Recursive combinations to reach target sum.
-- **Company**: Microsoft
-- **Source**: [LeetCode 39](https://leetcode.com/problems/combination-sum/)
+**Medium**
+4. Kth Smallest Element in a Sorted Matrix — Facebook — [LeetCode 378](https://leetcode.com/problems/kth-smallest-element-in-a-sorted-matrix/)
+5. Find the Duplicate Number — Amazon — [LeetCode 287](https://leetcode.com/problems/find-the-duplicate-number/)
+6. Capacity To Ship Packages Within D Days — Microsoft — [LeetCode 1011](https://leetcode.com/problems/capacity-to-ship-packages-within-d-days/)
 
-### 4. Sudoku Solver
-- **Problem**: Recursive backtracking to fill board.
-- **Company**: Facebook
-- **Source**: [LeetCode 37](https://leetcode.com/problems/sudoku-solver/)
+**Hard**
+7. Minimum Days to Make m Bouquets — Google — [LeetCode 1482](https://leetcode.com/problems/minimum-number-of-days-to-make-m-bouquets/)
+8. Minimum Time to Complete Trips (Hard Variant) — Facebook — [LeetCode 2187](https://leetcode.com/problems/minimum-time-to-complete-trips/)
 
-### 5. Generate Parentheses
-- **Problem**: Recursive generation + backtracking.
-- **Company**: Apple
-- **Source**: [LeetCode 22](https://leetcode.com/problems/generate-parentheses/)
+---
+
+## 4️⃣ Binary Search with Condition (Custom Comparator)
+
+**Easy**
+
+1. Find Smallest Letter Greater Than Target — Amazon — [LeetCode 744](https://leetcode.com/problems/find-smallest-letter-greater-than-target/)
+2. Search in Rotated Sorted Array (Simple Condition) — Microsoft — [LeetCode 33](https://leetcode.com/problems/search-in-rotated-sorted-array/)
+3. Find Peak Element — Google — [LeetCode 162](https://leetcode.com/problems/find-peak-element/)
+
+**Medium**
+4. Find Minimum in Rotated Sorted Array II — Facebook — [LeetCode 154](https://leetcode.com/problems/find-minimum-in-rotated-sorted-array-ii/)
+5. Find First and Last Position of Element in Sorted Array — Amazon — [LeetCode 34](https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/)
+6. Capacity To Ship Packages Within D Days — Microsoft — [LeetCode 1011](https://leetcode.com/problems/capacity-to-ship-packages-within-d-days/)
+
+**Hard**
+7. Kth Smallest Element in Sorted Matrix — Google — [LeetCode 378](https://leetcode.com/problems/kth-smallest-element-in-a-sorted-matrix/)
+8. Split Array Largest Sum (Custom Comparator Variant) — Facebook — [LeetCode 410](https://leetcode.com/problems/split-array-largest-sum/)
+
+---
+
+## 5️⃣ Binary Search on Rotated Sorted Array
+
+**Easy**
+
+1. Search in Rotated Sorted Array — Amazon — [LeetCode 33](https://leetcode.com/problems/search-in-rotated-sorted-array/)
+2. Find Minimum in Rotated Sorted Array — Microsoft — [LeetCode 153](https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/)
+3. Find Minimum in Rotated Sorted Array II — Google — [LeetCode 154](https://leetcode.com/problems/find-minimum-in-rotated-sorted-array-ii/)
+
+**Medium**
+4. Search in Rotated Sorted Array II — Facebook — [LeetCode 81](https://leetcode.com/problems/search-in-rotated-sorted-array-ii/)
+5. Find Peak Element in Rotated Array — Amazon — [LeetCode 162](https://leetcode.com/problems/find-peak-element/)
+6. Find Rotation Count in Rotated Sorted Array — Microsoft — [LeetCode 153 Variant](https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/)
+
+**Hard**
+7. Median of Two Sorted Arrays (Rotated Variant) — Google — [LeetCode 4](https://leetcode.com/problems/median-of-two-sorted-arrays/)
+8. Kth Element in Two Sorted Arrays (Rotated) — Facebook — [LeetCode 378 Variant](https://leetcode.com/problems/kth-smallest-element-in-a-sorted-matrix/)
+
+---
+
+## 6️⃣ Binary Search in 2D Matrix
+
+**Easy**
+
+1. Search a 2D Matrix — Amazon — [LeetCode 74](https://leetcode.com/problems/search-a-2d-matrix/)
+2. Search a 2D Matrix II — Microsoft — [LeetCode 240](https://leetcode.com/problems/search-a-2d-matrix-ii/)
+3. Matrix Median — Google — [LeetCode 74 Variant](https://leetcode.com/problems/search-a-2d-matrix/)
+
+**Medium**
+4. Kth Smallest Element in a Sorted Matrix — Facebook — [LeetCode 378](https://leetcode.com/problems/kth-smallest-element-in-a-sorted-matrix/)
+5. Search a 2D Matrix II (Medium) — Amazon — [LeetCode 240](https://leetcode.com/problems/search-a-2d-matrix-ii/)
+6. Smallest Common Element in All Rows — Microsoft — [LeetCode 1198](https://leetcode.com/problems/smallest-common-element-in-all-rows/)
+
+**Hard**
+7. Median in a Row-wise Sorted Matrix — Google — [LeetCode 374 Variant](https://leetcode.com/problems/guess-number-higher-or-lower/)
+8. Kth Smallest Number in Multiplication Table — Facebook — [LeetCode 668](https://leetcode.com/problems/kth-smallest-number-in-multiplication-table/)
+
+---
+Perfect! Let’s continue with **TIER 2 / Mid-Level Core Patterns — Monotonic Stack / Queue**. We'll give **6 subtypes**, with **8 questions per subtype** (3 easy, 3 medium, 2 hard), along with **company names** and **LeetCode references**.
+
+---
+
+# 🥈 Monotonic Stack / Queue — Complete Questions
+
+## 1️⃣ Next Greater / Smaller Element
+
+**Easy**
+
+1. Next Greater Element I — Amazon — [LeetCode 496](https://leetcode.com/problems/next-greater-element-i/)
+2. Next Greater Element II — Microsoft — [LeetCode 503](https://leetcode.com/problems/next-greater-element-ii/)
+3. Next Smaller Element — Google — [LeetCode 739 Variant](https://leetcode.com/problems/daily-temperatures/)
+
+**Medium**
+4. Daily Temperatures — Facebook — [LeetCode 739](https://leetcode.com/problems/daily-temperatures/)
+5. Next Greater Element III — Amazon — [LeetCode 556](https://leetcode.com/problems/next-greater-element-iii/)
+6. Next Greater Node in Linked List — Microsoft — [LeetCode 1019](https://leetcode.com/problems/next-greater-node-in-linked-list/)
+
+**Hard**
+7. Maximum of Minimum for Every Window Size — Google — [LeetCode 239 Variant](https://leetcode.com/problems/sliding-window-maximum/)
+8. Largest Rectangle in Histogram — Facebook — [LeetCode 84](https://leetcode.com/problems/largest-rectangle-in-histogram/)
+
+---
+
+## 2️⃣ Previous Greater / Smaller Element
+
+**Easy**
+
+1. Previous Greater Element — Amazon — [LeetCode 503 Variant](https://leetcode.com/problems/next-greater-element-ii/)
+2. Previous Smaller Element — Microsoft — [LeetCode 85 Variant](https://leetcode.com/problems/maximal-rectangle/)
+3. Daily Temperatures (Previous Check Variant) — Google — [LeetCode 739](https://leetcode.com/problems/daily-temperatures/)
+
+**Medium**
+4. Stock Span Problem — Facebook — [LeetCode 901](https://leetcode.com/problems/online-stock-span/)
+5. Previous Greater Element II — Amazon — [LeetCode 503 Variant](https://leetcode.com/problems/next-greater-element-ii/)
+6. Maximal Rectangle — Microsoft — [LeetCode 85](https://leetcode.com/problems/maximal-rectangle/)
+
+**Hard**
+7. Largest Rectangle in Histogram — Google — [LeetCode 84](https://leetcode.com/problems/largest-rectangle-in-histogram/)
+8. Sliding Window Maximum (Deque variant) — Facebook — [LeetCode 239](https://leetcode.com/problems/sliding-window-maximum/)
+
+---
+
+## 3️⃣ Stock Span / Daily Temperature Patterns
+
+**Easy**
+
+1. Stock Span Problem — Amazon — [LeetCode 901](https://leetcode.com/problems/online-stock-span/)
+2. Daily Temperatures — Microsoft — [LeetCode 739](https://leetcode.com/problems/daily-temperatures/)
+3. Temperature Trend (Simpler Variant) — Google — [LeetCode 739 Variant](https://leetcode.com/problems/daily-temperatures/)
+
+**Medium**
+4. Next Greater Node in Linked List — Facebook — [LeetCode 1019](https://leetcode.com/problems/next-greater-node-in-linked-list/)
+5. Online Stock Span with Queries — Amazon — [LeetCode 901 Variant](https://leetcode.com/problems/online-stock-span/)
+6. Maximum of Minimum for Every Window Size — Microsoft — [LeetCode 239 Variant](https://leetcode.com/problems/sliding-window-maximum/)
+
+**Hard**
+7. Largest Rectangle in Histogram — Google — [LeetCode 84](https://leetcode.com/problems/largest-rectangle-in-histogram/)
+8. Sliding Window Maximum — Facebook — [LeetCode 239](https://leetcode.com/problems/sliding-window-maximum/)
+
+---
+
+## 4️⃣ Range Queries Using Stack
+
+**Easy**
+
+1. Next Greater Element — Amazon — [LeetCode 496](https://leetcode.com/problems/next-greater-element-i/)
+2. Previous Greater Element — Microsoft — [LeetCode 503 Variant](https://leetcode.com/problems/next-greater-element-ii/)
+3. Next Smaller Element — Google — [LeetCode 739 Variant](https://leetcode.com/problems/daily-temperatures/)
+
+**Medium**
+4. Stock Span Problem — Facebook — [LeetCode 901](https://leetcode.com/problems/online-stock-span/)
+5. Maximal Rectangle — Amazon — [LeetCode 85](https://leetcode.com/problems/maximal-rectangle/)
+6. Histogram Max Area for Sliding Window — Microsoft — [LeetCode 84](https://leetcode.com/problems/largest-rectangle-in-histogram/)
+
+**Hard**
+7. Largest Rectangle in Histogram — Google — [LeetCode 84](https://leetcode.com/problems/largest-rectangle-in-histogram/)
+8. Sliding Window Maximum — Facebook — [LeetCode 239](https://leetcode.com/problems/sliding-window-maximum/)
+
+---
+
+## 5️⃣ Sliding Window Maximum Using Deque
+
+**Easy**
+
+1. Sliding Window Maximum (Small Window) — Amazon — [LeetCode 239](https://leetcode.com/problems/sliding-window-maximum/)
+2. Max in Window Size k — Microsoft — [LeetCode 239 Variant](https://leetcode.com/problems/sliding-window-maximum/)
+3. Window Max Sum — Google — [LeetCode 239 Variant](https://leetcode.com/problems/sliding-window-maximum/)
+
+**Medium**
+4. Sliding Window Maximum — Facebook — [LeetCode 239](https://leetcode.com/problems/sliding-window-maximum/)
+5. Maximum of Minimum for Every Window Size — Amazon — [LeetCode 239 Variant](https://leetcode.com/problems/sliding-window-maximum/)
+6. Sliding Window Minimum — Microsoft — [LeetCode 239 Variant](https://leetcode.com/problems/sliding-window-maximum/)
+
+**Hard**
+7. Sliding Window Maximum Hard — Google — [LeetCode 239](https://leetcode.com/problems/sliding-window-maximum/)
+8. Largest Rectangle in Histogram (Deque Usage) — Facebook — [LeetCode 84](https://leetcode.com/problems/largest-rectangle-in-histogram/)
+
+---
+
+## 6️⃣ Histogram / Rectangle Area Problems
+
+**Easy**
+
+1. Largest Rectangle in Histogram (Simple) — Amazon — [LeetCode 84](https://leetcode.com/problems/largest-rectangle-in-histogram/)
+2. Maximal Rectangle (Simpler) — Microsoft — [LeetCode 85](https://leetcode.com/problems/maximal-rectangle/)
+3. Max Rectangle in Matrix (Binary) — Google — [LeetCode 85 Variant](https://leetcode.com/problems/maximal-rectangle/)
+
+**Medium**
+4. Maximal Rectangle — Facebook — [LeetCode 85](https://leetcode.com/problems/maximal-rectangle/)
+5. Largest Rectangle in Histogram — Amazon — [LeetCode 84](https://leetcode.com/problems/largest-rectangle-in-histogram/)
+6. Largest Rectangle Area II — Microsoft — [LeetCode 84 Variant](https://leetcode.com/problems/largest-rectangle-in-histogram/)
+
+**Hard**
+7. Maximal Rectangle with Obstacles — Google — [LeetCode 85 Variant](https://leetcode.com/problems/maximal-rectangle/)
+8. Largest Rectangle in Histogram Advanced — Facebook — [LeetCode 84](https://leetcode.com/problems/largest-rectangle-in-histogram/)
+
+---
+Perfect! Let's continue with **TIER 2 — Merge Intervals**. We'll cover **6 subtypes**, each with **8 questions** (3 Easy, 3 Medium, 2 Hard), including **company names** and **LeetCode references**.
+
+---
+
+# 🥈 Merge Intervals — Complete Questions
+
+## 1️⃣ Merge Overlapping Intervals
+
+**Easy**
+
+1. Merge Intervals — Amazon — [LeetCode 56](https://leetcode.com/problems/merge-intervals/)
+2. Merge Overlapping Meetings — Microsoft — [LeetCode 56 Variant](https://leetcode.com/problems/merge-intervals/)
+3. Merge Intervals (Simpler Variant) — Google — [LeetCode 56](https://leetcode.com/problems/merge-intervals/)
+
+**Medium**
+4. Insert Interval — Facebook — [LeetCode 57](https://leetcode.com/problems/insert-interval/)
+5. Merge Intervals with Sorting — Amazon — [LeetCode 56](https://leetcode.com/problems/merge-intervals/)
+6. Merge Two Lists of Intervals — Microsoft — [LeetCode 986](https://leetcode.com/problems/interval-list-intersections/)
+
+**Hard**
+7. Non-overlapping Intervals (Minimum Removal) — Google — [LeetCode 435](https://leetcode.com/problems/non-overlapping-intervals/)
+8. Maximum Number of Non-overlapping Intervals — Facebook — [LeetCode 452](https://leetcode.com/problems/minimum-number-of-arrows-to-burst-balloons/)
+
+---
+
+## 2️⃣ Insert New Interval
+
+**Easy**
+
+1. Insert Interval — Amazon — [LeetCode 57](https://leetcode.com/problems/insert-interval/)
+2. Insert and Merge Interval — Microsoft — [LeetCode 57 Variant](https://leetcode.com/problems/insert-interval/)
+3. Insert Interval (Simpler) — Google — [LeetCode 57](https://leetcode.com/problems/insert-interval/)
+
+**Medium**
+4. Merge Intervals — Facebook — [LeetCode 56](https://leetcode.com/problems/merge-intervals/)
+5. Interval List Intersections — Amazon — [LeetCode 986](https://leetcode.com/problems/interval-list-intersections/)
+6. Insert Multiple Intervals — Microsoft — [LeetCode 57 Variant](https://leetcode.com/problems/insert-interval/)
+
+**Hard**
+7. Non-overlapping Intervals — Google — [LeetCode 435](https://leetcode.com/problems/non-overlapping-intervals/)
+8. Maximum Number of Non-overlapping Intervals — Facebook — [LeetCode 452](https://leetcode.com/problems/minimum-number-of-arrows-to-burst-balloons/)
+
+---
+
+## 3️⃣ Minimum Number of Intervals to Remove
+
+**Easy**
+
+1. Non-overlapping Intervals — Amazon — [LeetCode 435](https://leetcode.com/problems/non-overlapping-intervals/)
+2. Remove Overlapping Intervals — Microsoft — [LeetCode 435 Variant](https://leetcode.com/problems/non-overlapping-intervals/)
+3. Minimum Number of Arrows to Burst Balloons — Google — [LeetCode 452](https://leetcode.com/problems/minimum-number-of-arrows-to-burst-balloons/)
+
+**Medium**
+4. Non-overlapping Intervals II — Facebook — [LeetCode 435 Variant](https://leetcode.com/problems/non-overlapping-intervals/)
+5. Interval Scheduling — Amazon — [LeetCode 452 Variant](https://leetcode.com/problems/minimum-number-of-arrows-to-burst-balloons/)
+6. Merge Intervals to Avoid Overlap — Microsoft — [LeetCode 56](https://leetcode.com/problems/merge-intervals/)
+
+**Hard**
+7. Maximum Number of Non-overlapping Intervals — Google — [LeetCode 452](https://leetcode.com/problems/minimum-number-of-arrows-to-burst-balloons/)
+8. Interval Partitioning Problem — Facebook — [LeetCode 253 Variant](https://leetcode.com/problems/meeting-rooms-ii/)
+
+---
+
+## 4️⃣ Meeting Room Allocation
+
+**Easy**
+
+1. Meeting Rooms I — Amazon — [LeetCode 252](https://leetcode.com/problems/meeting-rooms/)
+2. Can Attend All Meetings — Microsoft — [LeetCode 252](https://leetcode.com/problems/meeting-rooms/)
+3. Meeting Rooms Check — Google — [LeetCode 252 Variant](https://leetcode.com/problems/meeting-rooms/)
+
+**Medium**
+4. Meeting Rooms II — Facebook — [LeetCode 253](https://leetcode.com/problems/meeting-rooms-ii/)
+5. Minimum Number of Meeting Rooms — Amazon — [LeetCode 253](https://leetcode.com/problems/meeting-rooms-ii/)
+6. Interval Partitioning Problem — Microsoft — [LeetCode 253 Variant](https://leetcode.com/problems/meeting-rooms-ii/)
+
+**Hard**
+7. Employee Free Time — Google — [LeetCode 759](https://leetcode.com/problems/employee-free-time/)
+8. Maximum Meeting Rooms Required — Facebook — [LeetCode 253 Variant](https://leetcode.com/problems/meeting-rooms-ii/)
+
+---
+
+## 5️⃣ Interval Intersections
+
+**Easy**
+
+1. Interval List Intersections — Amazon — [LeetCode 986](https://leetcode.com/problems/interval-list-intersections/)
+2. Intersecting Intervals (Simpler) — Microsoft — [LeetCode 986 Variant](https://leetcode.com/problems/interval-list-intersections/)
+3. Overlapping Intervals Check — Google — [LeetCode 986 Variant](https://leetcode.com/problems/interval-list-intersections/)
+
+**Medium**
+4. Interval Intersections II — Facebook — [LeetCode 986 Variant](https://leetcode.com/problems/interval-list-intersections/)
+5. Merge Overlapping Intervals — Amazon — [LeetCode 56](https://leetcode.com/problems/merge-intervals/)
+6. Insert Interval and Merge — Microsoft — [LeetCode 57](https://leetcode.com/problems/insert-interval/)
+
+**Hard**
+7. Maximum Number of Overlapping Intervals — Google — [LeetCode 253 Variant](https://leetcode.com/problems/meeting-rooms-ii/)
+8. Employee Free Time — Facebook — [LeetCode 759](https://leetcode.com/problems/employee-free-time/)
+
+---
+
+## 6️⃣ Sorting + Merging + Condensing Intervals Pattern
+
+**Easy**
+
+1. Merge Intervals — Amazon — [LeetCode 56](https://leetcode.com/problems/merge-intervals/)
+2. Insert Interval — Microsoft — [LeetCode 57](https://leetcode.com/problems/insert-interval/)
+3. Overlapping Intervals — Google — [LeetCode 56 Variant](https://leetcode.com/problems/merge-intervals/)
+
+**Medium**
+4. Non-overlapping Intervals — Facebook — [LeetCode 435](https://leetcode.com/problems/non-overlapping-intervals/)
+5. Meeting Rooms II — Amazon — [LeetCode 253](https://leetcode.com/problems/meeting-rooms-ii/)
+6. Interval List Intersections — Microsoft — [LeetCode 986](https://leetcode.com/problems/interval-list-intersections/)
+
+**Hard**
+7. Maximum Number of Non-overlapping Intervals — Google — [LeetCode 452](https://leetcode.com/problems/minimum-number-of-arrows-to-burst-balloons/)
+8. Employee Free Time — Facebook — [LeetCode 759](https://leetcode.com/problems/employee-free-time/)
+
+---
+Perfect! Let’s continue with **TIER 2 — Kadane’s Algorithm / Subarray Optimization**. We'll cover **5 subtypes**, each with **8 questions** (3 Easy, 3 Medium, 2 Hard), including **company names** and **LeetCode references**.
+
+---
+
+# 🥈 Kadane’s Algorithm / Subarray Optimization — Complete Questions
+
+## 1️⃣ Maximum Subarray Sum
+
+**Easy**
+
+1. Maximum Subarray — Amazon — [LeetCode 53](https://leetcode.com/problems/maximum-subarray/)
+2. Maximum Sum of Subarray of Size K — Microsoft — [LeetCode 1004 Variant](https://leetcode.com/problems/max-consecutive-ones-iii/)
+3. Maximum Subarray (Simpler Variant) — Google — [LeetCode 53](https://leetcode.com/problems/maximum-subarray/)
+
+**Medium**
+4. Maximum Product Subarray — Facebook — [LeetCode 152](https://leetcode.com/problems/maximum-product-subarray/)
+5. Maximum Sum Circular Subarray — Amazon — [LeetCode 918](https://leetcode.com/problems/maximum-sum-circular-subarray/)
+6. Maximum Average Subarray — Microsoft — [LeetCode 644](https://leetcode.com/problems/maximum-average-subarray-ii/)
+
+**Hard**
+7. Maximum Subarray Sum with One Deletion — Google — [LeetCode 1186](https://leetcode.com/problems/maximum-subarray-sum-with-one-deletion/)
+8. Maximum Sum Rectangle in 2D Matrix — Facebook — [LeetCode 363](https://leetcode.com/problems/max-sum-of-rectangle-no-larger-than-k/)
+
+---
+
+## 2️⃣ Minimum Subarray Sum
+
+**Easy**
+
+1. Minimum Size Subarray Sum — Amazon — [LeetCode 209](https://leetcode.com/problems/minimum-size-subarray-sum/)
+2. Minimum Subarray Sum of Size K — Microsoft — [LeetCode 209 Variant](https://leetcode.com/problems/minimum-size-subarray-sum/)
+3. Smallest Subarray with Sum ≥ Target — Google — [LeetCode 209](https://leetcode.com/problems/minimum-size-subarray-sum/)
+
+**Medium**
+4. Minimum Subarray Sum Circular — Facebook — [LeetCode 918 Variant](https://leetcode.com/problems/maximum-sum-circular-subarray/)
+5. Minimum Window Subarray Sum — Amazon — [LeetCode 209 Variant](https://leetcode.com/problems/minimum-size-subarray-sum/)
+6. Subarray Sum Equals K — Microsoft — [LeetCode 560](https://leetcode.com/problems/subarray-sum-equals-k/)
+
+**Hard**
+7. Minimum Sum Rectangle in 2D Matrix — Google — [LeetCode 363 Variant](https://leetcode.com/problems/max-sum-of-rectangle-no-larger-than-k/)
+8. Minimum Subarray Length for Target Sum — Facebook — [LeetCode 209 Variant](https://leetcode.com/problems/minimum-size-subarray-sum/)
+
+---
+
+## 3️⃣ Circular Subarray
+
+**Easy**
+
+1. Maximum Sum Circular Subarray — Amazon — [LeetCode 918](https://leetcode.com/problems/maximum-sum-circular-subarray/)
+2. Circular Subarray Sum (Simpler) — Microsoft — [LeetCode 918 Variant](https://leetcode.com/problems/maximum-sum-circular-subarray/)
+3. Circular Maximum Sum Subarray — Google — [LeetCode 918](https://leetcode.com/problems/maximum-sum-circular-subarray/)
+
+**Medium**
+4. Maximum Sum Circular Subarray with One Element Removal — Facebook — [LeetCode 1186 + 918 Variant](https://leetcode.com/problems/maximum-subarray-sum-with-one-deletion/)
+5. Circular Subarray Sum with Constraints — Amazon — [LeetCode 918 Variant](https://leetcode.com/problems/maximum-sum-circular-subarray/)
+6. Maximum Average Circular Subarray — Microsoft — [LeetCode 644 Variant](https://leetcode.com/problems/maximum-average-subarray-ii/)
+
+**Hard**
+7. Maximum Sum of K-Concatenated Array — Google — [LeetCode 1191](https://leetcode.com/problems/k-concatenation-maximum-sum/)
+8. Maximum Sum Circular Submatrix — Facebook — [LeetCode 363 Variant](https://leetcode.com/problems/max-sum-of-rectangle-no-larger-than-k/)
+
+---
+
+## 4️⃣ Subarray with at Most K Negatives/Positives
+
+**Easy**
+
+1. Max Consecutive Ones III — Amazon — [LeetCode 1004](https://leetcode.com/problems/max-consecutive-ones-iii/)
+2. Subarray with At Most K Negatives — Microsoft — [LeetCode 1004 Variant](https://leetcode.com/problems/max-consecutive-ones-iii/)
+3. Max Consecutive Ones (Simpler) — Google — [LeetCode 1004](https://leetcode.com/problems/max-consecutive-ones-iii/)
+
+**Medium**
+4. Longest Subarray with At Most K Zeros — Facebook — [LeetCode 1004 Variant](https://leetcode.com/problems/max-consecutive-ones-iii/)
+5. Maximum Size Subarray With Limited Zeros — Amazon — [LeetCode 1004 Variant](https://leetcode.com/problems/max-consecutive-ones-iii/)
+6. Subarray Sum with K Negatives Allowed — Microsoft — [LeetCode 560 Variant](https://leetcode.com/problems/subarray-sum-equals-k/)
+
+**Hard**
+7. Maximum Sum Subarray with K Negatives — Google — [LeetCode 1186 + 1004 Variant](https://leetcode.com/problems/maximum-subarray-sum-with-one-deletion/)
+8. Maximum Product Subarray with Constraints — Facebook — [LeetCode 152 Variant](https://leetcode.com/problems/maximum-product-subarray/)
+
+---
+
+## 5️⃣ Subarray Sum Constraint Optimization
+
+**Easy**
+
+1. Subarray Sum Equals K — Amazon — [LeetCode 560](https://leetcode.com/problems/subarray-sum-equals-k/)
+2. Minimum Size Subarray Sum — Microsoft — [LeetCode 209](https://leetcode.com/problems/minimum-size-subarray-sum/)
+3. Maximum Size Subarray Sum ≤ Target — Google — [LeetCode 325 Variant](https://leetcode.com/problems/maximum-size-subarray-sum-equals-k/)
+
+**Medium**
+4. Continuous Subarray Sum — Facebook — [LeetCode 523](https://leetcode.com/problems/continuous-subarray-sum/)
+5. Max Sum Subarray Less Than or Equal K — Amazon — [LeetCode 363](https://leetcode.com/problems/max-sum-of-rectangle-no-larger-than-k/)
+6. Longest Subarray Sum ≤ K — Microsoft — [LeetCode 325 Variant](https://leetcode.com/problems/maximum-size-subarray-sum-equals-k/)
+
+**Hard**
+7. Maximum Sum Submatrix No Larger Than K — Google — [LeetCode 363](https://leetcode.com/problems/max-sum-of-rectangle-no-larger-than-k/)
+8. Maximum Subarray Sum with Limit — Facebook — [LeetCode 325 Variant](https://leetcode.com/problems/maximum-size-subarray-sum-equals-k/)
+
+---
+Perfect! Let’s complete **TIER 2 — Recursion + Divide & Conquer**. We'll cover **5 subtypes**, each with **8 questions** (3 Easy, 3 Medium, 2 Hard), along with **company names** and **LeetCode references**.
+
+---
+
+# 🥈 Recursion + Divide & Conquer — Complete Questions
+
+## 1️⃣ Classic Divide and Combine (Sorts, Searches)
+
+**Easy**
+
+1. Merge Sort Implementation — Amazon — [LeetCode 912](https://leetcode.com/problems/sort-an-array/)
+2. Quick Sort Implementation — Microsoft — [LeetCode 912 Variant](https://leetcode.com/problems/sort-an-array/)
+3. Binary Search (Recursive) — Google — [LeetCode 704](https://leetcode.com/problems/binary-search/)
+
+**Medium**
+4. Kth Largest Element (Divide & Conquer / QuickSelect) — Facebook — [LeetCode 215](https://leetcode.com/problems/kth-largest-element-in-an-array/)
+5. Count Inversions in Array — Amazon — [LeetCode 315](https://leetcode.com/problems/count-of-smaller-numbers-after-self/)
+6. Sort Colors (Recursive Partitioning) — Microsoft — [LeetCode 75](https://leetcode.com/problems/sort-colors/)
+
+**Hard**
+7. Median of Two Sorted Arrays — Google — [LeetCode 4](https://leetcode.com/problems/median-of-two-sorted-arrays/)
+8. Maximum Subarray Divide & Conquer — Facebook — [LeetCode 53 Variant](https://leetcode.com/problems/maximum-subarray/)
+
+---
+
+## 2️⃣ Divide by Halves (Binary Logic)
+
+**Easy**
+
+1. Binary Search — Amazon — [LeetCode 704](https://leetcode.com/problems/binary-search/)
+2. Find Peak Element — Microsoft — [LeetCode 162](https://leetcode.com/problems/find-peak-element/)
+3. Search in Rotated Sorted Array (Recursive) — Google — [LeetCode 33](https://leetcode.com/problems/search-in-rotated-sorted-array/)
+
+**Medium**
+4. Median of Two Sorted Arrays — Facebook — [LeetCode 4](https://leetcode.com/problems/median-of-two-sorted-arrays/)
+5. Find Minimum in Rotated Sorted Array — Amazon — [LeetCode 153](https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/)
+6. Count Occurrences Using Binary Search — Microsoft — [LeetCode 34](https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/)
+
+**Hard**
+7. Kth Smallest Element in Sorted Matrix — Google — [LeetCode 378](https://leetcode.com/problems/kth-smallest-element-in-a-sorted-matrix/)
+8. Allocate Minimum Number of Pages — Facebook — [LeetCode 410](https://leetcode.com/problems/split-array-largest-sum/)
+
+---
+
+## 3️⃣ Combine Results Recursively
+
+**Easy**
+
+1. Merge Two Sorted Lists — Amazon — [LeetCode 21](https://leetcode.com/problems/merge-two-sorted-lists/)
+2. Merge K Sorted Lists (Recursive) — Microsoft — [LeetCode 23](https://leetcode.com/problems/merge-k-sorted-lists/)
+3. Sum of Array Recursively — Google — [LeetCode 1678 Variant](https://leetcode.com/problems/intersection-of-two-arrays-ii/)
+
+**Medium**
+4. Divide Array to Maximize Sum — Facebook — [LeetCode 1043](https://leetcode.com/problems/partition-array-for-maximum-sum/)
+5. Flatten Nested List — Amazon — [LeetCode 341](https://leetcode.com/problems/flatten-nested-list-iterator/)
+6. Count Smaller Numbers After Self — Microsoft — [LeetCode 315](https://leetcode.com/problems/count-of-smaller-numbers-after-self/)
+
+**Hard**
+7. Maximum Subarray Divide & Conquer — Google — [LeetCode 53](https://leetcode.com/problems/maximum-subarray/)
+8. Super Egg Drop — Facebook — [LeetCode 887](https://leetcode.com/problems/super-egg-drop/)
+
+---
+
+## 4️⃣ Recursive Tree Traversal Logic
+
+**Easy**
+
+1. Binary Tree Inorder Traversal — Amazon — [LeetCode 94](https://leetcode.com/problems/binary-tree-inorder-traversal/)
+2. Binary Tree Preorder Traversal — Microsoft — [LeetCode 144](https://leetcode.com/problems/binary-tree-preorder-traversal/)
+3. Binary Tree Postorder Traversal — Google — [LeetCode 145](https://leetcode.com/problems/binary-tree-postorder-traversal/)
+
+**Medium**
+4. Maximum Depth of Binary Tree — Facebook — [LeetCode 104](https://leetcode.com/problems/maximum-depth-of-binary-tree/)
+5. Lowest Common Ancestor — Amazon — [LeetCode 236](https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/)
+6. Path Sum — Microsoft — [LeetCode 112](https://leetcode.com/problems/path-sum/)
+
+**Hard**
+7. Serialize and Deserialize Binary Tree — Google — [LeetCode 297](https://leetcode.com/problems/serialize-and-deserialize-binary-tree/)
+8. Recover Binary Search Tree — Facebook — [LeetCode 99](https://leetcode.com/problems/recover-binary-search-tree/)
+
+---
+
+## 5️⃣ Backtracking Base + Recursive Case Identification
+
+**Easy**
+
+1. Generate Parentheses — Amazon — [LeetCode 22](https://leetcode.com/problems/generate-parentheses/)
+2. Subsets — Microsoft — [LeetCode 78](https://leetcode.com/problems/subsets/)
+3. Combination Sum I — Google — [LeetCode 39](https://leetcode.com/problems/combination-sum/)
+
+**Medium**
+4. Word Search — Facebook — [LeetCode 79](https://leetcode.com/problems/word-search/)
+5. Permutations — Amazon — [LeetCode 46](https://leetcode.com/problems/permutations/)
+6. N-Queens Problem — Microsoft — [LeetCode 51](https://leetcode.com/problems/n-queens/)
+
+**Hard**
+7. Sudoku Solver — Google — [LeetCode 37](https://leetcode.com/problems/sudoku-solver/)
+8. Word Search II — Facebook — [LeetCode 212](https://leetcode.com/problems/word-search-ii/)
+
+---
+
+
+
+
+
+

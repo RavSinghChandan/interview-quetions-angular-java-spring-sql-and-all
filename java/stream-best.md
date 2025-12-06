@@ -4949,29 +4949,638 @@ ranges.stream()
 
 # **LEVEL 4 — HARD / FAANG-LEVEL (20 Questions)**
 
-Focus: parallel streams, correctness, spliterators, performance, concurrency.
+Excellent — here’s **LEVEL 4 — HARD / FAANG-LEVEL (56–75)**.
+For each problem I give:
 
-56. Implement a **parallel frequency counter** with correct combining logic.
-57. Create a **custom Spliterator** for a tree or graph structure.
-58. Analyze correctness issues when using shared mutable state in parallel Streams.
-59. Compute top-K elements using **parallel Streams** correctly.
-60. Build a custom collector that is **parallel-friendly**.
-61. Implement a parallel prefix operation using Streams.
-62. Read and process multi-gigabyte logs with **streamed batching**.
-63. Use Streams to detect deadlocks or resource leaks from event log patterns.
-64. Design a zero-allocation Stream pipeline for high-performance systems.
-65. Show how ordering constraints degrade parallel performance.
-66. Optimize a Stream pipeline suffering from heavy boxing/unboxing.
-67. Use Streams to validate constraints in a dependency graph.
-68. Stream multiple infinite sources safely using Stream.generate().
-69. Use reduce() to implement a mini SQL GROUP BY aggregator.
-70. Implement find N-th smallest element using Stream API.
-71. Combine multiple Stream pipelines while avoiding temporary lists.
-72. Detect concurrent modification issues when the underlying collection changes.
-73. Use parallel Streams to compute large matrix operations.
-74. Simulate MapReduce patterns using only Streams.
-75. Implement an efficient **parallel merge sort** using Streams.
+1. A concise, production-ready approach or code sketch (Java 17+ style).
+2. A one-line explanation of why it’s correct / important.
+3. **Five short follow-up Q&As** (quick, interview-style answers).
+
+I keep every solution pragmatic — focused on correctness, parallel-safety, and performance. Use these in interviews, system design discussions, or as implementation starting points.
 
 ---
+
+# **56. Parallel frequency counter with correct combining**
+
+### ✅ Solution (parallel-safe)
+
+```java
+Map<Integer, Long> freq = list.parallelStream()
+    .collect(Collectors.groupingByConcurrent(
+        Function.identity(),
+        Collectors.counting()
+    ));
+```
+
+**Why:** `groupingByConcurrent` + `counting()` gives thread-safe accumulation without global locks.
+
+**Follow-ups**
+
+1. Q: Why `groupingByConcurrent` vs `groupingBy`?
+   A: Concurrent uses `ConcurrentHashMap` and concurrent accumulation for parallel streams.
+2. Q: What about insertion-order?
+   A: `ConcurrentHashMap` is unordered; use concurrent collectors + post-sort if needed.
+3. Q: Memory cost?
+   A: O(distinct keys).
+4. Q: When would combiner be used explicitly?
+   A: For custom mutable accumulators in parallel reduction.
+5. Q: Avoids atomic hotspots?
+   A: Yes—`ConcurrentHashMap` uses striping/locks to reduce contention.
+
+---
+
+# **57. Custom Spliterator for a binary tree**
+
+### ✅ Solution (skeleton)
+
+```java
+public class TreeSpliterator<T> implements Spliterator<T> {
+    private Deque<Node<T>> stack = new ArrayDeque<>();
+    public TreeSpliterator(Node<T> root){ if(root!=null) stack.push(root); }
+    @Override public boolean tryAdvance(Consumer<? super T> action) {
+        if(stack.isEmpty()) return false;
+        Node<T> n = stack.pop();
+        if(n.right!=null) stack.push(n.right);
+        if(n.left!=null) stack.push(n.left);
+        action.accept(n.value);
+        return true;
+    }
+    @Override public Spliterator<T> trySplit() {
+        // best-effort: don't split small workloads; return null or split subtree
+        if(stack.size()<=1) return null;
+        Node<T> n = stack.pop();
+        TreeSpliterator<T> other = new TreeSpliterator<>(n.right); // example
+        if(n.left!=null) stack.push(n.left);
+        return other;
+    }
+    @Override public long estimateSize(){ return Long.MAX_VALUE; }
+    @Override public int characteristics(){ return Spliterator.ORDERED; }
+}
+```
+
+**Why:** Custom `trySplit()` lets parallel streams partition tree work; `tryAdvance` yields elements lazily.
+
+**Follow-ups**
+
+1. Q: How to make splitting balanced?
+   A: Compute subtree sizes and split the larger subtree.
+2. Q: What characteristics to expose?
+   A: `SIZED` only if you can compute exact size; otherwise `ORDERED`.
+3. Q: Thread-safety concerns?
+   A: Spliterator instances are used by single thread only.
+4. Q: Why not always return split?
+   A: Excessive splitting increases overhead; split heuristically.
+5. Q: Use-case for custom Spliterator?
+   A: Non-linear data sources (trees, graphs, custom iterables).
+
+---
+
+# **58. Correctness issues with shared mutable state in parallel Streams**
+
+### ✅ Summary (best practice)
+
+* **Never** mutate shared collections/fields from inside parallel stream lambdas.
+* Use concurrent collectors (`groupingByConcurrent`, `toConcurrentMap`) or thread-local/mutable accumulators with proper combiner.
+
+**Follow-ups**
+
+1. Q: What happens if you `forEach(list::add)` on `ArrayList` in parallel?
+   A: Race conditions, lost updates, data corruption.
+2. Q: When is `synchronized` acceptable?
+   A: Only if contention is low; synchronization serializes and kills parallel benefits.
+3. Q: Alternative to shared mutation?
+   A: Return per-thread accumulators and use combiner to merge.
+4. Q: Is `Collectors.toList()` thread-safe?
+   A: No—use `Collectors.toCollection(ConcurrentLinkedQueue::new)` for concurrency.
+5. Q: How to test correctness?
+   A: Run randomized parallel tests, stress tests, and compare sequential vs parallel results.
+
+---
+
+# **59. Top-K elements correctly with parallel Streams**
+
+### ✅ Solution (parallel-friendly using Collector + bounded heap)
+
+```java
+Collector<Integer, PriorityQueue<Integer>, List<Integer>> topKCollector =
+    Collector.of(
+      () -> new PriorityQueue<Integer>(Comparator.reverseOrder()), // min-heap for K smallest / adapt
+      (pq, v) -> { pq.add(v); if(pq.size()>k) pq.poll(); },
+      (pq1, pq2) -> { pq1.addAll(pq2); while(pq1.size()>k) pq1.poll(); return pq1; },
+      pq -> { List<Integer> res = new ArrayList<>(pq); res.sort(Comparator.reverseOrder()); return res; },
+      Collector.Characteristics.UNORDERED
+    );
+
+List<Integer> topK = list.parallelStream().collect(topKCollector);
+```
+
+**Why:** Each thread keeps local bounded heap; combiner merges while preserving top-K; constant memory O(k).
+
+**Follow-ups**
+
+1. Q: Why not sort whole list?
+   A: Sorting O(n log n) heavy vs collector O(n log k).
+2. Q: Is collector associative?
+   A: Yes—combiner merges heaps preserving invariants.
+3. Q: Parallel correctness?
+   A: Each local heap is independent; combiner merges deterministically.
+4. Q: Use `concurrent` collector?
+   A: Hard; using `Collector.of` with proper combiner is preferred.
+5. Q: For streams of objects?
+   A: Use comparator on key.
+
+---
+
+# **60. Build a custom parallel-friendly collector**
+
+### ✅ Template: parallel-safe collector to accumulate into `LongAdder` map
+
+```java
+Collector<Key, ConcurrentHashMap<Key, LongAdder>, Map<Key, Long>> parallelCollector =
+  Collector.of(
+    ConcurrentHashMap::new,
+    (m, v) -> m.computeIfAbsent(v.key(), k -> new LongAdder()).add(v.count()),
+    (m1, m2) -> { m2.forEach((k, v) -> m1.computeIfAbsent(k, kk -> new LongAdder()).add(v.sum())); return m1; },
+    m -> { return m.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().sum())); },
+    Collector.Characteristics.CONCURRENT, Collector.Characteristics.UNORDERED
+  );
+```
+
+**Why:** Uses concurrent map + `LongAdder` for low-contention accumulation in parallel.
+
+**Follow-ups**
+
+1. Q: Why `LongAdder`?
+   A: Reduces contention compared to `AtomicLong`.
+2. Q: Why CONCURRENT characteristic?
+   A: Allows concurrent accumulation without locking.
+3. Q: When finisher is identity?
+   A: If internal container equals result type and `IDENTITY_FINISH` set.
+4. Q: Are combiners still called?
+   A: Possibly, but with CONCURRENT, framework may avoid merging.
+5. Q: How to test it?
+   A: Compare results sequential vs parallel, run stress tests.
+
+---
+
+# **61. Parallel prefix (inclusive scan) using Streams**
+
+### ✅ Approach (use `ForkJoin` or `Arrays.parallelPrefix` for primitives)
+
+```java
+int[] arr = ...;
+Arrays.parallelPrefix(arr, Integer::sum); // in-place inclusive prefix sum
+```
+
+For object streams, use `Spliterator` + custom parallel scan algorithm (complex) or use `StreamEx` / libraries.
+
+**Why:** `Arrays.parallelPrefix` is battle-tested and efficient; Streams don't provide built-in parallel prefix.
+
+**Follow-ups**
+
+1. Q: Can you do parallel prefix with `reduce()`?
+   A: Not safely—need scan semantics, not just reduction.
+2. Q: Complexity of parallel prefix?
+   A: O(n) work, O(log n) span with fork-join.
+3. Q: Libraries that help?
+   A: JDK `Arrays.parallelPrefix`, `StreamEx`, `Eclipse Collections`.
+4. Q: Inclusive vs exclusive scan?
+   A: `parallelPrefix` is inclusive; exclusive needs prep.
+5. Q: Memory footprint?
+   A: Usually in-place for arrays; extra for object sequences.
+
+---
+
+# **62. Read & process multi-gigabyte logs with streamed batching**
+
+### ✅ Pattern (Files.lines + windowed batching)
+
+```java
+try (Stream<String> lines = Files.lines(path)) {
+    final int batchSize = 10_000;
+    Iterator<String> it = lines.iterator();
+    while(it.hasNext()) {
+        List<String> batch = new ArrayList<>(batchSize);
+        for(int i=0;i<batchSize && it.hasNext();i++) batch.add(it.next());
+        processBatch(batch); // process and release memory
+    }
+}
+```
+
+**Why:** This keeps bounded memory, processes in chunks, and avoids loading entire file.
+
+**Follow-ups**
+
+1. Q: Why not `readAllLines`?
+   A: OOM for multi-GB files.
+2. Q: Parallel processing?
+   A: Read sequentially, dispatch batches to worker pool.
+3. Q: Backpressure concerns?
+   A: Use bounded queue to avoid overload.
+4. Q: How to handle partial lines/socket streams?
+   A: Use buffered reader and proper framing.
+5. Q: Fault tolerance?
+   A: Use checkpointing per batch.
+
+---
+
+# **63. Use Streams to detect deadlocks/resource leaks from event logs**
+
+### ✅ Pattern (aggregate events per thread/resource, look for cycles/waits)
+
+```java
+Map<String, List<Event>> byThread = events.stream().collect(Collectors.groupingBy(Event::threadId));
+Map<String, List<Event>> byResource = events.stream().collect(Collectors.groupingBy(Event::resourceId));
+// analyze sequences: detect wait-for graph, then detect cycles with graph alg (not purely Stream)
+```
+
+**Why:** Streams are great for preprocessing and building graphs; cycle detection requires graph algorithms (DFS).
+
+**Follow-ups**
+
+1. Q: Can cycle detection be done purely with Streams?
+   A: No—requires recursive traversal (DFS/BFS).
+2. Q: Use-case: detect deadlock?
+   A: Build wait-for graph, then run SCC or cycle detection.
+3. Q: Memory for huge logs?
+   A: Aggregate per resource with streaming/windowed approach.
+4. Q: Real-time detection?
+   A: Maintain incremental graph and run light-weight checks.
+5. Q: Visualize results?
+   A: Export to graph format (DOT/JSON) for tools.
+
+---
+
+# **64. Design a zero-allocation Stream pipeline for high-performance**
+
+### ✅ Principles & sketch
+
+* Prefer primitive streams (`IntStream`, `LongStream`) to avoid boxing.
+* Use method references and lambdas that don't capture to help escape analysis.
+* Use `mapToInt`/`mapToLong` and primitive collectors.
+* Avoid creating intermediate collections; rely on fusion and `toArray()`.
+
+Example:
+
+```java
+int sum = IntStream.range(0, n)
+    .map(i -> compute(i)) // compute returns int
+    .sum();
+```
+
+**Why:** Primitive streams + JIT + escape analysis minimize allocations.
+
+**Follow-ups**
+
+1. Q: How to avoid lambda allocation?
+   A: Use stateless method references or ensure lambdas don't escape.
+2. Q: Are `toArray()` allocations unavoidable?
+   A: Yes for final arrays; transient objects minimized.
+3. Q: Use `unsafe` / off-heap?
+   A: Only as last resort.
+4. Q: How to measure?
+   A: Use profilers (Flight Recorder) and JMH microbenchmarks.
+5. Q: When zero-allocation not achievable?
+   A: When logic inherently creates objects (strings, wrappers).
+
+---
+
+# **65. Show ordering constraints degrading parallel performance**
+
+### ✅ Demo pattern
+
+```java
+List<Integer> result = list.parallelStream()
+    .sorted()         // forces global ordering
+    .map(...).collect(Collectors.toList());
+```
+
+**Why:** `sorted()` requires global coordination and buffering which serializes/merges work, reducing parallel speedups.
+
+**Follow-ups**
+
+1. Q: Which ops enforce ordering?
+   A: `sorted()`, `limit()` (with encounter order), `forEachOrdered()`.
+2. Q: How to speed up?
+   A: Use `unordered()` if semantic allows, or remove `sorted()`.
+3. Q: Is `forEach` unordered faster?
+   A: Yes—avoids ordered merging.
+4. Q: Example where ordering required?
+   A: Time-series processing needing chronological order.
+5. Q: Bench method?
+   A: Compare `parallel().sorted()` vs `parallel().unordered()` for same dataset.
+
+---
+
+# **66. Optimize pipeline suffering heavy boxing/unboxing**
+
+### ✅ Fix pattern
+
+* Replace `Stream<Integer>` → `IntStream`
+* Use `mapToInt` / `mapToLong` for numeric transforms
+* Use primitive collectors: `sum()`, `average()`, `toArray()`
+
+Before:
+
+```java
+int sum = list.stream().map(x -> x*2).reduce(0, Integer::sum);
+```
+
+After:
+
+```java
+int sum = list.stream().mapToInt(x->x*2).sum();
+```
+
+**Why:** Primitive streams eliminate `Integer` allocations and GC pressure.
+
+**Follow-ups**
+
+1. Q: What about DoubleSummaryStatistics?
+   A: Use `summaryStatistics()` on `DoubleStream`.
+2. Q: When boxing unavoidable?
+   A: Collecting to generic containers (List<Integer>) forces boxing.
+3. Q: How to reduce boxed collections?
+   A: Use primitive arrays or `IntBuffer` alternatives.
+4. Q: Profiling tips?
+   A: Use async-profiler / JFR to find allocation hotspots.
+5. Q: Are primitive streams always faster?
+   A: Usually—especially when hot and JITed.
+
+---
+
+# **67. Use Streams to validate constraints in dependency graph**
+
+### ✅ Approach
+
+* Build adjacency list with Streams.
+* For each node, validate that all required deps exist and no version conflicts.
+
+```java
+Map<String, List<String>> deps = edges.stream().collect(...);
+// For each module, check prerequisites:
+List<String> invalid = modules.stream()
+    .filter(m -> !deps.getOrDefault(m, List.of()).stream().allMatch(modules::contains))
+    .toList();
+```
+
+**Why:** Streams help express validations; graph-level checks may need traversal.
+
+**Follow-ups**
+
+1. Q: Detect missing dependency?
+   A: Filter by `contains` test (as above).
+2. Q: Detect cycles?
+   A: Use DFS/SCC (not pure Stream).
+3. Q: Parallelize validation?
+   A: Validate per-node concurrently (no shared mutation).
+4. Q: Version conflicts?
+   A: Aggregate versions per artifact and find >1 entries.
+5. Q: Large graphs?
+   A: Use streaming storage and partitioning.
+
+---
+
+# **68. Stream multiple infinite sources safely using `Stream.generate()`**
+
+### ✅ Pattern (compose with `takeWhile`/limit and interleave carefully)
+
+```java
+Stream<Integer> s1 = Stream.generate(source1::next).limit(1000);
+Stream<Integer> s2 = Stream.generate(source2::next).limit(1000);
+Stream<Integer> merged = Stream.concat(s1, s2); // or interleave with custom supplier
+```
+
+**Why:** Always bound infinite streams with `limit()` or `takeWhile()` before terminal ops to avoid unbounded execution.
+
+**Follow-ups**
+
+1. Q: How to interleave infinite streams?
+   A: Use custom `Iterator` that alternates pull.
+2. Q: Parallel combining?
+   A: Beware thread starvation; use bounded queues.
+3. Q: Backpressure?
+   A: Streams have none—control via limits.
+4. Q: Use Reactive for true infinite sources?
+   A: Yes—Reactive supports backpressure.
+5. Q: Memory safety?
+   A: Ensure consumer drains or limits source.
+
+---
+
+# **69. Use `reduce()` to implement mini SQL GROUP BY**
+
+### ✅ Sketch (group by key with reduce merging maps)
+
+```java
+Map<String, Integer> aggregated = items.stream()
+    .map(i -> Map.of(i.key(), i.value()))
+    .reduce(new HashMap<>(),
+        (acc, m) -> { m.forEach((k,v)->acc.merge(k,v,Integer::sum)); return acc; },
+        (m1, m2) -> { m2.forEach((k,v)->m1.merge(k,v,Integer::sum)); return m1; });
+```
+
+**Why:** `reduce(identity, accumulator, combiner)` can merge per-element maps into aggregated result; but `collect()` is clearer and preferred.
+
+**Follow-ups**
+
+1. Q: Why prefer `collect()`?
+   A: Collectors are optimized and clearer for mutable aggregation.
+2. Q: Is this parallel-safe?
+   A: Only if identity is fresh and combiner correct; using mutable identity across threads is dangerous.
+3. Q: Cost?
+   A: Each element map allocation expensive—better produce tuples.
+4. Q: Null keys?
+   A: Handle explicitly.
+5. Q: Example SQL COUNT?
+   A: Use `Collectors.groupingBy(key, counting())`.
+
+---
+
+# **70. Find N-th smallest element using Stream API**
+
+### ✅ Efficient (use bounded max-heap per thread)
+
+```java
+int nth = 5;
+Collector<Integer, PriorityQueue<Integer>, Integer> nthCollector =
+ Collector.of(
+   () -> new PriorityQueue<Integer>(Comparator.reverseOrder()),
+   (pq, v) -> { pq.add(v); if(pq.size()>nth) pq.poll(); },
+   (p1, p2) -> { p1.addAll(p2); while(p1.size()>nth) p1.poll(); return p1; },
+   pq -> pq.peek()
+ );
+
+Integer nthSmallest = list.parallelStream().collect(nthCollector);
+```
+
+**Why:** Maintains only `n` smallest elements locally, low memory O(n).
+
+**Follow-ups**
+
+1. Q: Complexity?
+   A: O(m log n) where m = number of elements, n = requested rank.
+2. Q: Why reverseOrder PQ?
+   A: Keep largest of the top-n at root for easy eviction.
+3. Q: Parallel correctness?
+   A: Local heaps merged by combiner preserving top-n.
+4. Q: Alternative?
+   A: Quickselect (linear) for single-thread.
+5. Q: When n large?
+   A: Consider full sort or quickselect.
+
+---
+
+# **71. Combine multiple Stream pipelines avoiding temporary lists**
+
+### ✅ Pattern (use `flatMap` to merge pipelines)
+
+```java
+Stream<Result> combined = Stream.of(
+    streamA.map(a -> f(a)),
+    streamB.map(b -> g(b)),
+    streamC.map(c -> h(c))
+).flatMap(s -> s); // result is single stream, no temp lists
+```
+
+Or:
+
+```java
+Stream.concat(Stream.concat(streamATransformed, streamBTransformed), streamCTransformed)
+```
+
+**Why:** `flatMap` and `concat` avoid materializing intermediates.
+
+**Follow-ups**
+
+1. Q: Danger of reusing streams?
+   A: Streams are single-use—wrap in suppliers if needed.
+2. Q: Parallel combining?
+   A: Each substream can be parallelized; final stream may be parallel.
+3. Q: Memory?
+   A: Keeps memory low—no intermediate collections.
+4. Q: Ordering?
+   A: `concat` preserves order; `flatMap` interleaves if parallel? In general flatMap preserves substream order.
+5. Q: Exception handling?
+   A: Failures propagate; consider recovery wrappers.
+
+---
+
+# **72. Detect concurrent modification when underlying collection changes**
+
+### ✅ Pattern
+
+* If you use `Iterator`/stream over a `Collection` that’s modified, you may get `ConcurrentModificationException` (fail-fast) or undefined behavior for concurrent collections.
+* Use `CopyOnWriteArrayList` or snapshot (`new ArrayList<>(orig)`) before streaming for deterministic behavior.
+
+**Follow-ups**
+
+1. Q: Will `Files.lines()` be affected?
+   A: No—different IO semantics.
+2. Q: How to detect modification?
+   A: Streams don’t expose mod count; rely on exception or use copy.
+3. Q: Use `ConcurrentHashMap` for safe concurrent updates?
+   A: Yes—supports concurrent iteration.
+4. Q: Is snapshot cheap?
+   A: O(n) copy cost—tradeoff for safety.
+5. Q: Best practice?
+   A: Avoid mutating source during streaming; collect diffs instead.
+
+---
+
+# **73. Parallel Streams for large matrix operations**
+
+### ✅ Pattern (split by rows, parallelize row work with primitive arrays)
+
+```java
+double[][] A, B, C;
+IntStream.range(0, rows).parallel().forEach(i -> {
+   for(int j=0;j<cols;j++){
+       double sum=0;
+       for(int k=0;k<K;k++) sum+=A[i][k]*B[k][j];
+       C[i][j]=sum;
+   }
+});
+```
+
+**Why:** Partition by rows eliminates shared mutable state; use cache-friendly blocking for performance.
+
+**Follow-ups**
+
+1. Q: Does this exploit BLAS/SIMD?
+   A: Native BLAS is faster; Java loops can use vector API for SIMD.
+2. Q: Avoid false sharing?
+   A: Ensure each thread writes distinct rows.
+3. Q: How to tune threads?
+   A: Use parallelism ~ CPU cores; avoid oversubscription.
+4. Q: Use `ForkJoin` vs `parallelStream`?
+   A: `ForkJoin` gives more control for blocking/nesting.
+5. Q: Numeric stability?
+   A: Use double and blocking to improve locality.
+
+---
+
+# **74. Simulate MapReduce patterns using only Streams**
+
+### ✅ Pattern (map → partition → reduce)
+
+```java
+// Map: produce key-value pairs
+Stream<Map.Entry<K, V>> mapped = data.stream().flatMap(d -> mapFunc(d));
+// Shuffle+group: groupingByConcurrent
+Map<K, List<V>> grouped = mapped.collect(Collectors.groupingByConcurrent(Map.Entry::getKey, Collectors.mapping(Map.Entry::getValue, Collectors.toList())));
+// Reduce per key
+Map<K, R> reduced = grouped.entrySet().parallelStream()
+   .collect(Collectors.toMap(Entry::getKey, e -> reduceFunc(e.getValue())));
+```
+
+**Why:** Streams can implement the three MapReduce stages; `groupingByConcurrent` acts as shuffle+reduce.
+
+**Follow-ups**
+
+1. Q: How to scale across machines?
+   A: Streams are in-process; use Hadoop/Spark for distributed.
+2. Q: Shuffle bottleneck?
+   A: `groupingByConcurrent` uses memory; for huge data use external storage.
+3. Q: Fault tolerance?
+   A: Streams lack distributed fault tolerance.
+4. Q: Use combiners?
+   A: Provide local reduction before global grouping to reduce memory.
+5. Q: When prefer Streams?
+   A: Single-machine MapReduce-like tasks.
+
+---
+
+# **75. Efficient parallel merge sort using Streams**
+
+### ✅ Approach (use parallel sort on arrays or `Arrays.parallelSort` — best practical)
+
+```java
+int[] arr = ...;
+Arrays.parallelSort(arr); // Highly optimized fork-join mergesort
+```
+
+If you must implement via Streams, use recursive fork-join:
+
+* Split array → sort halves in parallel (via `CompletableFuture`/`ForkJoinTask`) → merge.
+
+**Why:** `Arrays.parallelSort` is production-ready and uses efficient parallel merge.
+
+**Follow-ups**
+
+1. Q: Why prefer `Arrays.parallelSort` to stream sort?
+   A: It's optimized, uses primitives, low-overhead.
+2. Q: Implementing custom parallel mergesort pitfalls?
+   A: Task granularity, cutoff thresholds, and merge efficiency.
+3. Q: Complexity?
+   A: O(n log n) work, O(n) extra space for merging.
+4. Q: Stable sort?
+   A: `Arrays.parallelSort` is stable for objects in Java 8+? For object arrays it uses stable mergesort.
+5. Q: When streams `sorted()` equals arrays?
+   A: Streams `sorted()` converts pipeline to in-memory sort; for primitives prefer `IntStream.sorted()` -> `toArray()` then `Arrays.parallelSort`.
+
+---
+
+
 
 

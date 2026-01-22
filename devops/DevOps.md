@@ -1,6 +1,6 @@
 # DevOps Interview Questions for Senior Java Full-Stack Developers
 
-This document contains the most frequently asked DevOps interview questions, tailored for senior Java full-stack developers. Questions are organized by topic and include those repeatedly asked in interviews by companies like **TCS, Infosys, Cognizant, Capgemini**, etc., ensuring comprehensive coverage for senior-level interviews. The focus is on DevOps practices relevant to Java-based full-stack development, including CI/CD, containerization, cloud platforms, and integration with Java/Spring Boot applications.
+This document contains the most frequently asked DevOps interview questions, tailored for senior Java full-stack developers. Questions are organized by topic and include those repeatedly asked in companyInterviews by companies like **TCS, Infosys, Cognizant, Capgemini**, etc., ensuring comprehensive coverage for senior-level companyInterviews. The focus is on DevOps practices relevant to Java-based full-stack development, including CI/CD, containerization, cloud platforms, and integration with Java/Spring Boot applications.
 
 ---
 

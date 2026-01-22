@@ -1,6 +1,6 @@
 
 
-**(Grouped topic-wise for senior-level backend/full-stack interviews)**
+**(Grouped topic-wise for senior-level backend/full-stack companyInterviews)**
 
 ---
 

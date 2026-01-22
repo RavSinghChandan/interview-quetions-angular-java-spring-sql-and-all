@@ -72,7 +72,7 @@
 
 ### 5️⃣ **Window Functions & Advanced Aggregates**
 
-*(Heavily asked in data engineer, BI, analytics, and backend interviews)*
+*(Heavily asked in data engineer, BI, analytics, and backend companyInterviews)*
 
 1. What is the difference between `RANK()`, `DENSE_RANK()`, and `ROW_NUMBER()`?
 2. What does `PARTITION BY` actually do in a window function?

@@ -24,7 +24,7 @@
 
 ### 2️⃣ **Multithreading & Concurrency (Deep Concepts)**
 
-*(One of the most favorite areas for hard interviews)*
+*(One of the most favorite areas for hard companyInterviews)*
 
 1. What is the difference between `synchronized`, `ReentrantLock`, and `StampedLock`?
 2. How does `volatile` really work under the hood?
@@ -41,7 +41,7 @@
 
 ### 3️⃣ **Collections Framework – Internals & Traps**
 
-*(Another heavily targeted area in interviews)*
+*(Another heavily targeted area in companyInterviews)*
 
 1. What is the load factor and capacity in `HashMap`, and how do they affect performance?
 2. What happens internally when two keys have the same hashcode in a `HashMap`?
@@ -92,7 +92,7 @@
 
 ### 6️⃣ **Streams, Lambdas, and Functional Style**
 
-*(Very commonly tested in Java 8+ interviews)*
+*(Very commonly tested in Java 8+ companyInterviews)*
 
 1. How does `Stream.map()` differ from `flatMap()`?
 2. What happens when you call `terminal operation` twice on the same stream?

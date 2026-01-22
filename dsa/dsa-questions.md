@@ -1,6 +1,6 @@
 # DSA and Java Streams Interview Questions for Senior Java Backend Developers (Full Stack)
 
-This document contains a comprehensive set of Data Structures and Algorithms (DSA) and Java Streams interview questions, curated for senior Java backend developers transitioning to full-stack roles. Questions are organized by topic and include those frequently asked in interviews by companies like **TCS, Infosys, Cognizant, Capgemini**, etc., ensuring no question from prior context is missed and adding critical questions for senior-level interviews.
+This document contains a comprehensive set of Data Structures and Algorithms (DSA) and Java Streams interview questions, curated for senior Java backend developers transitioning to full-stack roles. Questions are organized by topic and include those frequently asked in companyInterviews by companies like **TCS, Infosys, Cognizant, Capgemini**, etc., ensuring no question from prior context is missed and adding critical questions for senior-level companyInterviews.
 
 ---
 

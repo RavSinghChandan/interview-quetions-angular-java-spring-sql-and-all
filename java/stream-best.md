@@ -280,7 +280,7 @@ var total = list.stream()
 Below is **Section 2** delivered in **the exact same premium interview format**, with
 **Foundation → Function → Features → Flow → 5 Follow-ups (with answers)** for EACH question.
 
-Everything is senior-level, architect-ready, and crafted for top-tier Java interviews.
+Everything is senior-level, architect-ready, and crafted for top-tier Java companyInterviews.
 
 ---
 
@@ -984,7 +984,7 @@ Perfect — here is **Section 4: STREAM ARCHITECTURE & INTERNAL DESIGN**, crafte
 * Flow (with code)
 * 5 follow-up questions **with answers**
 
-This section is senior-level / architect-level, exactly what you need for SDE3+ and system-design-style Java interviews.
+This section is senior-level / architect-level, exactly what you need for SDE3+ and system-design-style Java companyInterviews.
 
 ---
 
@@ -1477,7 +1477,7 @@ Here is **Section 5 – LAZINESS AND PIPELINE EXECUTION MODEL**, written in your
 * Flow (code example)
 * 5 follow-up questions + answers
 
-This is exactly the depth expected for **SDE3, Lead, Architect, and FAANG interviews**.
+This is exactly the depth expected for **SDE3, Lead, Architect, and FAANG companyInterviews**.
 
 ---
 
@@ -2213,7 +2213,7 @@ Written in the **exact same premium format** as earlier sections:
 * Flow (code snippet)
 * **5 senior-level follow-up questions with answers**
 
-This is the level expected at **Senior Engineer → Staff → Architect** interviews at Google, Meta, Amazon, Uber, Goldman Sachs, and high-bar product companies.
+This is the level expected at **Senior Engineer → Staff → Architect** companyInterviews at Google, Meta, Amazon, Uber, Goldman Sachs, and high-bar product companies.
 
 ---
 
@@ -2990,7 +2990,7 @@ Here is **Section 9 – BEST PRACTICES & DESIGN PRINCIPLES**, written in the exa
 * 🔁 Flow (code snippet)
 * **5 follow-up questions with senior-level answers**
 
-This section is essential for **SDE2 → SDE3 → Staff Engineer → Architect** interviews.
+This section is essential for **SDE2 → SDE3 → Staff Engineer → Architect** companyInterviews.
 
 ---
 
@@ -3323,7 +3323,7 @@ Here is **Section 10 – PLATFORM & ECOSYSTEM INTEGRATION**, crafted in the same
 * 🔁 Flow (code)
 * **5 follow-ups with answers per question**
 
-This section is crucial for **Senior Engineer, Lead, Architect** interviews.
+This section is crucial for **Senior Engineer, Lead, Architect** companyInterviews.
 
 ---
 
@@ -4956,7 +4956,7 @@ For each problem I give:
 2. A one-line explanation of why it’s correct / important.
 3. **Five short follow-up Q&As** (quick, interview-style answers).
 
-I keep every solution pragmatic — focused on correctness, parallel-safety, and performance. Use these in interviews, system design discussions, or as implementation starting points.
+I keep every solution pragmatic — focused on correctness, parallel-safety, and performance. Use these in companyInterviews, system design discussions, or as implementation starting points.
 
 ---
 

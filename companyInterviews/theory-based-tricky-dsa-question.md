@@ -102,7 +102,7 @@
 ---------
 Absolutely — now I will give you **Topic 1 (Java Basics & Internals)** AGAIN but this time with **detailed explanations for every code snippet**, just like we did for Topic 2.
 
-This will make you **100% confident** in answering ANY tricky primitive / type promotion / final / casting question in interviews.
+This will make you **100% confident** in answering ANY tricky primitive / type promotion / final / casting question in companyInterviews.
 
 ---
 
@@ -122,7 +122,7 @@ This topic tests:
 
 # 🎯 PART A — MASTER RULES (Explained Simply)
 
-Let’s rewrite each rule and explain it so you can speak it confidently in interviews.
+Let’s rewrite each rule and explain it so you can speak it confidently in companyInterviews.
 
 ---
 
@@ -969,7 +969,7 @@ You asked for:
 
 ✔️ **Rules**
 ✔️ **Tricky coding questions**
-✔️ **DSA-style questions for each rule** (VERY POWERFUL for interviews)
+✔️ **DSA-style questions for each rule** (VERY POWERFUL for companyInterviews)
 
 Let’s start.
 
@@ -977,7 +977,7 @@ Let’s start.
 
 # ✅ **TOPIC 3 — METHOD OVERLOADING (MASTER RULES)**
 
-These rules generate almost EVERY tricky overloading question in interviews.
+These rules generate almost EVERY tricky overloading question in companyInterviews.
 
 ---
 
@@ -1409,12 +1409,12 @@ printArray(3);
 
 # 🎉 YOU HAVE NOW MASTERED METHOD OVERLOADING WITH DSA PATTERNS.
 
-This topic alone is asked **in 80–90% Java interviews**.
+This topic alone is asked **in 80–90% Java companyInterviews**.
 
 ---
 
 # 👉 Say **"4"** to start **TOPIC 4 — Wrapper Classes & Autoboxing (Integer cache, == vs equals, NPE traps)**.
-Perfect — now we start **TOPIC 4: Wrapper Classes & Autoboxing** — one of the MOST asked areas in Java interviews.
+Perfect — now we start **TOPIC 4: Wrapper Classes & Autoboxing** — one of the MOST asked areas in Java companyInterviews.
 
 You will get:
 
@@ -1911,7 +1911,7 @@ This question is used in Amazon + Infosys specialist rounds.
 
 **TOPIC 5 — String, StringBuilder, StringBuffer (immutability, concatenation rules, memory tricks — VERY IMPORTANT).**
 Perfect — now we start **TOPIC 5: String, StringBuilder, StringBuffer**
-This topic creates **the highest number of trick coding questions** in Java interviews after wrappers and overloading.
+This topic creates **the highest number of trick coding questions** in Java companyInterviews after wrappers and overloading.
 
 I will give you:
 
@@ -1930,7 +1930,7 @@ Let’s begin.
 
 # 🎯 PART A — MASTER RULES (100% Interview Patterns)
 
-These rules create every tricky String question asked in interviews.
+These rules create every tricky String question asked in companyInterviews.
 
 ---
 
@@ -2414,7 +2414,7 @@ You're becoming unstoppable.
 # 👉 Say **“6”** to continue with:
 
 **TOPIC 6 — Collections Framework (HashMap, HashSet, ArrayList, TreeMap — internal working + trick questions).**
-Perfect — now we begin **TOPIC 6: Java Collections Framework** — the MOST IMPORTANT TOPIC for Java interviews (Infosys, TCS Digital, Amazon, Google, Paytm, Zeta, Swiggy… EVERYWHERE).
+Perfect — now we begin **TOPIC 6: Java Collections Framework** — the MOST IMPORTANT TOPIC for Java companyInterviews (Infosys, TCS Digital, Amazon, Google, Paytm, Zeta, Swiggy… EVERYWHERE).
 
 You will get:
 
@@ -2907,14 +2907,14 @@ Reverse priority ordering in scheduling problems.
 
 # 🎉 TOPIC 6 (Collections) COMPLETE
 
-This is one of the most important topics for Java interviews.
+This is one of the most important topics for Java companyInterviews.
 
 ---
 
 # 👉 Say **“7”** to continue with
 
 **TOPIC 7 — Generics (wildcards, type erasure, PECS rule, tricky inheritance questions)**.
-Perfect — now we start **TOPIC 7: GENERICS** — one of the MOST MISUNDERSTOOD areas in Java interviews.
+Perfect — now we start **TOPIC 7: GENERICS** — one of the MOST MISUNDERSTOOD areas in Java companyInterviews.
 
 This topic produces **high-quality tricky questions** in every senior Java round because generics involve:
 
@@ -3822,7 +3822,7 @@ Explanation:
 
 > Returning inside finally overrides algorithm’s return value → bug.
 
-This is a VERY common mistake in coding interviews.
+This is a VERY common mistake in coding companyInterviews.
 
 ---
 
@@ -3840,14 +3840,14 @@ You now have:
 # 👉 Say **“9”** to start:
 
 **TOPIC 9 — Multithreading (synchronized, volatile, locks, race conditions, atomicity, deadlocks)**
-Excellent — now we begin **TOPIC 9: MULTITHREADING** — the MOST FEARED but MOST IMPORTANT topic in senior Java interviews.
+Excellent — now we begin **TOPIC 9: MULTITHREADING** — the MOST FEARED but MOST IMPORTANT topic in senior Java companyInterviews.
 
 You will receive:
 
 ✔️ **Master Rules** (the foundations every tricky multithreading question is built on)
 ✔️ **Tricky coding questions**
 ✔️ **Deep interview-ready explanations**
-✔️ **DSA-style concurrency questions** (VERY important for real-world system design interviews)
+✔️ **DSA-style concurrency questions** (VERY important for real-world system design companyInterviews)
 
 Let’s begin.
 
@@ -4425,7 +4425,7 @@ This is a MAJOR interview section — you now understand:
 # 👉 Say **“10”** for:
 
 **TOPIC 10 — Java Memory Model (volatile, happens-before, reordering, visibility, atomicity).**
-Perfect — now we begin **TOPIC 10: JAVA MEMORY MODEL (JMM)** — the DEEPEST and MOST ELITE topic in Java interviews (Google, Uber, Amazon, Trading Companies, High-frequency systems).
+Perfect — now we begin **TOPIC 10: JAVA MEMORY MODEL (JMM)** — the DEEPEST and MOST ELITE topic in Java companyInterviews (Google, Uber, Amazon, Trading Companies, High-frequency systems).
 
 You will get:
 
@@ -4994,7 +4994,7 @@ This is one of the MOST IMPORTANT backend interview topics.
 # 👉 Say **“11”** to continue with
 
 **TOPIC 11 — JVM Internals (Heap, Stack, GC, Classloading, Memory structure, JIT, escape analysis).**
-Perfect — now we begin **TOPIC 11: JVM INTERNALS** — one of the *highest-impact* topics in Senior Java interviews (Google, Amazon, fintech, high-performance backend systems).
+Perfect — now we begin **TOPIC 11: JVM INTERNALS** — one of the *highest-impact* topics in Senior Java companyInterviews (Google, Amazon, fintech, high-performance backend systems).
 
 This topic gives you:
 
@@ -5003,7 +5003,7 @@ This topic gives you:
 ✔️ **Interview-ready explanations**
 ✔️ **DSA/system-design style questions**
 
-This knowledge helps you look **10× more senior** in interviews.
+This knowledge helps you look **10× more senior** in companyInterviews.
 
 ---
 
@@ -5433,7 +5433,7 @@ You are now officially thinking like a backend system engineer.
 # 👉 Say **“12”** to continue with:
 
 **TOPIC 12 — File I/O & Serialization (streams, buffering, pitfalls, deep tricks, custom serialization).**
-Great — now we begin **TOPIC 12: FILE I/O & SERIALIZATION** — a COMMONLY ASKED area in Java backend interviews, especially in:
+Great — now we begin **TOPIC 12: FILE I/O & SERIALIZATION** — a COMMONLY ASKED area in Java backend companyInterviews, especially in:
 
 * Infosys Specialist
 * TCS Digital
@@ -5898,7 +5898,7 @@ You now understand:
 # 👉 Say **“13”** to continue with:
 
 **TOPIC 13 — Reflection, Annotations & Class Objects (used in Spring, Hibernate, frameworks)**.
-Excellent — now we begin **TOPIC 13: REFLECTION, ANNOTATIONS & CLASS OBJECTS** — one of the most **powerful, tricky, and widely asked** topics in Java interviews, especially for backend engineers working with:
+Excellent — now we begin **TOPIC 13: REFLECTION, ANNOTATIONS & CLASS OBJECTS** — one of the most **powerful, tricky, and widely asked** topics in Java companyInterviews, especially for backend engineers working with:
 
 * **Spring Boot**
 * **Hibernate / JPA**
@@ -6336,13 +6336,13 @@ You are now operating at **advanced backend engineer level**.
 # 👉 Say **“14”** to continue with:
 
 **TOPIC 14 — JPA, Hibernate & ORM Internals (lazy loading, caching, proxies, N+1 problem, dirty checking).**
-Perfect — now we begin **TOPIC 14: JPA & HIBERNATE INTERNALS** — one of the *most senior-level* topics in Java backend interviews.
+Perfect — now we begin **TOPIC 14: JPA & HIBERNATE INTERNALS** — one of the *most senior-level* topics in Java backend companyInterviews.
 
 This topic frequently appears in:
 
 * Spring Boot backend rounds
-* High-level system design interviews
-* Microservices interviews
+* High-level system design companyInterviews
+* Microservices companyInterviews
 * Database + ORM optimization discussions
 
 You will get:
@@ -6787,7 +6787,7 @@ This is a **very senior-level topic** that gives you a huge advantage.
 # 👉 Say **“15”** to continue with:
 
 **TOPIC 15 — Spring Boot Internals (IoC, DI, AOP, Bean lifecycle, proxies, component scan, dispatcherservlet).**
-Perfect — now we begin **TOPIC 15: SPRING BOOT INTERNALS** — one of the *MOST IMPORTANT* topics for senior Java backend interviews.
+Perfect — now we begin **TOPIC 15: SPRING BOOT INTERNALS** — one of the *MOST IMPORTANT* topics for senior Java backend companyInterviews.
 
 Interviewers WILL ask questions from:
 
@@ -7227,12 +7227,12 @@ This is the BIGGEST Spring Boot topic and extremely valuable.
 # 👉 Say **“16”** to continue with:
 
 **TOPIC 16 — Microservices (REST, Feign, Load Balancing, Circuit Breaker, Retry, Kafka, Security, JWT).**
-Perfect — now we begin **TOPIC 16: MICROSERVICES (MASTER LEVEL)** — the MOST IMPORTANT topic for senior Java backend interviews.
+Perfect — now we begin **TOPIC 16: MICROSERVICES (MASTER LEVEL)** — the MOST IMPORTANT topic for senior Java backend companyInterviews.
 
 This topic appears in:
 
 * **LTIMindtree Senior Java rounds**
-* **Infosys Specialist / Digital interviews**
+* **Infosys Specialist / Digital companyInterviews**
 * **Amazon SDE / PayPal / Walmart**
 * **Fintech / Distributed Systems roles**
 
@@ -7696,7 +7696,7 @@ This is the topic that differentiates an average developer from a **true system 
 
 You will get:
 
-✔️ **Master Rules** (20 rules that cover 90% of SD interviews)
+✔️ **Master Rules** (20 rules that cover 90% of SD companyInterviews)
 ✔️ **Tricky system design questions**
 ✔️ **Perfect senior-level explanations**
 ✔️ **Java + Microservice + Distributed Systems integration**
@@ -7871,7 +7871,7 @@ Reduces latency drastically.
 
 ## ⭐ RULE 20 — Observability = Logs + Metrics + Traces
 
-You MUST mention this in interviews.
+You MUST mention this in companyInterviews.
 
 ---
 
@@ -7988,7 +7988,7 @@ Components:
 
 # 🎯 PART C — JAVA + MICROSERVICES + SYSTEM DESIGN COMBO QUESTIONS
 
-These are guaranteed in senior interviews.
+These are guaranteed in senior companyInterviews.
 
 ---
 

@@ -1020,7 +1020,7 @@ If you're ready, I can now prepare you for:
 Let me know where to go next.
 You're right to ask — let's make **Set C (System Design & Architecture)** **100% complete**, covering any remaining questions or frequently asked system design topics that might come up in your **Senior Software Engineer - UI (Java + Angular)** interview at **Magnit Global**.
 
-Below are **additional high-impact C-level questions**, not yet covered, but commonly asked in senior-level interviews:
+Below are **additional high-impact C-level questions**, not yet covered, but commonly asked in senior-level companyInterviews:
 
 ---
 

@@ -3790,6 +3790,6 @@ END;
 2. **Explain Your Approach**: For query or coding questions, outline your logic first (e.g., "I'll use a LEFT JOIN to include all customers, even those without orders"), then provide the SQL or Java code.
 3. **Address Edge Cases**: For advanced/hard questions, mention considerations like NULL handling, performance optimization, or error recovery to demonstrate expertise.
 4. **Focus on Optimization**: For performance-related questions, discuss indexing, query plans, connection pooling, or batch processing to show depth.
-5. **Practice Common Patterns**: Prioritize JOINs, GROUP BY, transactions, JDBC integration, indexing, stored procedures, and schema design, as these are frequently tested in MNC interviews.
+5. **Practice Common Patterns**: Prioritize JOINs, GROUP BY, transactions, JDBC integration, indexing, stored procedures, and schema design, as these are frequently tested in MNC companyInterviews.
 
 This updated list ensures comprehensive coverage of SQL topics for senior Java backend developers, including newly added sections for Indexes and Performance Optimization, Stored Procedures and Triggers, and Database Design. All questions are aligned with recent MNC interview trends (2023-2025) and tagged with relevant companies. If you need sample answers or further clarification on any question, let me know!

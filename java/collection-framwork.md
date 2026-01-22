@@ -1,6 +1,6 @@
 # Java Collections Framework Interview Questions
 
-This markdown file organizes commonly asked **Java Collections Framework** interview questions into four categories — **Basic**, **Intermediate**, **Advanced**, and **Real-World Applications** — for each major topic, gathered from real MNC interviews.
+This markdown file organizes commonly asked **Java Collections Framework** interview questions into four categories — **Basic**, **Intermediate**, **Advanced**, and **Real-World Applications** — for each major topic, gathered from real MNC companyInterviews.
 
 ---
 
@@ -951,4 +951,4 @@ Map<String, OrderSummary> report = orders.stream()
 
 ---
 
-This file is designed to help you practice and revise Java Collection topics thoroughly for interviews at MNCs and top product-based companies.
+This file is designed to help you practice and revise Java Collection topics thoroughly for companyInterviews at MNCs and top product-based companies.

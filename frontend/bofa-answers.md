@@ -874,7 +874,7 @@ Memory leaks are prevented by unsubscribing using `ngOnDestroy`, async pipe, or 
 ### ✅ END OF SECTION 3 + 4
 
 If you want, say **“SECTION 5 & 6”**
-(HTTP, Interceptors, Forms — **very common in BOFA frontend interviews**).
+(HTTP, Interceptors, Forms — **very common in BOFA frontend companyInterviews**).
 Excellent.
 Continuing **without changing format**, exactly interview-ready.
 

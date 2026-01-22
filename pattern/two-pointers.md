@@ -1,7 +1,3 @@
-Perfect.
-I’ll teach **Two Pointers** in a way a **6th-grade student can understand**, and then **slowly upgrade you to FAANG-level mastery**, with **Java code** and **interview thinking**.
-
-Take this as a **complete mental model**, not just tricks.
 
 ---
 

@@ -1,6 +1,6 @@
 # Spring Boot Interview Questions for Senior Java Backend Developers (Full Stack)
 
-This document contains the most frequently asked Spring Boot interview questions, including code-based and configuration-based questions, curated for senior Java backend developers transitioning to full-stack roles. Questions are organized by topic and include those repeatedly asked in interviews by companies like **TCS, Infosys, Cognizant, Capgemini**, etc., along with additional critical questions to ensure comprehensive coverage for senior-level interviews.
+This document contains the most frequently asked Spring Boot interview questions, including code-based and configuration-based questions, curated for senior Java backend developers transitioning to full-stack roles. Questions are organized by topic and include those repeatedly asked in companyInterviews by companies like **TCS, Infosys, Cognizant, Capgemini**, etc., along with additional critical questions to ensure comprehensive coverage for senior-level companyInterviews.
 
 ---
 

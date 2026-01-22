@@ -12,7 +12,7 @@
    → Aim for **pattern recall + explanation speed**
 2. **Explanation > Code** at ₹40L+
    → You must speak like a system thinker
-3. **Mock interviews are mandatory**
+3. **Mock companyInterviews are mandatory**
    → This is where most good coders fail
 
 Now let’s do **Step 3 properly**.

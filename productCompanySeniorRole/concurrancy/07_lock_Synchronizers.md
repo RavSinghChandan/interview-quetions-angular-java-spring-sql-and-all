@@ -1,190 +1,362 @@
-# Module 6: Executors Framework (Self Notes)
+Perfect. Here is **Module 7**, written **exactly in the same structure, tone, and senior depth** as Module 5 and Module 6.
+
+You can paste this directly into your notes.
+
+---
+
+# Module 7: Locks & Advanced Synchronization (Self Notes)
 
 ---
 
 ## Core Purpose
 
-The Executors Framework provides a **high-level, managed, and scalable** way to execute asynchronous tasks without manually creating threads.
+Locks provide **explicit, flexible, and fine-grained control** over concurrency beyond `synchronized`.
+
+They solve problems where:
+
+* Intrinsic locking is too rigid
+* Fairness, timeout, or multiple conditions are required
 
 **Golden Rule:**
 
-> Never create raw threads in production. Always use a properly sized thread pool.
+> Use `synchronized` for simplicity.
+> Use Locks when you need control.
 
 ---
 
 ## Mental Model
 
-* Task = Job
-* Thread = Worker
-* ExecutorService = Factory managing workers
-* Queue = Waiting line for jobs
+* Lock = Explicit mutual exclusion tool
+* Thread = Actor requesting access
+* Critical section = Protected resource
+* Condition = Waiting room with rules
+* Fairness = Queue discipline
 
 ---
 
-## Topic 38: Executor Interface
+## Topic 48: Why Locks Exist (Beyond `synchronized`)
 
-* Minimal interface with `execute(Runnable)`
-* Decouples task submission from execution
-* Foundation for all executor implementations
+Limitations of `synchronized`:
+
+* No timeout
+* No fairness
+* Single wait-set
+* No interruptible lock acquisition
+
+Locks solve all of these.
 
 ---
 
-## Topic 39: ExecutorService
+## Topic 49: Lock Interface
 
-* Extends Executor
-* Adds lifecycle control
-* Supports `submit()`, `invokeAll()`, `shutdown()`
+Located in:
+
+```
+java.util.concurrent.locks
+```
+
+Core methods:
+
+* `lock()`
+* `unlock()`
+* `tryLock()`
+* `lockInterruptibly()`
 
 ```java
-ExecutorService es = Executors.newFixedThreadPool(4);
-es.submit(() -> processPayment());
+Lock lock = new ReentrantLock();
+lock.lock();
+try {
+    process();
+} finally {
+    lock.unlock();
+}
 ```
 
 ---
 
-## Topic 40: ScheduledExecutorService
+## Topic 50: ReentrantLock
 
-* Runs tasks after delay or periodically
-* Replaces Timer
+* Most common Lock implementation
+* Same thread can acquire lock multiple times
+* Must manually release
+
+Key features:
+
+* Reentrancy
+* Optional fairness
+* Better diagnostics
+
+---
+
+## Reentrancy Explained
 
 ```java
-ScheduledExecutorService ses = Executors.newScheduledThreadPool(2);
-ses.scheduleAtFixedRate(() -> refreshCache(), 0, 5, TimeUnit.MINUTES);
+lock.lock();
+lock.lock(); // same thread, allowed
+```
+
+Lock keeps a **hold count** per thread.
+
+---
+
+## Topic 51: Fair vs Unfair Locks
+
+### Fair Lock
+
+```java
+new ReentrantLock(true);
+```
+
+* FIFO ordering
+* Prevents starvation
+* Lower throughput
+
+### Unfair Lock (default)
+
+* Higher throughput
+* Possible starvation
+
+---
+
+## Rule of Thumb
+
+* High contention → unfair lock
+* User-facing systems → fair lock
+* Latency-sensitive → unfair
+
+---
+
+## Topic 52: tryLock()
+
+```java
+if (lock.tryLock()) {
+    try {
+        process();
+    } finally {
+        lock.unlock();
+    }
+}
+```
+
+Advantages:
+
+* Avoids deadlock
+* Supports fallback logic
+* Useful in high-load systems
+
+---
+
+## Topic 53: lockInterruptibly()
+
+Allows thread to:
+
+* Wait for lock
+* Respond to interruption
+
+```java
+lock.lockInterruptibly();
+```
+
+Useful for:
+
+* Cancellable tasks
+* Graceful shutdown
+
+---
+
+## Topic 54: Condition Interface
+
+Condition = Advanced replacement for `wait()` / `notify()`
+
+```java
+Condition notEmpty = lock.newCondition();
+```
+
+Key methods:
+
+* `await()`
+* `signal()`
+* `signalAll()`
+
+---
+
+## Condition vs wait/notify
+
+| Feature             | Condition | wait/notify |
+| ------------------- | --------- | ----------- |
+| Multiple conditions | Yes       | No          |
+| Explicit lock       | Yes       | Implicit    |
+| Readability         | High      | Low         |
+
+---
+
+## Topic 55: Multiple Conditions Pattern
+
+```java
+Condition notFull;
+Condition notEmpty;
+```
+
+Used in:
+
+* Bounded buffers
+* Producer–consumer systems
+
+---
+
+## Topic 56: ReadWriteLock
+
+Separates:
+
+* Read access
+* Write access
+
+```java
+ReadWriteLock rw = new ReentrantReadWriteLock();
 ```
 
 ---
 
-## Topic 41: FixedThreadPool
+## Read Lock
 
-* Fixed number of threads
-* Unbounded queue
-* Stable resource usage
-* Risk: memory leak under heavy load
+* Multiple readers allowed
+* No writers
 
----
+## Write Lock
 
-## Topic 42: CachedThreadPool
-
-* Creates threads on demand
-* No queue
-* Reuses idle threads
-* Risk: unbounded thread creation
+* Exclusive
+* Blocks readers and writers
 
 ---
 
-## Topic 43: SingleThreadExecutor
+## When ReadWriteLock Helps
 
-* One worker thread
-* Serial task execution
-* Guarantees ordering
-
----
-
-## Topic 44: ScheduledThreadPool
-
-* Fixed threads
-* Supports delayed and periodic tasks
+* Read-heavy systems
+* Low write contention
+* Cache-like data
 
 ---
 
-## Topic 45: ThreadPool Sizing
+## Topic 57: StampedLock (Java 8+)
 
-* CPU-bound: cores + 1
-* IO-bound: cores * (1 + wait/compute)
+Advanced lock with:
 
----
-
-## Topic 46: RejectedExecutionHandler
-
-* Handles task rejection
-* Types:
-
-    * AbortPolicy
-    * CallerRunsPolicy
-    * DiscardPolicy
-    * DiscardOldestPolicy
-
----
-
-## Topic 47: Graceful Shutdown
+* Optimistic reads
+* Lower overhead
 
 ```java
-es.shutdown();
-es.awaitTermination(10, TimeUnit.SECONDS);
+long stamp = lock.tryOptimisticRead();
 ```
 
 ---
 
-## Execution Rules
+## Optimistic Read
 
-* Always shutdown executors
-* Never block pool threads
-* Separate CPU and IO pools
-* Monitor queue size
-
----
-
-## Real-World Mapping
-
-* API request handling
-* Fraud scoring jobs
-* Batch settlement tasks
-* Notification services
+* No blocking
+* Must validate
+* Falls back to read lock if invalid
 
 ---
 
-## Performance Implications
+## Topic 58: Deadlocks & Locks
 
-* Too many threads → context switching
-* Too few threads → underutilization
-* Unbounded queues → OOM
+Deadlock causes:
+
+* Circular wait
+* Multiple locks
+* Inconsistent ordering
+
+Prevention:
+
+* Lock ordering
+* tryLock()
+* Timeouts
 
 ---
 
-## Common Mistakes
+## Topic 59: Performance Tradeoffs
 
-* Using CachedThreadPool blindly
-* Forgetting shutdown()
-* Blocking inside pool threads
-* Single pool for all workloads
+### synchronized
 
----
+* Simple
+* JVM-optimized
+* Limited control
 
-## Design Rules
+### ReentrantLock
 
-* Prefer ThreadPoolExecutor over Executors factory
-* Use bounded queues
-* Separate pools by workload
-* Monitor metrics
+* More flexible
+* Slightly more overhead
+
+### ReadWriteLock
+
+* Scales reads
+* Costly writes
+
+### StampedLock
+
+* Fast reads
+* Complex logic
 
 ---
 
 ## JVM Insight
 
-* Thread pools reduce GC pressure
-* Idle threads consume stack memory
-* ForkJoinPool optimized for parallelism
+* Locks use OS mutexes under contention
+* Biased / lightweight locking optimizations exist
+* Excessive locking increases context switching
+* Lock contention increases GC pressure
+
+---
+
+## Real-World Usage
+
+* In-memory caches
+* Order matching engines
+* Inventory systems
+* Rate limiters
+* Shared configuration stores
+
+---
+
+## Common Mistakes
+
+* Forgetting unlock()
+* Using fair locks blindly
+* Overusing ReadWriteLock
+* Mixing intrinsic and explicit locks
+
+---
+
+## Design Rules
+
+* Prefer synchronized for simple cases
+* Use ReentrantLock for control
+* Use ReadWriteLock for read-heavy
+* Use StampedLock only if necessary
+* Always unlock in finally
 
 ---
 
 ## Senior-Level Takeaway
 
-> Executors provide controlled concurrency. Thread pool sizing and queue management decide performance and stability.
+> Locks trade simplicity for control.
+> Use them when concurrency requirements demand fairness, timeouts, or multiple conditions.
 
 ---
 
 ## Ultra-Crisp Recall
 
-* Never use raw threads
-* FixedPool = stable
-* CachedPool = risky
-* Always shutdown
-* Size pools correctly
+* synchronized = simple
+* ReentrantLock = control
+* tryLock avoids deadlock
+* Condition > wait/notify
+* Always unlock
 
 ---
 
 ## Interview Punchline
 
-> The Executors Framework abstracts thread management using thread pools. It improves scalability and stability. In production, always use bounded thread pools, proper sizing, and graceful shutdown.
+> Java Locks provide explicit mutual exclusion with advanced features like fairness, timeout, interruptibility, and multiple conditions. ReentrantLock is the most common, while ReadWriteLock and StampedLock optimize read-heavy workloads.
 
 ---
+

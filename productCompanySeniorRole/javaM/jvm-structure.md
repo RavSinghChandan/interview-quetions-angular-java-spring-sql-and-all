@@ -25,7 +25,7 @@ JVM Architecture
 |   ├── Parent-first loading
 |   ├── Security isolation
 |
-├── 🧾 Class Loading Phases
+├── 🧾 Class Loading Phases = Marriage 
 |   ├── Loading
 |   ├── Linking
 |   |   ├── Verification

@@ -1,6 +1,7 @@
 
 NOTE  
 Java is **hybrid compiled + interpreted**, not purely compiled.
+Brute force -> better -> optimized = Like java DSA programming
 
 KEY POINTS
 - javac ≠ final compiler

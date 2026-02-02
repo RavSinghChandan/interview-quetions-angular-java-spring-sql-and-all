@@ -1,7 +1,7 @@
 
 ---
 
-````md
+
 # Angular — Module 6: RxJS & Async Programming
 (Custom Notes | Senior Full-Stack Engineer | Barclays / Mastercard Level)
 

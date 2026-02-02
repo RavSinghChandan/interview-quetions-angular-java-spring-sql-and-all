@@ -1,7 +1,7 @@
 
 ---
 
-````md
+
 # Angular — Module 8: HTTP, Interceptors & API Design
 (Custom Notes | Senior Full-Stack Engineer | Barclays / Mastercard Level)
 

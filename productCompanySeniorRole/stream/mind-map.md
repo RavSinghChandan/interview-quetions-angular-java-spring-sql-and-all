@@ -22,7 +22,7 @@ Few candidates **understand** them.
 
 ==================================================
 
-
+````
 # 🧠 MASTER MIND MAP — JAVA STREAM API (BIG PICTURE)
 
 Java Stream API
@@ -139,7 +139,7 @@ Java Stream API
 └── Streams complement loops, not replace them
 
 ==================================================
-
+````
 
 # MODULE-WISE STREAM API ROADMAP (FOR LEARNING)
 

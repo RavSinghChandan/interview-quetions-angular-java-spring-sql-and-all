@@ -1,6 +1,6 @@
 
 
-````md
+
 # Angular — Module 5: Routing, Lazy Loading & Navigation
 (Custom Notes | Senior Full-Stack Engineer | Barclays / Mastercard Level)
 

@@ -1,7 +1,7 @@
 
 ---
 
-```md
+
 # Angular — Module 11: Design & Interview Mastery
 (Custom Notes | Senior Full-Stack Engineer | Barclays / Mastercard Level)
 

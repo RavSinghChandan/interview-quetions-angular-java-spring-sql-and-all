@@ -1,7 +1,7 @@
 
 ---
 
-````md
+
 # Angular — Module 3: Change Detection & Performance
 (Custom Notes | Senior Full-Stack Engineer | Barclays / Mastercard Level)
 

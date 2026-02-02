@@ -1,7 +1,7 @@
 
 ---
 
-````md
+
 # Angular — Module 4: Dependency Injection & Providers
 (Custom Notes | Senior Full-Stack Engineer | Barclays / Mastercard Level)
 

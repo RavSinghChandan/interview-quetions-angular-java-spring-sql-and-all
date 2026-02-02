@@ -1,7 +1,7 @@
 
 ---
 
-````md
+
 # Angular — Module 10: Performance, Build & Optimization
 (Custom Notes | Senior Full-Stack Engineer | Barclays / Mastercard Level)
 

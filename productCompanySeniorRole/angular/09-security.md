@@ -1,7 +1,7 @@
 
 ---
 
-````md
+
 # Angular — Module 9: Security (XSS, Sanitization, Guards & Token Handling)
 (Custom Notes | Senior Full-Stack Engineer | Barclays / Mastercard Level)
 

@@ -1,7 +1,7 @@
 
 ---
 
-````md
+
 # Angular — Module 7: State Management (NgRx, ComponentStore & Design Trade-offs)
 (Custom Notes | Senior Full-Stack Engineer | Barclays / Mastercard Level)
 

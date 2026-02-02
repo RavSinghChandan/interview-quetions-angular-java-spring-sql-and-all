@@ -1,7 +1,7 @@
 
 ---
 
-````md
+
 # Angular — Module 2: Component Architecture & Lifecycle
 (Custom Notes | Senior Full-Stack Engineer | Barclays / Mastercard Level)
 

@@ -22,7 +22,7 @@ Angular is used as a proxy to test:
 
 ==================================================
 
-
+````
 # 🧠 MASTER MIND MAP — ANGULAR (BIG PICTURE)
 
 Angular
@@ -122,7 +122,7 @@ Angular
 ├── SPA trade-offs
 ├── Frontend scalability
 └── How to explain decisions
-
+````
 ==================================================
 
 

@@ -1,7 +1,7 @@
 
 ---
 
-````md
+
 # Angular — Module 1: Philosophy, Bootstrapping & Runtime Model
 (Custom Notes | Senior Full-Stack Engineer | Barclays / Mastercard Level)
 

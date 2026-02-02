@@ -1,7 +1,7 @@
 
 ---
 
-````md
+
 # Spring Boot — Module 5: Web Layer & REST Architecture
 (Custom Notes | Senior Developer | Barclays / Mastercard Level)
 

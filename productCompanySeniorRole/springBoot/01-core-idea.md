@@ -1,7 +1,7 @@
 
 ---
 
-````md
+
 # Spring Boot — Module 1: Philosophy, Bootstrapping & Startup Model
 (Custom Notes | Senior Developer | Barclays / Mastercard Level)
 

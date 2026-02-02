@@ -1,7 +1,7 @@
 
 ---
 
-````md
+
 # Spring Boot — Module 7: Security Architecture (Spring Security, JWT, OAuth2)
 (Custom Notes | Senior Developer | Barclays / Mastercard Level)
 

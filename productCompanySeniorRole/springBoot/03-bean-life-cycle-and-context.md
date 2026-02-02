@@ -1,7 +1,7 @@
 
 ---
 
-````md
+
 # Spring Boot — Module 3: ApplicationContext, Bean Lifecycle & Dependency Graph
 (Custom Notes | Senior Developer | Barclays / Mastercard Level)
 

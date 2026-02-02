@@ -1,11 +1,8 @@
 
----
 
-```md
-# Spring Boot — Senior Engineer Mind Map & Roadmap
-(Product-Based Companies | Barclays / Mastercard | Custom Blueprint)
 
-==================================================
+
+
 
 ## WHY SPRING BOOT MATTERS AT SENIOR LEVEL
 
@@ -25,7 +22,7 @@ Spring Boot is used as a **proxy** to test:
 
 ==================================================
 
-
+````
 # 🧠 MASTER MIND MAP — SPRING BOOT (BIG PICTURE)
 
 Spring Boot
@@ -120,7 +117,7 @@ Spring Boot
     ├── Monolith vs microservices
     ├── Failure scenarios
     └── How to explain decisions
-
+````
 ==================================================
 
 

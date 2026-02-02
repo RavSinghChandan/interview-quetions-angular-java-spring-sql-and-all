@@ -1,7 +1,7 @@
 
 ---
 
-```md
+
 # Spring Boot — Module 11: Design & Interview Mastery
 (Custom Notes | Senior Developer | Barclays / Mastercard Level)
 

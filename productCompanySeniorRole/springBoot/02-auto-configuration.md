@@ -1,7 +1,7 @@
 
 ---
 
-```md
+
 # Spring Boot — Module 2: Auto-Configuration Internals (The Real Power)
 (Custom Notes | Senior Developer | Barclays / Mastercard Level)
 

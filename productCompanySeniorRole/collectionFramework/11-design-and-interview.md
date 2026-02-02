@@ -1,7 +1,7 @@
 
 ---
 
-````md
+
 # Java Collections Framework — Module 11: Design & Interview Mastery
 (Custom Notes | Senior Developer | Product-Based Companies)
 

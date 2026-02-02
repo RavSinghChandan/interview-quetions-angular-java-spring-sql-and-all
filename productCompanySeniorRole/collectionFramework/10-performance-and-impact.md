@@ -1,7 +1,7 @@
 
 ---
 
-````md
+
 # Java Collections Framework — Module 9: Synchronization Models
 (Custom Notes | Senior Developer | Product-Based Companies)
 

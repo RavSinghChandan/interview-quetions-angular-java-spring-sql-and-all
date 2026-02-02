@@ -2,7 +2,7 @@
 
 ---
 
-````md
+
 # Java Collections Framework — Module 2: List Interface
 (Custom Notes | Senior Developer | Product-Based Companies)
 

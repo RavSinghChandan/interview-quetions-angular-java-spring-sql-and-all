@@ -1,7 +1,7 @@
 
 ---
 
-````md
+
 # Java Collections Framework — Module 8: Ordering & Sorting
 (Custom Notes | Senior Developer | Product-Based Companies)
 

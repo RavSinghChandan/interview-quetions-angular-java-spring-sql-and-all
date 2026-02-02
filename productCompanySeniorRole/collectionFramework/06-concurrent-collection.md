@@ -1,6 +1,6 @@
 
 
-````md
+
 # Java Collections Framework — Module 6: Concurrent Collections
 (Custom Notes | Senior Developer | Product-Based Companies)
 

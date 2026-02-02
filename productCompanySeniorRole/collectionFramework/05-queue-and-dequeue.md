@@ -1,6 +1,6 @@
 
 
-````md
+
 # Java Collections Framework — Module 5: Queue & Deque
 (Custom Notes | Senior Developer | Product-Based Companies)
 

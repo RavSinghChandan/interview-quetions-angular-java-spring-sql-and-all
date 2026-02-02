@@ -1,7 +1,7 @@
 
 ---
 
-````md
+
 # Java Collections Framework — Module 1: Core Foundations
 (Custom Notes | Senior Developer | Product-Based Companies)
 

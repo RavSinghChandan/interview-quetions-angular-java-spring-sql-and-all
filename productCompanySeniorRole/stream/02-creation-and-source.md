@@ -2,7 +2,7 @@
 
 ---
 
-````md
+
 # Java Stream API — Module 2: Stream Creation & Sources
 (Custom Notes | Senior Developer | Product-Based Companies)
 

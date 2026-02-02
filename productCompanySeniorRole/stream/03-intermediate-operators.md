@@ -1,7 +1,7 @@
 
 ---
 
-````md
+
 # Java Stream API — Module 3: Intermediate Operations (Transformation & Flow)
 (Custom Notes | Senior Developer | Product-Based Companies)
 

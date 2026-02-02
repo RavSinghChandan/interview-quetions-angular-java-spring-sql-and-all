@@ -1,7 +1,7 @@
 
 ---
 
-````md
+
 # Java Stream API — Module 10: Performance & JVM Impact
 (Custom Notes | Senior Developer | Product-Based Companies)
 

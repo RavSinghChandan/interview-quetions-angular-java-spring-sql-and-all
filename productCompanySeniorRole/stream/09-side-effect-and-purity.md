@@ -1,7 +1,7 @@
 
 ---
 
-````md
+
 # Java Stream API — Module 8: Parallel Streams (Reality, Risks & Design Judgment)
 (Custom Notes | Senior Developer | Product-Based Companies)
 

@@ -1,7 +1,7 @@
 
 ---
 
-````md
+
 # Java Stream API — Module 5: Collectors (Aggregation & Modeling Data)
 (Custom Notes | Senior Developer | Product-Based Companies)
 

@@ -1,7 +1,7 @@
 
 ---
 
-````md
+
 # Java Stream API — Module 7: Laziness, Short-Circuiting & Pipeline Optimization
 (Custom Notes | Senior Developer | Product-Based Companies)
 

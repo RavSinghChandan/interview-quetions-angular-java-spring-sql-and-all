@@ -1,7 +1,7 @@
 
 ---
 
-````md
+
 # Java Stream API — Module 6: Reduction vs Collection (Aggregation Deep Dive)
 (Custom Notes | Senior Developer | Product-Based Companies)
 

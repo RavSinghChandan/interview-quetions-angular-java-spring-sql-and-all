@@ -2,7 +2,7 @@
 
 ---
 
-````md
+
 # Java Stream API — Module 1: Core Foundations (What Streams REALLY Are)
 (Custom Notes | Senior Developer | Product-Based Companies)
 

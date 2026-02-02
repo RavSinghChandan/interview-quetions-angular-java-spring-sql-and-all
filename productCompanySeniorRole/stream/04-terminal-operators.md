@@ -1,7 +1,7 @@
 
 ---
 
-````md
+
 # Java Stream API — Module 4: Terminal Operations (Execution & Outcomes)
 (Custom Notes | Senior Developer | Product-Based Companies)
 

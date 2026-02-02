@@ -1,4 +1,4 @@
-````md
+
 # STEP 2: Process vs Thread
 
 ---

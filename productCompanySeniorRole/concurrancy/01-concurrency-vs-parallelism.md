@@ -1,4 +1,4 @@
-````md
+
 # STEP 1: Concurrency vs Parallelism
 
 ---

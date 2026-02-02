@@ -1,4 +1,4 @@
-````md
+
 # STEP 3: Race Conditions & Critical Sections
 
 ---

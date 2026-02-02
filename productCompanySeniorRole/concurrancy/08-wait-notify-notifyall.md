@@ -1,4 +1,4 @@
-````md
+
 # STEP 8: `wait()`, `notify()`, `notifyAll()`
 
 ---

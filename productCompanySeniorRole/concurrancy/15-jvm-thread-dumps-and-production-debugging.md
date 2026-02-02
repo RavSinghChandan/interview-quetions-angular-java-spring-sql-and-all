@@ -1,4 +1,4 @@
-````md
+
 # STEP 10: Advanced Concurrency Concepts (JVM & Hardware Reality)
 
 ---

@@ -1,4 +1,4 @@
-````md
+
 # STEP 7: Locks & Advanced Synchronizers
 
 ---

@@ -1,4 +1,4 @@
-````md
+md
 # STEP 4: Thread Safety, Atomicity, Visibility, Ordering
 
 ---

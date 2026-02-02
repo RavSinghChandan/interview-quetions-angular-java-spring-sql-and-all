@@ -1,4 +1,4 @@
-````md
+
 # STEP 5: `volatile` & Atomic Variables
 
 ---

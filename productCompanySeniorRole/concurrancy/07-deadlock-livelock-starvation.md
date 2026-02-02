@@ -1,4 +1,4 @@
-````md
+
 # STEP 7: Deadlock, Livelock, Starvation
 
 ---

@@ -1,4 +1,4 @@
-````md
+
 # STEP 6: `synchronized` & Intrinsic Locks
 
 ---

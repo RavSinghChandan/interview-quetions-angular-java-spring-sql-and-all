@@ -1,175 +1,241 @@
-# Module 8: Concurrent Collections (Self Notes)
+````md
+# STEP 7: Locks & Advanced Synchronizers
 
 ---
 
-## Core Purpose
+## Why this step exists
 
-Concurrent collections provide **thread-safe, high-performance data structures** without external synchronization.
+Up to now, `synchronized` solved correctness problems — but only at a basic level.
 
-**Golden Rule:**
+In real systems:
+- Not all reads need to block writes
+- Not all threads should wait the same way
+- Coordination is more complex than mutual exclusion
 
-> Never wrap Collections.synchronizedXxx() in high-scale systems. Use concurrent collections.
-
----
-
-## Mental Model
-
-* Regular collections = not thread-safe
-* Synchronized collections = thread-safe but slow
-* Concurrent collections = thread-safe + scalable
+This step exists because **real concurrency problems are about coordination, not just locking**.
 
 ---
 
-## Topic 58: ConcurrentHashMap
+## The limitation of `synchronized`
 
-* Thread-safe Map
-* Lock striping / CAS-based
-* No global lock
-* High concurrency for reads and writes
+`synchronized` gives:
+- Mutual exclusion
+- Visibility
+- Ordering
+
+But it lacks:
+- Lock polling
+- Timed waits
+- Fairness control
+- Multiple condition queues
+
+In large systems, these limitations start to hurt.
+
+---
+
+## Enter explicit locks
+
+Java provides explicit locks to express **intent**, not just safety.
+
+The core idea:
+> Use stronger tools only when basic locking becomes insufficient.
+
+---
+
+## Lock vs synchronized (how seniors think)
+
+`synchronized`:
+- Simple
+- Implicit
+- JVM-managed
+
+`Lock`:
+- Explicit
+- Flexible
+- Programmer-controlled
+
+You don’t replace `synchronized` blindly.  
+You replace it **when intent cannot be expressed otherwise**.
+
+---
+
+## ReentrantLock (most common)
 
 ```java
-ConcurrentHashMap<String, Integer> map = new ConcurrentHashMap<>();
-map.put("txn", 1);
-map.computeIfAbsent("key", k -> 42);
+Lock lock = new ReentrantLock();
+
+lock.lock();
+try {
+    // critical section
+} finally {
+    lock.unlock();
+}
+````
+
+What this adds:
+
+* Explicit lock management
+* Ability to try or time out
+* Optional fairness
+
+This matters when threads must not block indefinitely.
+
+---
+
+## Fair vs Unfair locks (important nuance)
+
+```java
+Lock fairLock = new ReentrantLock(true);
 ```
 
----
+* Fair lock → first-come-first-served
+* Unfair lock → higher throughput, possible starvation
 
-## Topic 59: CopyOnWriteArrayList
-
-* Creates new copy on write
-* Read-optimized
-* Expensive writes
-* No ConcurrentModificationException
+Most systems prefer **unfair locks** for performance.
+Fairness is a policy decision, not a default.
 
 ---
 
-## Topic 60: CopyOnWriteArraySet
+## ReadWriteLock (separating intent)
 
-* Backed by CopyOnWriteArrayList
-* Thread-safe set
-* Best for read-heavy workloads
+When reads dominate writes, blocking everything is wasteful.
 
----
+```java
+ReadWriteLock rwLock = new ReentrantReadWriteLock();
 
-## Topic 61: BlockingQueue
+rwLock.readLock().lock();
+try {
+    // read-only work
+} finally {
+    rwLock.readLock().unlock();
+}
+```
 
-* Thread-safe queue
-* Blocks on full/empty
-* Used for producer-consumer
+This allows:
 
----
+* Multiple readers simultaneously
+* Writers get exclusive access
 
-## Topic 62: ArrayBlockingQueue
+Used heavily in:
 
-* Bounded queue
-* Fixed size
-* FIFO
-* Predictable memory usage
-
----
-
-## Topic 63: LinkedBlockingQueue
-
-* Optionally bounded
-* Higher throughput
-* More memory overhead
+* Caches
+* Configuration stores
+* Reference data systems
 
 ---
 
-## Topic 64: PriorityBlockingQueue
+## StampedLock (performance-first)
 
-* Orders elements by priority
-* Unbounded
-* Not FIFO
+StampedLock introduces:
 
----
+* Optimistic reads
+* Versioned locking
 
-## Topic 65: ConcurrentLinkedQueue
+```java
+long stamp = lock.tryOptimisticRead();
+int value = data;
 
-* Lock-free queue
-* Non-blocking
-* High throughput
+if (!lock.validate(stamp)) {
+    stamp = lock.readLock();
+    try {
+        value = data;
+    } finally {
+        lock.unlockRead(stamp);
+    }
+}
+```
 
----
+This reduces contention in read-heavy systems,
+but increases complexity.
 
-## Topic 66: ConcurrentSkipListMap
+Used when:
 
-* Sorted concurrent map
-* Logarithmic performance
-* NavigableMap support
-
----
-
-## Execution Rules
-
-* Use ConcurrentHashMap for shared maps
-* Use BlockingQueue for producer-consumer
-* Avoid CopyOnWrite for write-heavy use
-
----
-
-## Real-World Mapping
-
-* Session stores
-* Rate limiter state
-* Work queues
-* Event processing buffers
+* Reads vastly outnumber writes
+* Latency matters
 
 ---
 
-## Performance Implications
+## Condition variables (fine-grained coordination)
 
-* ConcurrentHashMap scales well
-* CopyOnWrite is read-optimized
-* BlockingQueue prevents busy-waiting
-* Unbounded queues risk OOM
+`Condition` allows multiple wait-sets per lock.
 
----
+```java
+Condition notEmpty = lock.newCondition();
+Condition notFull = lock.newCondition();
+```
 
-## Common Mistakes
+This avoids the bluntness of `wait/notifyAll`.
 
-* Using HashMap in multithreading
-* Overusing CopyOnWrite
-* Using unbounded queues blindly
-* External synchronization on concurrent collections
+Used in:
 
----
-
-## Design Rules
-
-* Prefer ConcurrentHashMap
-* Prefer bounded queues
-* Match data structure to access pattern
-* Avoid synchronized wrappers
+* Bounded queues
+* Resource pools
+* Stateful workflows
 
 ---
 
-## JVM Insight
+## Synchronizers (coordination tools)
 
-* ConcurrentHashMap uses CAS
-* CopyOnWrite uses array copying
-* BlockingQueue uses locks/conditions
+These are not locks — they coordinate threads.
+
+### CountDownLatch
+
+* One-time signal
+* Threads wait until count reaches zero
+
+### CyclicBarrier
+
+* Threads wait for each other
+* Reusable
+
+### Semaphore
+
+* Limits concurrent access
+* Controls permits, not ownership
+
+### Phaser
+
+* Dynamic barrier
+* Multi-phase workflows
+
+These solve problems locks cannot express cleanly.
 
 ---
 
-## Senior-Level Takeaway
+## Senior instinct
 
-> Concurrent collections provide scalable thread safety. Choose the right structure based on read/write patterns.
+Locks protect **state**.
+Synchronizers coordinate **progress**.
 
----
-
-## Ultra-Crisp Recall
-
-* ConcurrentHashMap = default map
-* CopyOnWrite = read-heavy
-* BlockingQueue = producer-consumer
-* Avoid synchronized wrappers
+Using the wrong tool makes code harder than necessary.
 
 ---
 
-## Interview Punchline
+## Interview signal
 
-> Java concurrent collections provide thread-safe data structures optimized for scalability. ConcurrentHashMap is the default choice, BlockingQueue supports producer-consumer patterns, and CopyOnWrite collections suit read-heavy workloads.
+> “Locks protect critical sections, while synchronizers coordinate thread progress. Choosing between them depends on whether the problem is state protection or workflow coordination.”
+
+That answer shows design maturity.
 
 ---
+
+## Quick recall
+
+* ReentrantLock → flexibility
+* ReadWriteLock → read-heavy systems
+* StampedLock → optimistic performance
+* Condition → fine-grained waiting
+* Synchronizers → coordination, not exclusion
+
+---
+
+## Where this leads next
+
+Once locking and coordination are clear,
+data structures themselves must become concurrency-safe.
+
+That brings us to:
+**Concurrent Collections.**
+
+```
+```

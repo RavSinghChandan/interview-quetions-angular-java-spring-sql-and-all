@@ -1,190 +1,187 @@
-# Module 6: Executors Framework (Self Notes)
+````md
+# STEP 5: `volatile` & Atomic Variables
 
 ---
 
-## Core Purpose
+## Why this step exists
 
-The Executors Framework provides a **high-level, managed, and scalable** way to execute asynchronous tasks without manually creating threads.
+After fixing race conditions with `synchronized`, things become correct — but heavy.
 
-**Golden Rule:**
+Blocking threads everywhere works,  
+but it doesn’t scale.
 
-> Never create raw threads in production. Always use a properly sized thread pool.
+At this point, the real question appears:
 
----
+Do I need **mutual exclusion**, or do I only need **visibility**?
 
-## Mental Model
-
-* Task = Job
-* Thread = Worker
-* ExecutorService = Factory managing workers
-* Queue = Waiting line for jobs
+That distinction leads to `volatile` and atomic variables.
 
 ---
 
-## Topic 38: Executor Interface
+## What `volatile` actually gives
 
-* Minimal interface with `execute(Runnable)`
-* Decouples task submission from execution
-* Foundation for all executor implementations
+`volatile` guarantees:
+- **Visibility** (changes are seen by other threads)
+- **Ordering** (certain reordering is prevented)
+
+It does **not** guarantee:
+- Atomicity
+
+This single misunderstanding causes many bugs.
 
 ---
 
-## Topic 39: ExecutorService
-
-* Extends Executor
-* Adds lifecycle control
-* Supports `submit()`, `invokeAll()`, `shutdown()`
+## Code: visibility without locking
 
 ```java
-ExecutorService es = Executors.newFixedThreadPool(4);
-es.submit(() -> processPayment());
-```
+class Flag {
+    volatile boolean ready = false;
+}
+````
 
----
-
-## Topic 40: ScheduledExecutorService
-
-* Runs tasks after delay or periodically
-* Replaces Timer
+Writer thread:
 
 ```java
-ScheduledExecutorService ses = Executors.newScheduledThreadPool(2);
-ses.scheduleAtFixedRate(() -> refreshCache(), 0, 5, TimeUnit.MINUTES);
+flag.ready = true;
 ```
 
----
-
-## Topic 41: FixedThreadPool
-
-* Fixed number of threads
-* Unbounded queue
-* Stable resource usage
-* Risk: memory leak under heavy load
-
----
-
-## Topic 42: CachedThreadPool
-
-* Creates threads on demand
-* No queue
-* Reuses idle threads
-* Risk: unbounded thread creation
-
----
-
-## Topic 43: SingleThreadExecutor
-
-* One worker thread
-* Serial task execution
-* Guarantees ordering
-
----
-
-## Topic 44: ScheduledThreadPool
-
-* Fixed threads
-* Supports delayed and periodic tasks
-
----
-
-## Topic 45: ThreadPool Sizing
-
-* CPU-bound: cores + 1
-* IO-bound: cores * (1 + wait/compute)
-
----
-
-## Topic 46: RejectedExecutionHandler
-
-* Handles task rejection
-* Types:
-
-    * AbortPolicy
-    * CallerRunsPolicy
-    * DiscardPolicy
-    * DiscardOldestPolicy
-
----
-
-## Topic 47: Graceful Shutdown
+Reader thread:
 
 ```java
-es.shutdown();
-es.awaitTermination(10, TimeUnit.SECONDS);
+while (!flag.ready) {
+    // eventually exits
+}
 ```
 
----
+Why this works:
 
-## Execution Rules
-
-* Always shutdown executors
-* Never block pool threads
-* Separate CPU and IO pools
-* Monitor queue size
+* Writes go to main memory
+* Reads always see the latest value
+* No blocking involved
 
 ---
 
-## Real-World Mapping
+## What `volatile` cannot fix
 
-* API request handling
-* Fraud scoring jobs
-* Batch settlement tasks
-* Notification services
+```java
+volatile int count = 0;
 
----
+void increment() {
+    count++; // still broken
+}
+```
 
-## Performance Implications
+`count++` is:
 
-* Too many threads → context switching
-* Too few threads → underutilization
-* Unbounded queues → OOM
+* read
+* modify
+* write
 
----
+`volatile` does not make compound operations atomic.
 
-## Common Mistakes
-
-* Using CachedThreadPool blindly
-* Forgetting shutdown()
-* Blocking inside pool threads
-* Single pool for all workloads
+Visibility alone is not correctness.
 
 ---
 
-## Design Rules
+## When `volatile` is the right choice
 
-* Prefer ThreadPoolExecutor over Executors factory
-* Use bounded queues
-* Separate pools by workload
-* Monitor metrics
+Use `volatile` when:
 
----
+* One thread writes
+* Others only read
+* The operation is a single write
+* No invariants span multiple fields
 
-## JVM Insight
+Typical examples:
 
-* Thread pools reduce GC pressure
-* Idle threads consume stack memory
-* ForkJoinPool optimized for parallelism
-
----
-
-## Senior-Level Takeaway
-
-> Executors provide controlled concurrency. Thread pool sizing and queue management decide performance and stability.
+* Shutdown flags
+* Feature toggles
+* Configuration refresh markers
 
 ---
 
-## Ultra-Crisp Recall
+## Atomic variables: correctness without blocking
 
-* Never use raw threads
-* FixedPool = stable
-* CachedPool = risky
-* Always shutdown
-* Size pools correctly
+Atomic classes provide:
+
+* Atomicity
+* Visibility
+* Ordering
+
+Without using locks.
+
+---
+
+## Code: atomic increment
+
+```java
+AtomicInteger count = new AtomicInteger(0);
+
+void increment() {
+    count.incrementAndGet();
+}
+```
+
+Internally:
+
+* Uses CAS (Compare-And-Swap)
+* Retries instead of blocking
+* Scales better under contention
 
 ---
 
-## Interview Punchline
+## CAS intuition (easy memory hook)
 
-> The Executors Framework abstracts thread management using thread pools. It improves scalability and stability. In production, always use bounded thread pools, proper sizing, and graceful shutdown.
+1. Read current value
+2. Compute new value
+3. Update only if unchanged
+4. Retry if someone else modified it
+
+Optimistic, not blocking.
 
 ---
+
+## The ABA problem (know this)
+
+CAS can fail when:
+
+* Value changes A → B → A
+* CAS sees A again and succeeds incorrectly
+
+This matters in lock-free algorithms.
+That’s why `AtomicStampedReference` exists.
+
+---
+
+## Performance mindset
+
+* `synchronized` → blocking, safest
+* `volatile` → visibility only, fastest
+* Atomic variables → lock-free, scalable
+
+No primitive is “best”.
+Only the **right one for the problem**.
+
+---
+
+## Senior takeaway
+
+Before choosing a tool, ask:
+
+* Do I need exclusivity?
+* Or only visibility?
+* Or atomic updates without blocking?
+
+Concurrency bugs come from choosing the wrong guarantee.
+
+---
+
+## Where this leads next
+
+As systems grow, managing threads manually becomes fragile.
+
+The next step is:
+**Executors and thread pools — controlling concurrency at scale.**
+
+```
+```

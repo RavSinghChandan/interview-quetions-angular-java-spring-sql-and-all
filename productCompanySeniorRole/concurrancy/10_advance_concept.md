@@ -1,172 +1,242 @@
-# Module 10: Advanced Concurrency Concepts (Self Notes)
+````md
+# STEP 9: Futures & Asynchronous Programming
 
 ---
 
-## Core Purpose
+## Why this step exists
 
-This module focuses on **high-performance**, **low-latency**, and **lock-free** concurrency techniques used in large-scale systems.
+Up to now, concurrency meant **multiple threads doing work**.
 
-**Golden Rule:**
+But threads are expensive, and blocking them is worse.
 
-> Avoid locks where possible. Prefer immutability and non-blocking designs.
+In real systems, most time is spent:
+- Waiting for I/O
+- Calling downstream services
+- Waiting for responses
 
----
+Blocking a thread while waiting is wasteful.
 
-## Mental Model
-
-* ThreadLocal = private thread storage
-* Immutable objects = share safely
-* Lock-free = progress without blocking
-* Reactive streams = data flows
+This step exists because **waiting should not block progress**.
 
 ---
 
-## Topic 76: ThreadLocal
+## The shift in mindset
 
-* Stores data per thread
-* Avoids shared state
-* Risk of memory leaks
+Earlier thinking:
+> “Call a method and wait for the result.”
+
+Asynchronous thinking:
+> “Start the work, move on, and handle the result when it’s ready.”
+
+This shift separates **execution** from **result handling**.
+
+---
+
+## Future: representing a result that arrives later
+
+A `Future` represents a value that:
+- Is not available now
+- Will be available later
+- Might fail
+
+---
+
+## Code: basic Future
 
 ```java
-ThreadLocal<String> ctx = new ThreadLocal<>();
-ctx.set("userId");
+ExecutorService executor = Executors.newFixedThreadPool(2);
+
+Future<Integer> future = executor.submit(() -> {
+    Thread.sleep(1000);
+    return 42;
+});
+
+Integer result = future.get(); // blocks
+````
+
+What this gives:
+
+* Asynchronous execution
+* Synchronous retrieval
+
+This is only a partial solution.
+
+---
+
+## The problem with `Future`
+
+* `get()` blocks
+* No easy composition
+* No built-in callbacks
+* Error handling is clumsy
+
+As systems grow, this model becomes restrictive.
+
+---
+
+## CompletableFuture: the real async tool
+
+`CompletableFuture` solves what `Future` cannot.
+
+It allows:
+
+* Non-blocking callbacks
+* Task composition
+* Explicit error handling
+* Clear async pipelines
+
+---
+
+## Code: non-blocking async execution
+
+```java
+CompletableFuture
+    .supplyAsync(() -> fetchData())
+    .thenApply(data -> transform(data))
+    .thenAccept(result -> save(result));
 ```
 
----
+What changed:
 
-## Topic 77: Immutable Objects
+* No blocking
+* Each stage is explicit
+* Flow is easy to reason about
 
-* State never changes
-* Thread-safe by design
-* Safe sharing
-
----
-
-## Topic 78: Lock-Free Programming
-
-* Uses CAS
-* No thread blocking
-* High throughput
+This is how modern backend systems are written.
 
 ---
 
-## Topic 79: Non-Blocking Algorithms
+## Composition matters
 
-* Guarantee progress
-* Avoid deadlocks
-* Use atomic operations
+### thenApply vs thenCompose
 
----
+```java
+CompletableFuture<User> user =
+    fetchUserAsync(id);
 
-## Topic 80: Memory Consistency Errors
+CompletableFuture<Profile> profile =
+    user.thenCompose(u -> fetchProfileAsync(u));
+```
 
-* Stale reads
-* Reordering bugs
-* Visibility issues
+* `thenApply` → transforms data
+* `thenCompose` → flattens async calls
 
----
-
-## Topic 81: False Sharing
-
-* Threads modify adjacent memory
-* Cache line contention
-* Performance collapse
+Misusing these leads to nested futures and messy code.
 
 ---
 
-## Topic 82: Cache Coherence
+## Combining multiple async tasks
 
-* CPU cores sync memory
-* MESI protocol
-* Costly synchronization
+```java
+CompletableFuture<Void> all =
+    CompletableFuture.allOf(f1, f2, f3);
+```
 
----
+Use cases:
 
-## Topic 83: Reactive Streams
+* Calling multiple downstream services
+* Aggregating results
+* Parallel I/O
 
-* Async data flow
-* Non-blocking
-* Backpressure support
-
----
-
-## Topic 84: Backpressure
-
-* Flow control
-* Prevent overload
-* Reactive stability
+This is concurrency without explicit threads.
 
 ---
 
-## Execution Rules
+## Error handling (often ignored)
 
-* Avoid ThreadLocal leaks
-* Prefer immutability
-* Use atomics carefully
-* Design backpressure
+```java
+future
+    .exceptionally(ex -> fallback())
+    .thenAccept(result -> process(result));
+```
 
----
+Errors are part of the flow, not an afterthought.
 
-## Real-World Mapping
-
-* Request context storage
-* Event streaming
-* High-frequency trading
-* Async microservices
+Senior systems handle failures explicitly.
 
 ---
 
-## Performance Implications
+## Execution context matters
 
-* Lock-free = high throughput
-* False sharing = hidden killer
-* ThreadLocal leaks = memory bloat
+By default, async tasks use:
 
----
+* `ForkJoinPool.commonPool()`
 
-## Common Mistakes
+This is shared across the JVM.
 
-* Overusing ThreadLocal
-* Mutable shared state
-* Ignoring backpressure
-* CAS overuse
+For backend services:
+
+* Use dedicated executors
+* Avoid starving unrelated tasks
 
 ---
 
-## Design Rules
+## ForkJoinPool intuition
 
-* Favor immutability
-* Minimize shared state
-* Use reactive for streaming
-* Profile false sharing
+ForkJoinPool:
 
----
+* Splits work into smaller tasks
+* Uses work-stealing
+* Maximizes CPU utilization
 
-## JVM Insight
+Best suited for:
 
-* VarHandles power CAS
-* ThreadLocalMap stores per-thread data
-* Cache line = 64 bytes
+* CPU-bound parallel work
+* Recursive task decomposition
 
----
-
-## Senior-Level Takeaway
-
-> Advanced concurrency is about avoiding contention, not adding locks.
+Not ideal for blocking I/O.
 
 ---
 
-## Ultra-Crisp Recall
+## Mental model (easy recall)
 
-* ThreadLocal = per-thread data
-* Immutability = thread safety
-* Lock-free = CAS-based
-* Backpressure = overload control
+* Threads → execution units
+* Executors → resource control
+* Futures → placeholders
+* CompletableFuture → async pipelines
+
+---
+
+## Senior instinct
+
+Asynchronous code is about **composability**, not just speed.
+
+Good async design:
+
+* Avoids blocking
+* Makes flow explicit
+* Handles failure naturally
 
 ---
 
-## Interview Punchline
+## Interview signal
 
-> Advanced concurrency focuses on minimizing contention using immutability, ThreadLocal, lock-free programming, and reactive streams with backpressure for scalable systems.
+> “CompletableFuture enables non-blocking, composable async pipelines, unlike Future which blocks and doesn’t scale well.”
+
+That signals real-world experience.
 
 ---
+
+## Quick recall
+
+* Future → async execution, blocking retrieval
+* CompletableFuture → non-blocking, composable
+* thenApply → transform
+* thenCompose → flatten
+* allOf → parallel coordination
+
+---
+
+## Where this leads next
+
+Async pipelines run fast, but at scale:
+
+* CPU caches matter
+* Memory ordering matters
+* Hardware behavior matters
+
+That brings us to:
+**Advanced concurrency concepts and JVM-level effects.**
+
+```
+```

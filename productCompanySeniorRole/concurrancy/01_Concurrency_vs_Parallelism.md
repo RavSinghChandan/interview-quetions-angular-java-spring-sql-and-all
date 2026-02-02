@@ -1,154 +1,163 @@
-# Topic 1: Concurrency vs Parallelism
+````md
+# STEP 1: Concurrency vs Parallelism
 
 ---
 
-## Core Definition
+## Why this matters
 
-**Concurrency** = Structuring a program so multiple tasks can *make progress* at the same time. Tasks may interleave on a single CPU core.
+Most concurrency bugs don’t start with locks or threads.  
+They start with confusing **concurrency** and **parallelism**.
 
-**Parallelism** = Executing multiple tasks *at the exact same time* on multiple CPU cores.
-
-**Golden Rule:**
-
-> Concurrency is about *design & structure*. Parallelism is about *execution & hardware*.
+If this distinction is clear, design decisions become obvious.  
+If it’s not, systems look correct but fail under load.
 
 ---
 
-## Mental Model
+## Core idea
 
-* Concurrency = One person cooking + answering phone by switching context.
-* Parallelism = Two people cooking two dishes simultaneously.
+**Concurrency**  
+Structuring a program so multiple tasks can *make progress* at the same time.  
+Tasks may interleave on a single CPU core.
 
----
+**Parallelism**  
+Executing multiple tasks *at the same time* on multiple CPU cores.
 
-## In Java Context
-
-* Java provides **concurrency abstractions**, not guaranteed parallelism.
-* Threads, locks, executors, CompletableFuture → enable concurrency.
-* JVM + OS scheduler + CPU cores → decide actual parallel execution.
-
----
-
-## Why Concurrency Exists
-
-* Improve application **responsiveness** (UI, APIs)
-* Handle **I/O waits** efficiently
-* Share limited system resources
-* Scale server throughput
+> Concurrency is about **how work is structured**.  
+> Parallelism is about **how work is executed**.
 
 ---
 
-## Why Parallelism Exists
+## Mental picture (easy to recall)
 
-* Speed up **CPU-bound** workloads
-* Reduce total processing time
-* Maximize **multi-core CPU utilization**
+Concurrency:  
+One person cooking and answering a phone by switching context.
 
----
+Parallelism:  
+Two people cooking two dishes simultaneously.
 
-## Technical Differences
-
-| Aspect  | Concurrency                 | Parallelism             |
-| ------- | --------------------------- | ----------------------- |
-| Nature  | Program structure           | Runtime execution       |
-| CPU     | Works on single core        | Needs multi-core        |
-| Goal    | Responsiveness, scalability | Performance, throughput |
-| Control | Developer controls          | Hardware + JVM controls |
+Context switching vs true simultaneity.
 
 ---
 
-## Execution Reality
+## Java perspective
 
-* A concurrent program **may not** run in parallel.
-* A parallel program **must** be concurrent.
-* Async ≠ Parallel
+Java provides **concurrency abstractions**, not guaranteed parallelism.
+
+Threads, locks, executors, futures → express concurrency.  
+CPU cores + OS scheduler → decide parallel execution.
+
+This is why adding threads does not always improve performance.
 
 ---
 
-## Code Illustration
+## Code example
 
 ```java
-Runnable task1 = () -> System.out.println("Task1 running");
-Runnable task2 = () -> System.out.println("Task2 running");
+Runnable task = () -> {
+    System.out.println(Thread.currentThread().getName());
+};
 
-new Thread(task1).start();
-new Thread(task2).start();
-```
+new Thread(task).start();
+new Thread(task).start();
+````
 
-* This is **concurrent**.
-* It becomes **parallel** only if JVM schedules on different cores.
+This code is **concurrent** by design.
 
----
+It becomes **parallel** only if the JVM schedules these threads on different cores.
 
-## Real-World System Mapping
-
-**Concurrency Examples:**
-
-* Web servers handling thousands of users
-* Async API orchestration
-* Database connection pooling
-* Fraud-check microservices
-
-**Parallelism Examples:**
-
-* Batch payment settlement
-* Risk scoring engines
-* Encryption/decryption pipelines
-* Data analytics jobs
+Parallelism here is an execution detail, not a programming guarantee.
 
 ---
 
-## Performance Implications
+## Why concurrency exists
+
+Concurrency exists to:
+
+* Keep applications responsive
+* Hide I/O latency
+* Handle many requests with limited resources
+* Improve throughput without blocking
+
+Examples:
+
+* Web servers waiting on database calls
+* API gateways orchestrating downstream services
+* Asynchronous fraud checks
+
+---
+
+## Why parallelism exists
+
+Parallelism exists to:
+
+* Speed up CPU-bound work
+* Reduce total computation time
+* Utilize multi-core hardware efficiently
+
+Examples:
+
+* Encryption and decryption
+* Risk calculations
+* Batch settlement jobs
+* Data processing pipelines
+
+---
+
+## Execution reality
+
+* A concurrent program may not run in parallel
+* A parallel program must be concurrent
+* Async does not imply parallel
+* More threads do not guarantee better performance
+
+---
+
+## Performance intuition
 
 * Too much concurrency → context switching overhead
 * Too much parallelism → CPU saturation
-* Blocking threads → kills concurrency benefits
-* Optimal design = balance between both
+* Blocking threads → destroys concurrency benefits
+
+Good systems balance both intentionally.
 
 ---
 
-## Production Engineering Truths
+## Production takeaway
 
-* Use concurrency to **hide I/O latency**
-* Use parallelism to **speed up computation**
-* Thread pools control concurrency
-* ForkJoinPool enables parallelism
+Concurrency is used to **manage waiting**.
+Parallelism is used to **accelerate computation**.
 
----
-
-## Common Misconceptions
-
-* Multi-threading always increases speed ❌
-* Async code is always parallel ❌
-* More threads = more performance ❌
+Thread pools control concurrency.
+ForkJoinPool exploits parallelism.
 
 ---
 
-## Memory Model Insight
+## Senior-level summary
 
-* Concurrency introduces **visibility & ordering** issues
-* Parallelism increases **cache coherence** overhead
+Concurrency structures programs to handle multiple tasks efficiently.
+Parallelism executes tasks simultaneously for performance.
 
----
-
-## Senior-Level Takeaway
-
-> Design for concurrency. Optimize for parallelism. Never confuse the two.
+Java enables concurrency; actual parallelism depends on hardware and scheduling.
 
 ---
 
-## Ultra-Crisp Recall
+## Quick recall
 
-* Concurrency = task management
-* Parallelism = task execution
-* Concurrency hides I/O
-* Parallelism accelerates CPU work
-* Java enables concurrency; hardware enables parallelism
-
----
-
-## Interview Punchline
-
-> Concurrency structures programs to handle multiple tasks efficiently, while parallelism executes tasks simultaneously for performance. Java provides concurrency tools; actual parallelism depends on CPU cores and JVM scheduling.
+* Concurrency → task structure
+* Parallelism → task execution
+* Concurrency hides I/O latency
+* Parallelism speeds up CPU work
 
 ---
+
+## What this leads to
+
+Once concurrency is introduced, tasks share memory.
+
+The next question becomes:
+**what exactly is running concurrently, and what do they share?**
+
+That is where processes and threads enter the picture.
+
+```
+```

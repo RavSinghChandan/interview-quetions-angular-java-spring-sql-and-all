@@ -1,175 +1,256 @@
-# Module 9: Futures & Async Programming (Self Notes)
+````md
+# STEP 8: Concurrent Collections
 
 ---
 
-## Core Purpose
+## Why this step exists
 
-This module enables **non-blocking execution**, **asynchronous pipelines**, and **parallel task composition** for scalable systems.
+After learning locks and synchronizers, a pattern becomes obvious:
 
-**Golden Rule:**
+Correctness is hard.  
+Correctness everywhere is harder.
 
-> Never block waiting for a Future if you can compose asynchronously.
+If every access to a data structure requires manual locking, systems become:
+- Fragile
+- Slow
+- Difficult to reason about
 
----
-
-## Mental Model
-
-* Task = computation
-* Future = promise of result
-* CompletableFuture = pipeline of async stages
-* ForkJoinPool = parallel task engine
+This step exists because **data structures themselves must understand concurrency**.
 
 ---
 
-## Topic 67: Callable
+## The core shift
 
-* Task that returns a value
-* Can throw checked exceptions
-* Used with ExecutorService
+Instead of asking:
+“How do I lock around this collection?”
+
+We ask:
+“Can the collection manage concurrency for me?”
+
+Concurrent collections encode **battle-tested concurrency decisions** so application code stays simple.
+
+---
+
+## Why normal collections fail
 
 ```java
-Callable<Integer> task = () -> 42;
-```
+Map<String, Integer> map = new HashMap<>();
+
+map.put("a", 1);
+map.get("a");
+````
+
+`HashMap` assumes:
+
+* Single-threaded access
+* No concurrent modification
+
+Under concurrency:
+
+* Lost updates
+* Infinite loops (rehashing)
+* Corrupted internal state
+
+These failures are silent and catastrophic.
 
 ---
 
-## Topic 68: Future
+## The design goal of concurrent collections
 
-* Represents pending result
-* Blocking `get()`
-* Can be cancelled
+Concurrent collections aim to:
+
+* Reduce contention
+* Avoid global locks
+* Maintain correctness
+* Scale with thread count
+
+They trade **strong consistency everywhere** for **practical performance**.
+
+---
+
+## ConcurrentHashMap (the workhorse)
 
 ```java
-Future<Integer> f = es.submit(task);
-Integer result = f.get();
+ConcurrentHashMap<String, Integer> map =
+        new ConcurrentHashMap<>();
+
+map.put("a", 1);
+map.computeIfAbsent("b", k -> 2);
 ```
+
+Key properties:
+
+* No global lock
+* Fine-grained synchronization
+* Safe concurrent reads and writes
+* Atomic compound operations
+
+Reads never block writes.
+Writes don’t block unrelated reads.
+
+This is why it’s everywhere in backend systems.
 
 ---
 
-## Topic 69: CompletableFuture Basics
+## Mental model (easy recall)
 
-* Non-blocking async API
-* Supports chaining
-* Built on ForkJoinPool by default
+* HashMap → unsafe, fast
+* Hashtable → safe, slow
+* ConcurrentHashMap → safe, scalable
+
+---
+
+## Atomic operations matter
 
 ```java
-CompletableFuture.supplyAsync(() -> fetchData());
+map.putIfAbsent("key", value);
 ```
 
----
+This is not just convenience.
+It is **atomic correctness**.
 
-## Topic 70: thenApply / thenCompose
-
-* thenApply = transform result
-* thenCompose = flatten nested futures
+Doing the same with `get()` + `put()` is broken under concurrency.
 
 ---
 
-## Topic 71: thenCombine
+## Copy-on-write collections (specialized tools)
 
-* Combine two independent futures
-* Parallel execution
+```java
+List<String> list = new CopyOnWriteArrayList<>();
+```
 
----
+Behavior:
 
-## Topic 72: allOf / anyOf
+* Reads are lock-free
+* Writes copy the entire structure
 
-* allOf = wait for all
-* anyOf = wait for first
+This is efficient only when:
 
----
+* Reads vastly outnumber writes
+* Writes are rare and acceptable to copy
 
-## Topic 73: Exception Handling
+Used in:
 
-* exceptionally()
-* handle()
-* whenComplete()
+* Listener lists
+* Configuration snapshots
 
----
-
-## Topic 74: ForkJoinPool
-
-* Work-stealing pool
-* Optimized for CPU-bound tasks
-* Recursive task splitting
+Wrong choice for write-heavy workloads.
 
 ---
 
-## Topic 75: Work-Stealing Algorithm
+## Blocking queues (coordination + data)
 
-* Idle threads steal work
-* Improves CPU utilization
-* Reduces idle time
+```java
+BlockingQueue<Task> queue =
+        new LinkedBlockingQueue<>();
 
----
+queue.put(task);   // may block
+Task task = queue.take(); // may block
+```
 
-## Execution Rules
+Blocking queues:
 
-* Avoid blocking get()
-* Always provide custom executor
-* Separate IO and CPU pools
-* Handle exceptions explicitly
+* Combine data storage with coordination
+* Handle waiting internally
+* Remove need for manual `wait/notify`
 
----
+Common in:
 
-## Real-World Mapping
-
-* Async API orchestration
-* Fraud score pipelines
-* Parallel data fetch
-* Batch processing jobs
+* Producer–consumer systems
+* Task pipelines
+* Thread pools
 
 ---
 
-## Performance Implications
+## Queue choice matters
 
-* Blocking kills async benefits
-* ForkJoinPool suits CPU work
-* Too many async stages → overhead
+* ArrayBlockingQueue → bounded, predictable memory
+* LinkedBlockingQueue → scalable, unbounded by default
+* PriorityBlockingQueue → ordered execution
 
----
-
-## Common Mistakes
-
-* Calling get() too early
-* Ignoring exceptions
-* Using default ForkJoinPool blindly
-* Mixing blocking IO with async
+Bounded queues introduce **backpressure**.
+Unbounded queues risk **memory exhaustion**.
 
 ---
 
-## Design Rules
+## Non-blocking queues
 
-* Use supplyAsync for IO
-* Use thenCompose for dependent calls
-* Always specify executor
-* Avoid deep callback chains
+```java
+Queue<Event> queue = new ConcurrentLinkedQueue<>();
+```
 
----
+Characteristics:
 
-## JVM Insight
+* Lock-free
+* High throughput
+* No blocking
 
-* CompletableFuture uses ForkJoinPool.commonPool
-* Work stealing minimizes idle threads
-* Blocking tasks reduce pool efficiency
+Used when:
 
----
-
-## Senior-Level Takeaway
-
-> Futures enable async results. CompletableFuture enables async pipelines. ForkJoinPool powers parallel execution.
+* Low latency matters
+* Dropping or retrying is acceptable
+* Coordination is handled elsewhere
 
 ---
 
-## Ultra-Crisp Recall
+## Sorted concurrent structures
 
-* Callable = returns value
-* Future = blocking result
-* CompletableFuture = async pipeline
-* ForkJoinPool = parallel engine
+```java
+ConcurrentSkipListMap<Integer, String> map =
+        new ConcurrentSkipListMap<>();
+```
+
+Why it exists:
+
+* Concurrent + sorted
+* Logarithmic performance
+* No global lock
+
+Used for:
+
+* Time-based data
+* Ranked structures
+* Range queries
 
 ---
 
-## Interview Punchline
+## Senior instinct
 
-> Callable and Future support asynchronous execution, but CompletableFuture enables non-blocking async pipelines. ForkJoinPool uses work-stealing for efficient parallel execution. In production, always avoid blockin
+Use concurrent collections when:
+
+* Access patterns are well understood
+* Correctness matters more than raw speed
+* You want fewer locks in business logic
+
+Do not wrap normal collections with external locks unless necessary.
+
+---
+
+## Interview signal
+
+> “Concurrent collections encapsulate synchronization and scalability decisions, allowing safe concurrent access without explicit locking in application code.”
+
+That answer signals production experience.
+
+---
+
+## Quick recall
+
+* ConcurrentHashMap → general-purpose
+* CopyOnWrite → read-heavy
+* BlockingQueue → coordination + storage
+* ConcurrentLinkedQueue → non-blocking
+* SkipList → concurrent + sorted
+
+---
+
+## Where this leads next
+
+Once data structures are safe,
+the next challenge is **asynchronous execution and composition**.
+
+That brings us to:
+**Futures and CompletableFuture.**
+
+```
+```

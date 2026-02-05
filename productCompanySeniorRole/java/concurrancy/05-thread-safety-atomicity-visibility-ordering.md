@@ -1,5 +1,5 @@
-md
-# STEP 4: Thread Safety, Atomicity, Visibility, Ordering
+
+# STEP 5: Thread Safety, Atomicity, Visibility, Ordering
 
 ---
 
@@ -37,12 +37,19 @@ Atomicity means:
 Example that looks safe but isn’t:
 
 ```java
-int count = 0;
+class BrokenCounter {
+    int count = 0;
 
-void increment() {
-    count++; // not atomic
+    void increment() {
+        count++; // not atomic
+        // This is actually:
+        // 1. int temp = count;
+        // 2. temp = temp + 1;
+        // 3. count = temp;
+        // Three separate operations!
+    }
 }
-````
+```
 
 `count++` = read → modify → write
 Three steps.
@@ -63,21 +70,17 @@ Broken example:
 
 ```java
 class Flag {
-    boolean ready = false;
+    boolean ready = false; // Not volatile, not synchronized
 }
-```
 
-Thread A:
+// Thread A (writer)
+Flag flag = new Flag();
+flag.ready = true; // Write may stay in CPU cache
 
-```java
-flag.ready = true;
-```
-
-Thread B:
-
-```java
+// Thread B (reader)
 while (!flag.ready) {
-    // may loop forever
+    // May loop forever!
+    // Thread B may never see the update
 }
 ```
 
@@ -89,6 +92,29 @@ Why?
 
 The value changed.
 The thread never sees it.
+
+---
+
+## Code: fixing visibility
+
+```java
+class Flag {
+    volatile boolean ready = false; // Now visible across threads
+}
+
+// Or with synchronization
+class Flag {
+    private boolean ready = false;
+    
+    synchronized void setReady() {
+        ready = true;
+    }
+    
+    synchronized boolean isReady() {
+        return ready;
+    }
+}
+```
 
 ---
 
@@ -218,7 +244,7 @@ Synchronization makes code correct,
 but threads now need to **wait and coordinate**.
 
 That brings us to:
-**Inter-thread communication — wait, notify, and coordination patterns.**
+**`synchronized` and intrinsic locks — the first tool for correctness.**
 
 ```
 ```

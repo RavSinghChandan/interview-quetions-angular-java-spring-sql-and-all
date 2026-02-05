@@ -5,11 +5,11 @@
 
 ## Why this matters
 
-Most concurrency bugs don’t start with locks or threads.  
+Most concurrency bugs don't start with locks or threads.  
 They start with confusing **concurrency** and **parallelism**.
 
 If this distinction is clear, design decisions become obvious.  
-If it’s not, systems look correct but fail under load.
+If it's not, systems look correct but fail under load.
 
 ---
 
@@ -50,22 +50,49 @@ This is why adding threads does not always improve performance.
 
 ---
 
-## Code example
+## Code example: concurrent design
 
 ```java
-Runnable task = () -> {
-    System.out.println(Thread.currentThread().getName());
-};
+public class ConcurrencyExample {
+    public static void main(String[] args) {
+        Runnable task = () -> {
+            System.out.println("Running on: " + 
+                Thread.currentThread().getName());
+        };
 
-new Thread(task).start();
-new Thread(task).start();
-````
+        // These threads are concurrent by design
+        new Thread(task).start();
+        new Thread(task).start();
+    }
+}
+```
 
 This code is **concurrent** by design.
 
 It becomes **parallel** only if the JVM schedules these threads on different cores.
 
 Parallelism here is an execution detail, not a programming guarantee.
+
+---
+
+## Code example: parallelism demonstration
+
+```java
+public class ParallelismExample {
+    public static void main(String[] args) {
+        int cores = Runtime.getRuntime().availableProcessors();
+        System.out.println("Available CPU cores: " + cores);
+
+        // Parallel stream uses multiple cores
+        IntStream.range(0, 1000)
+            .parallel()
+            .map(i -> i * i)
+            .sum();
+    }
+}
+```
+
+Parallel streams explicitly use multiple cores for computation.
 
 ---
 
@@ -80,9 +107,31 @@ Concurrency exists to:
 
 Examples:
 
-* Web servers waiting on serviceBasedMNCLevel.database calls
+* Web servers waiting on database calls
 * API gateways orchestrating downstream services
 * Asynchronous fraud checks
+
+---
+
+## Code example: concurrency for I/O
+
+```java
+public class IOConcurrency {
+    public static void main(String[] args) {
+        ExecutorService executor = Executors.newFixedThreadPool(10);
+        
+        // Multiple I/O operations can proceed concurrently
+        for (int i = 0; i < 100; i++) {
+            executor.submit(() -> {
+                // Simulate database call
+                return fetchFromDatabase();
+            });
+        }
+    }
+}
+```
+
+While one thread waits for I/O, others can make progress.
 
 ---
 
@@ -103,12 +152,60 @@ Examples:
 
 ---
 
+## Code example: parallelism for CPU work
+
+```java
+public class CPUParallelism {
+    public static void main(String[] args) {
+        ForkJoinPool pool = new ForkJoinPool();
+        
+        // CPU-intensive work split across cores
+        pool.submit(() -> {
+            IntStream.range(0, 1_000_000)
+                .parallel()
+                .map(i -> compute(i))
+                .sum();
+        });
+    }
+    
+    static int compute(int n) {
+        // CPU-intensive calculation
+        return n * n;
+    }
+}
+```
+
+Parallel execution speeds up CPU-bound tasks.
+
+---
+
 ## Execution reality
 
 * A concurrent program may not run in parallel
 * A parallel program must be concurrent
 * Async does not imply parallel
 * More threads do not guarantee better performance
+
+---
+
+## Code example: when more threads hurt
+
+```java
+public class ThreadOverhead {
+    public static void main(String[] args) {
+        // Too many threads cause context switching overhead
+        for (int i = 0; i < 10000; i++) {
+            new Thread(() -> {
+                // Lightweight work
+                System.out.println("Task");
+            }).start();
+        }
+        // Better: use thread pool with limited size
+    }
+}
+```
+
+Creating too many threads can degrade performance due to context switching.
 
 ---
 
@@ -155,9 +252,10 @@ Java enables concurrency; actual parallelism depends on hardware and scheduling.
 Once concurrency is introduced, tasks share memory.
 
 The next question becomes:
-**what exactly is running concurrently, and what do they share?**
+**What exactly is running concurrently, and what do they share?**
 
 That is where processes and threads enter the picture.
 
 ```
 ```
+

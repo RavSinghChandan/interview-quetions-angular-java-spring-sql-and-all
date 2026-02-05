@@ -1,5 +1,5 @@
 
-# STEP 3: Race Conditions & Critical Sections
+# STEP 4: Race Conditions & Critical Sections
 
 ---
 
@@ -37,7 +37,7 @@ class Counter {
         count++;
     }
 }
-````
+```
 
 Looks harmless.
 But `count++` is **not a single operation**.
@@ -53,6 +53,21 @@ Two threads can interleave these steps and lose updates.
 ---
 
 ## What actually goes wrong
+
+```java
+// Thread A execution:
+int temp = count;  // Reads 5
+temp = temp + 1;   // temp = 6
+count = temp;      // Writes 6
+
+// Thread B execution (interleaved):
+int temp = count;  // Reads 5 (before A writes)
+temp = temp + 1;   // temp = 6
+count = temp;      // Writes 6 (overwrites A's write)
+
+// Expected: 7 (two increments)
+// Actual: 6 (one increment lost)
+```
 
 Thread A reads `count = 5`
 Thread B reads `count = 5`
@@ -101,15 +116,43 @@ class Counter {
     private int count = 0;
 
     synchronized void increment() {
-        count++;
+        count++; // Now atomic
+    }
+    
+    synchronized int get() {
+        return count; // Also synchronized for visibility
     }
 }
+
+// Usage
+Counter counter = new Counter();
+
+Thread t1 = new Thread(() -> {
+    for (int i = 0; i < 1000; i++) {
+        counter.increment();
+    }
+});
+
+Thread t2 = new Thread(() -> {
+    for (int i = 0; i < 1000; i++) {
+        counter.increment();
+    }
+});
+
+t1.start();
+t2.start();
+t1.join();
+t2.join();
+
+// Now guaranteed to be 2000
+System.out.println(counter.get());
 ```
 
 Now:
 
 * Only one thread can execute `increment()` at a time
 * Lost updates are prevented
+* Visibility is guaranteed
 
 Correctness is restored — but at a cost.
 

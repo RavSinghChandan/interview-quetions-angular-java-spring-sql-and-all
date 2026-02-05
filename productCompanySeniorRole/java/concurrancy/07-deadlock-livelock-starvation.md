@@ -231,7 +231,7 @@ Fair locks ensure:
 
 ---
 
-## Real-world example: serviceBasedMNCLevel.database deadlock
+## Real-world example: database deadlock
 
 ```sql
 Transaction 1: UPDATE account1 SET balance = balance - 100;

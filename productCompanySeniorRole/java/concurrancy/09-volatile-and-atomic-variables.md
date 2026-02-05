@@ -1,5 +1,5 @@
 
-# STEP 5: `volatile` & Atomic Variables
+# STEP 9: `volatile` & Atomic Variables
 
 ---
 
@@ -50,7 +50,7 @@ This is the most misunderstood part.
 class Flag {
     volatile boolean ready = false;
 }
-````
+```
 
 Thread A:
 

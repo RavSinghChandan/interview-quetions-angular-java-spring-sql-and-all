@@ -38,7 +38,7 @@ Java chooses speed — and accepts the risk.
 
 ---
 
-## Java’s model (important)
+## Java's model (important)
 
 A Java application:
 - Runs as **one OS process**
@@ -59,23 +59,43 @@ It also introduces:
 ## Code: multiple threads, same process
 
 ```java
-public class Example {
+public class ThreadExample {
+    // Shared: static variable
+    private static int sharedCounter = 0;
+    
+    // Shared: instance variable (if same object)
+    private int instanceCounter = 0;
 
     public static void main(String[] args) {
-        Thread t1 = new Thread(Example::work);
-        Thread t2 = new Thread(Example::work);
+        Thread t1 = new Thread(ThreadExample::work);
+        Thread t2 = new Thread(ThreadExample::work);
 
         t1.start();
         t2.start();
+        
+        try {
+            t1.join();
+            t2.join();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
 
     static void work() {
+        // Each thread has its own stack
+        int localVar = 0; // Not shared
+        
+        // But they share static variables
+        sharedCounter++;
+        
         System.out.println(
-            "Running on: " + Thread.currentThread().getName()
+            "Thread: " + Thread.currentThread().getName() +
+            ", Shared: " + sharedCounter +
+            ", Local: " + localVar
         );
     }
 }
-````
+```
 
 What is shared:
 
@@ -92,7 +112,41 @@ This distinction matters more than it looks.
 
 ---
 
-## First real problem (don’t ignore this)
+## Code: demonstrating memory sharing
+
+```java
+public class MemorySharing {
+    private static StringBuilder shared = new StringBuilder();
+    
+    public static void main(String[] args) throws InterruptedException {
+        Thread t1 = new Thread(() -> {
+            for (int i = 0; i < 1000; i++) {
+                shared.append("A");
+            }
+        });
+        
+        Thread t2 = new Thread(() -> {
+            for (int i = 0; i < 1000; i++) {
+                shared.append("B");
+            }
+        });
+        
+        t1.start();
+        t2.start();
+        t1.join();
+        t2.join();
+        
+        System.out.println("Length: " + shared.length());
+        // May not be 2000 due to race conditions
+    }
+}
+```
+
+Both threads modify the same object in heap memory.
+
+---
+
+## First real problem (don't ignore this)
 
 ```java
 class Counter {
@@ -101,7 +155,35 @@ class Counter {
     void increment() {
         count++;
     }
+    
+    int get() {
+        return count;
+    }
 }
+
+// Usage
+Counter counter = new Counter();
+
+Thread t1 = new Thread(() -> {
+    for (int i = 0; i < 1000; i++) {
+        counter.increment();
+    }
+});
+
+Thread t2 = new Thread(() -> {
+    for (int i = 0; i < 1000; i++) {
+        counter.increment();
+    }
+});
+
+t1.start();
+t2.start();
+t1.join();
+t2.join();
+
+// Expected: 2000
+// Actual: may be less due to lost updates
+System.out.println(counter.get());
 ```
 
 Two threads calling `increment()`:
@@ -121,7 +203,7 @@ This is a **shared-memory problem**.
 
 ## Mental checkpoint
 
-If threads didn’t share memory,
+If threads didn't share memory,
 there would be no race conditions.
 
 They share memory because:
@@ -143,13 +225,26 @@ Concurrency is a trade-off, not a feature.
 | Failure scope | Contained | Affects process |
 | Speed         | Slower    | Faster          |
 
-Java serviceBasedMNCLevel.backend systems almost always choose threads.
+Java backend systems almost always choose threads.
+
+---
+
+## Code: process isolation (for comparison)
+
+```java
+// This would require separate JVM processes
+// Processes don't share memory
+// Communication requires IPC (Inter-Process Communication)
+// Example: sockets, pipes, shared memory segments
+```
+
+Processes provide isolation but at a higher cost.
 
 ---
 
 ## Production reality
 
-Most serviceBasedMNCLevel.backend services are:
+Most backend services are:
 
 * Single process
 * Multi-threaded
@@ -186,3 +281,4 @@ That is where **race conditions and critical sections** begin.
 
 ```
 ```
+

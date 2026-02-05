@@ -4,7 +4,7 @@ This roadmap is designed as a **progressive journey**, not a list of topics.
 Each step exists because the previous one breaks at scale.
 
 The goal is simple:  
-**Think, design, debug, and explain concurrency like a senior serviceBasedMNCLevel.backend engineer.**
+**Think, design, debug, and explain concurrency like a senior backend engineer.**
 
 ---
 

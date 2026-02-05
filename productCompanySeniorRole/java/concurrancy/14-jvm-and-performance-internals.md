@@ -1,5 +1,5 @@
-
-# STEP 9: Futures & Asynchronous Programming
+````md
+# STEP 14: JVM & Performance Internals
 
 ---
 
@@ -102,7 +102,7 @@ What changed:
 * Each stage is explicit
 * Flow is easy to reason about
 
-This is how modern serviceBasedMNCLevel.backend systems are written.
+This is how modern backend systems are written.
 
 ---
 
@@ -164,7 +164,7 @@ By default, async tasks use:
 
 This is shared across the JVM.
 
-For serviceBasedMNCLevel.backend services:
+For backend services:
 
 * Use dedicated executors
 * Avoid starving unrelated tasks

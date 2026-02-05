@@ -1,5 +1,5 @@
-
-# STEP 6: Executors & Thread Pools
+````md
+# STEP 11: Locks & Advanced Synchronizers
 
 ---
 
@@ -29,7 +29,7 @@ Instead of saying:
 We say:
 > “Submit this task and let the system decide how to execute it”
 
-That shift is the foundation of all scalable serviceBasedMNCLevel.backend systems.
+That shift is the foundation of all scalable backend systems.
 
 ---
 
@@ -110,7 +110,7 @@ What changed:
 
 * Creates threads as needed
 * Risky under high load
-* Avoid in serviceBasedMNCLevel.backend services
+* Avoid in backend services
 
 ### SingleThreadExecutor
 
